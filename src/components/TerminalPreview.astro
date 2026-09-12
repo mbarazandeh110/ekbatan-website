@@ -1,0 +1,42 @@
+---
+---
+
+<section id="architecture" class="py-20 px-6 max-w-5xl mx-auto">
+  <div class="text-center mb-10">
+    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">SYSTEM ARCHITECTURE</span>
+    <h3 class="text-2xl md:text-4xl font-extrabold text-white mt-2">زیرساخت اعلامی (Declarative) و شفاف</h3>
+  </div>
+
+  <div class="rounded-xl border border-slate-800 bg-[#0B101B] shadow-2xl overflow-hidden font-mono text-xs text-left" dir="ltr">
+    <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+        <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+      </div>
+      <span class="text-slate-400 text-[11px]">ekbatan-platform-state.yaml</span>
+      <div class="text-slate-500 text-[11px]">Kubernetes v1.33</div>
+    </div>
+
+    <div class="p-6 overflow-x-auto leading-relaxed text-slate-300">
+      <p><span class="text-cyan-400">apiVersion</span>: core.ekbatan.tech/v1alpha1</p>
+      <p><span class="text-cyan-400">kind</span>: InfrastructureTopology</p>
+      <p><span class="text-cyan-400">metadata</span>:</p>
+      <p class="pl-4"><span class="text-cyan-400">name</span>: <span class="text-emerald-300">Ekbatan-prod-cluster</span></p>
+      <p><span class="text-cyan-400">spec</span>:</p>
+      <p class="pl-4"><span class="text-cyan-400">compute</span>:</p>
+      <p class="pl-8"><span class="text-cyan-400">orchestration</span>: <span class="text-amber-200">Kubernetes High-Availability (3 Control Planes)</span></p>
+      <p class="pl-8"><span class="text-cyan-400">networking</span>: <span class="text-amber-200">Cilium eBPF CNI + Anycast BGP Peering</span></p>
+      <p class="pl-4"><span class="text-cyan-400">storage</span>:</p>
+      <p class="pl-8"><span class="text-cyan-400">engine</span>: <span class="text-amber-200">Ceph CSI (Block, File, S3-Compatible Object Store)</span></p>
+      <p class="pl-4"><span class="text-cyan-400">media</span>:</p>
+      <p class="pl-8"><span class="text-cyan-400">streamingEngine</span>: <span class="text-amber-200">Sub-Second WebRTC Multi-Node Mesh</span></p>
+      <p class="pl-4"><span class="text-cyan-400">enterpriseOperators</span>:</p>
+      <p class="pl-8">- <span class="text-slate-400">name</span>: <span class="text-indigo-300">eck-operator</span> | <span class="text-slate-400">status</span>: <span class="text-emerald-400">Active</span></p>
+      <p class="pl-8">- <span class="text-slate-400">name</span>: <span class="text-indigo-300">gitlab-runner-fleet</span> | <span class="text-slate-400">status</span>: <span class="text-emerald-400">Active</span></p>
+      <p class="pl-8">- <span class="text-slate-400">name</span>: <span class="text-indigo-300">artifact-management (Nexus/JFrog)</span> | <span class="text-slate-400">status</span>: <span class="text-emerald-400">Active</span></p>
+      <p class="pl-8">- <span class="text-slate-400">name</span>: <span class="text-indigo-300">n8n-workflow-cluster</span> | <span class="text-slate-400">status</span>: <span class="text-emerald-400">Active</span></p>
+      <p class="mt-4 text-slate-500"># Cluster Status: 0 Unhealthy Nodes | MTBF > 99.999%</p>
+    </div>
+  </div>
+</section>

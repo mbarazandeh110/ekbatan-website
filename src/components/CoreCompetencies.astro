@@ -1,0 +1,54 @@
+---
+const services = [
+  {
+    title: "کوبرنتیز و ارکستراسیون پیشرفته",
+    desc: "طراحی کلاسترهای High-Availability، اپراتورهای اختصاصی، پیکربندی CNIهای پیشرفته و راهکارهای صفر-دان‌تایم.",
+    tag: "KUBERNETES & CLOUD",
+  },
+  {
+    title: "زیرساخت ذخیره‌سازی Ceph و دیتابیس‌ها",
+    desc: "راه‌اندازی بلاک‌استوریج و آبجکت‌استوریج در مقیاس پتابایت با Ceph به همراه استقرار پایگاه‌های داده مقیاس‌پذیر توزیع‌شده.",
+    tag: "STORAGE & DATA",
+  },
+  {
+    title: "استریمینگ ویدیو و WebRTC بلادرنگ",
+    desc: "معماری مدیا سرورهای مقیاس‌پذیر (SFU/MCU) جهت کنفرانس‌های ویدیویی با ظرفیت همزمانی بالا و تاخیر مینیمال.",
+    tag: "STREAMING & WEBRTC",
+  },
+  {
+    title: "MLOps و خطوط لوله داده‌های حجیم (BigData)",
+    desc: "پایپ‌لاین‌های آماده برای آموزش مدل‌های یادگیری عمیق، استنتاج سریع در بستر کلاستر و پایش مداوم مدل‌ها.",
+    tag: "AI / ML / PIPELINES",
+  },
+  {
+    title: "شبکه‌های توزیع محتوا (CDN) و Edge Computing",
+    desc: "طراحی لایه‌های هوشمند Caching، لودبالانسرهای Anycast و کاهش زمان پاسخ‌دهی برای ترافیک‌های میلیونی.",
+    tag: "NETWORKING & CDN",
+  },
+  {
+    title: "اتوماسیون DevOps و CI/CD مدرن",
+    desc: "ایمن‌سازی زنجیره تامین نرم‌افزار، زیرساخت مبتنی بر کد (IaC) و استقرار مداوم مبتنی بر فرآیندهای بازبینی تیمی.",
+    tag: "INFRASTRUCTURE AS CODE",
+  }
+];
+---
+
+<section id="infrastructure" class="py-24 px-6 max-w-7xl mx-auto">
+  <div class="text-center mb-16">
+    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">CAPABILITIES</span>
+    <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2">تخصص‌های هسته‌ای اکباتان</h2>
+    <p class="text-slate-400 max-w-2xl mx-auto mt-4 text-sm md:text-base">
+      تمرکز ما بر ساخت لایه‌های زیرساختی است که کسب‌وکارهای با ترافیک بالا بدون نگرانی از مقیاس‌پذیری روی آن‌ها رشد کنند.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {services.map((item) => (
+      <div class="group p-6 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-cyan-500/40 hover:bg-slate-900/80 transition-all duration-300 relative">
+        <div class="text-[11px] font-mono text-cyan-400/90 mb-3 tracking-wider">{item.tag}</div>
+        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-cyan-200 transition-colors">{item.title}</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+      </div>
+    ))}
+  </div>
+</section>

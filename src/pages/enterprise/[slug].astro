@@ -1,0 +1,101 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools');
+  return tools.map((tool) => ({
+    params: { slug: tool.id },
+    props: { tool },
+  }));
+}
+
+const { tool } = Astro.props;
+const { Content } = await render(tool);
+const data = tool.data;
+---
+
+<Layout title={`${data.name} | استقرار سازمانی اکباتان`}>
+  <Navbar />
+  
+  <main class="py-20 px-6 max-w-5xl mx-auto">
+    <!-- هدر صفحه ابزار -->
+    <div class="mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-800/60 bg-cyan-950/40 text-xs font-mono text-cyan-400 mb-6">
+        <span>{data.category}</span>
+        <span>•</span>
+        <span>{data.badge}</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black text-white mb-6 leading-snug">
+        استقرار و مدیریت <span class="text-cyan-400">{data.name}</span> در مقیاس انترپرایز
+      </h1>
+      <p class="text-slate-300 text-base md:text-lg leading-relaxed max-w-3xl font-light">
+        {data.description}
+      </p>
+    </div>
+
+    <!-- ویژگی‌ها و معماری -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+      <div class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800">
+        <h3 class="text-lg font-bold text-white mb-4 font-mono text-cyan-400">معماری و نحوه پیاده‌سازی</h3>
+        <ul class="space-y-3 text-slate-300 text-sm">
+          {data.architectureDetails.map((item: string) => (
+            <li class="flex items-start gap-2">
+              <span class="text-cyan-400 mt-1">✓</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800">
+        <h3 class="text-lg font-bold text-white mb-4 font-mono text-cyan-400">مزایای کلیدی و قابلیت‌ها</h3>
+        <ul class="space-y-3 text-slate-300 text-sm">
+          {data.features.map((feature: string) => (
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-400 mt-1">◆</span>
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <!-- نمایش مانیفست یا تنظیمات نمونه -->
+    {data.yamlCode && (
+      <div class="mb-16">
+        <h3 class="text-xl font-bold text-white mb-4">نمونه مانیفست استقرار (Deployment Manifest)</h3>
+        <div class="rounded-xl border border-slate-800 bg-[#0B101B] shadow-2xl overflow-hidden font-mono text-xs text-left" dir="ltr">
+          <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+            <span class="text-slate-400 text-[11px]">{tool.id}-deployment.yaml</span>
+            <span class="text-cyan-400 text-[11px]">Production-Ready</span>
+          </div>
+          <pre class="p-6 overflow-x-auto text-slate-300 leading-relaxed"><code>{data.yamlCode}</code></pre>
+        </div>
+      </div>
+    )}
+
+    <!-- بخش متن اضافی مارک‌داون (در صورت وجود) -->
+    <div class="text-slate-300 mb-16">
+      <Content />
+    </div>
+
+    <!-- بخش درخواست مشاوره داخلی -->
+    <div class="p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white">
+      هگمتانه آماده راه‌اندازی و پشتیبانی از این سرویس در زیرساخت شماست.
+      <div class="mt-6">
+        <a 
+          href={`mailto:contact@ekbatan.tech?subject=درخواست مشاوره استقرار نسخه سازمانی ${data.name}`} 
+          class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25"
+        >
+          درخواست استقرار {data.name}
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

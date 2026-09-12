@@ -1,0 +1,84 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const experiences = await getCollection('experiences');
+  return experiences.map((exp) => ({
+    params: { slug: exp.id },
+    props: { exp },
+  }));
+}
+
+const { exp } = Astro.props;
+const { Content } = await render(exp);
+const data = exp.data;
+---
+
+<Layout title={`${data.title} | تجربیات اجرایی اکباتان`}>
+  <Navbar />
+  
+  <main class="py-20 px-6 max-w-5xl mx-auto">
+    <div class="mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-800/60 bg-cyan-950/40 text-xs font-mono text-cyan-400 mb-6">
+        <span>{data.category}</span>
+        <span>•</span>
+        <span class="text-emerald-400">{data.scale}</span>
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black text-white mb-6 leading-snug">
+        {data.title}
+      </h1>
+      <p class="text-slate-300 text-base md:text-lg leading-relaxed max-w-3xl font-light">
+        {data.description}
+      </p>
+    </div>
+
+    <!-- دستاوردها و نکات کلیدی -->
+    <div class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800 mb-16">
+      <h3 class="text-lg font-bold text-white mb-4 font-mono text-cyan-400">دستاوردهای مهندسی و نکات کلیدی</h3>
+      <ul class="space-y-3 text-slate-300 text-sm">
+        {data.highlights.map((item: string) => (
+          <li class="flex items-start gap-2">
+            <span class="text-cyan-400 mt-1">✓</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- فناوری‌های به‌کاررفته -->
+    <div class="mb-16">
+      <h3 class="text-xl font-bold text-white mb-4">فناوری‌ها و پشته‌های فنی</h3>
+      <div class="flex flex-wrap gap-2">
+        {data.techs.map((tech: string) => (
+          <span class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-cyan-300 font-mono text-xs">
+            {tech}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- محتوای تکمیلی مارک‌داون -->
+    <div class="text-slate-300 mb-16 prose prose-invert max-w-none">
+      <Content />
+    </div>
+
+    <!-- دکمه مشاوره -->
+    <div class="p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white">
+      برای پیاده‌سازی چنین مقیاس و معماری در سازمان خود با تیم اکباتان مشورت کنید.
+      <div class="mt-6">
+        <a 
+          href={`mailto:contact@ekbatan.tech?subject=درخواست مشاوره معماری - ${data.title}`} 
+          class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25"
+        >
+          مشاوره معماری و مقیاس‌پذیری
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

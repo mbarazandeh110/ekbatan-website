@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+const experiences = await getCollection('experiences');
+---
+
+<section id="track-record" class="py-24 px-6 max-w-7xl mx-auto reveal">
+  <div class="text-center mb-16">
+    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">TRACK RECORD & SCALE</span>
+    <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2">مقیاس و تجربیات مهندسی اکباتان</h2>
+    <p class="text-slate-400 max-w-2xl mx-auto mt-4 text-sm md:text-base leading-relaxed">
+      اعداد و دستاوردهایی که پشتوانه‌ی پایداری و تاب‌آوری زیرساخت‌های کلیدی کشور بوده‌اند. روی هر حوزه کلیک کنید تا جزئیات مقیاس را ببینید.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {experiences.map((exp) => (
+      <a 
+        href={`${import.meta.env.BASE_URL}/experience/${exp.id}`.replace('//', '/')}
+        class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between group cursor-pointer shadow-lg"
+      >
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/40 text-cyan-300 font-mono text-xs">
+              {exp.data.scale}
+            </span>
+            <span class="text-slate-500 group-hover:text-cyan-400 transition-colors font-mono">→</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-3 group-hover:text-cyan-200 transition-colors">{exp.data.title}</h3>
+          <p class="text-slate-400 text-sm leading-relaxed mb-6">{exp.data.description}</p>
+        </div>
+        <div>
+          <div class="flex flex-wrap gap-1.5 pt-4 border-t border-slate-800/60">
+            {exp.data.techs.map((tech: string) => (
+              <span class="text-[10px] font-mono text-slate-300 bg-slate-800/80 px-2 py-0.5 rounded">
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
