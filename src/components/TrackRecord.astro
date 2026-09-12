@@ -15,7 +15,7 @@ const experiences = await getCollection('experiences');
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {experiences.map((exp) => (
       <a 
-        href={`${import.meta.env.BASE_URL}/experience/${exp.id}`.replace('//', '/')}
+        href={`/experience/${exp.id}`.replace('//', '/')}
         class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between group cursor-pointer shadow-lg"
       >
         <div>
