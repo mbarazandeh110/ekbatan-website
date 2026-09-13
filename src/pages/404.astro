@@ -1,0 +1,26 @@
+---
+---
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Not Found | Ekbatan Platform</title>
+  <style>
+    body { background-color: #020617; color: #cbd5e1; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen text-center px-6">
+  <div class="max-w-2xl mx-auto mt-20">
+    <span class="text-sm font-mono text-red-500 mb-4 block">FATAL ERROR: INGRESS_ROUTE_NOT_FOUND</span>
+    <h1 class="text-7xl font-black text-white mb-6 tracking-tighter">404</h1>
+    <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-lg text-left mb-8" dir="ltr">
+      <p class="text-cyan-400 mb-2">$ kubectl get ingress --namespace=production</p>
+      <p class="text-slate-400">Error from server (NotFound): ingress.networking.k8s.io "requested-path" not found</p>
+    </div>
+    <p class="text-slate-400 mb-8 text-lg font-sans">ترافیک درخواستی در لایه Edge دراپ شد. مسیر مورد نظر در توپولوژی زیرساخت اکباتان تعریف نشده است.</p>
+    <a href="/" class="px-8 py-3 rounded-xl bg-cyan-500 text-slate-950 font-bold hover:bg-cyan-400 transition-all inline-flex items-center gap-2">
+      بازگشت به Control Plane
+    </a>
+  </div>
+</body>
+</html>

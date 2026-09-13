@@ -1,13 +1,13 @@
 ---
-title: "زیرساخت هوش مصنوعی و MLOps در مقیاس بالا"
-scale: "NVIDIA H100 & H200 GPU Acceleration"
+title: "زیرساخت پردازش هوش مصنوعی و MLOps در مقیاس Enterprise"
+scale: "HPE ProLiant DL380a Gen11 & NVIDIA H200 NVL"
 category: "AI, ML & MLOps"
-description: "استقرار مدل‌های پیشرفته هوش مصنوعی و LLM روی کوبرنتیز همراه با بهینه‌سازی سخت‌افزارهای شتاب‌دهنده سنگین."
+description: "استقرار مدل‌های پردازشی هوش مصنوعی و LLM روی کلاسترهای سخت‌افزاری بهینه‌شده، همراه با پیاده‌سازی شبکه‌های پرسرعت NVLink جهت کاهش حداکثری Latency در لایه‌های Inference و Training."
 highlights:
-  - "استقرار مدل‌های هوش مصنوعی و LLM بر روی کلاسترهای کوبرنتیز در محیط پروداکشن"
-  - "پیکربندی و مدیریت سخت‌افزارهای شتاب‌دهنده گرافیکی قدرتمند شامل کارت‌های NVIDIA H100 و H200"
-  - "راه‌اندازی روال‌های خودکار CI/CD برای مدل‌ها (MLOps و LLMOps)"
-  - "بهینه‌سازی مصرف منابع و تخصیص بهینه GPU برای استنتاج سریع (Inference)"
-techs: ["MLOps", "LLMOps", "NVIDIA H100/H200", "Kubernetes", "AI Infrastructure"]
+  - "طراحی و پیکربندی کلاسترهای GPU-Dense مبتنی بر سرورهای قدرتمند HPE ProLiant DL380a Gen11 برای بارهای کاری سنگین"
+  - "تخصیص و مدیریت کارت‌های گرافیک NVIDIA H200 NVL با پل‌های ارتباطی 4-way NVLink (مدل S4A91C) جهت همگام‌سازی فوق‌سریع مموری"
+  - "راه‌اندازی پایپ‌لاین‌های خودکار CI/CD برای پردازش مدل‌ها (MLOps و LLMOps) روی پلتفرم Kubernetes"
+  - "تنظیم شبکه‌های AI-optimized Ethernet برای ارتباطات Inter-node با پهنای باند و پایداری تضمین‌شده"
+techs: ["MLOps", "LLMOps", "NVIDIA H200 NVL", "NVLink", "HPE ProLiant", "Kubernetes"]
 ---
 

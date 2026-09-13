@@ -11,12 +11,17 @@ const navItems = [
   <div class="max-w-7xl mx-auto flex items-center justify-between">
     <div class="flex items-center gap-4">
       <div class="flex items-center gap-4">
-        <!-- تصویر لوگو با قابلیت حذف پس‌زمینه سفید -->
-        <img 
-          src=/Ekbatan_logo.png
-          alt="Ekbatan Logo" 
-          class="h-12 w-auto mix-blend-lighten opacity-90 hover:opacity-100 transition-opacity"
-        />
+        <!-- بهینه‌سازی LCP با استفاده از فرمت نسل جدید -->
+        <picture>
+          <source srcset="/Ekbatan_logo.webp" type="image/webp" />
+          <img 
+            src="/Ekbatan_logo.png"
+            alt="Ekbatan Architecture Platform Logo" 
+            class="h-12 w-auto mix-blend-lighten opacity-90 hover:opacity-100 transition-opacity"
+            width="48"
+            height="48"
+          />
+        </picture>
       </div>
       <div>
         <span class="text-lg font-black tracking-wider text-white">EKbatan</span>
@@ -36,11 +41,24 @@ const navItems = [
 
     <div class="flex items-center gap-3">
       <a 
-        href="mailto:contact@ekbatan.tech" 
+        href="/assessment" 
         class="text-xs font-semibold px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all shadow-sm"
       >
-        جلسه مشاوره فنی
+        فرم ارزیابی معماری
       </a>
     </div>
   </div>
+  
+  <!-- SEO: Enterprise IT Service Schema Markup -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Ekbatan Tech",
+      "url": "https://ekbatan.tech",
+      "logo": "https://ekbatan.tech/Ekbatan_logo.png",
+      "description": "معماری زیرساخت‌های ابری، MLOps، دیتابیس‌های توزیع‌شده و کلاسترهای Enterprise Kubernetes.",
+      "sameAs": ["https://linkedin.com/company/ekbatan"]
+    }
+  </script>
 </nav>
