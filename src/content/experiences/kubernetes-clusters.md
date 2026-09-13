@@ -1,13 +1,13 @@
 ---
-title: "معماری کلاسترهای عظیم کوبرنتیز و ارکستراسیون"
-scale: "80+ Worker Nodes per Cluster"
+title: "پلتفرم مهندسی کوبرنتیز و Cloud-Native HA"
+scale: "80+ Worker Nodes / Multi-Region HA"
 category: "Kubernetes & DevOps"
-description: "راه‌اندازی و مدیریت کلاسترهای بزرگ کوبرنتیز با بیش از ۸۰ نود ورکر، اتوماسیون کامل GitOps و سخت‌سازی امنیت ساختاری."
+description: "طراحی، امن‌سازی و مدیریت چرخه حیات کلاسترهای کوبرنتیز در محیط‌های Bare-metal با تمرکز بر پایداری (SLA 99.999%)، مانیتورینگ متمرکز و Disaster Recovery."
 highlights:
-  - "راه اندازی و مدیریت چندین کلاستر بزرگ کوبرنتیز با بیش از ۸۰ نود ورکر در هر کلاستر"
-  - "پیاده‌سازی کامل خطوط لوله CI/CD و محیط‌های توسعه و پروداکشن با GitLab Enterprise و ArgoCD"
-  - "سخت‌سازی امنیتی پیشرفته کلاسترهای کوبرنتیز و ایزوله‌سازی سرویس‌ها"
-  - "مدیریت خودکار آپدیت‌ها و پایش پایداری سیستم در مقیاس بزرگ"
-techs: ["Kubernetes", "GitLab Enterprise", "ArgoCD", "Docker", "Helm", "Security"]
+  - "پیاده‌سازی معماری Multi-Region (Active-Active) و تفکیک دقیق Failure Domains در سطح Rack و دیتاسنتر برای تضمین دسترس‌پذیری سرویس‌ها"
+  - "مدیریت متمرکز اسرار (Secrets Management) با استقرار HashiCorp Vault و External Secrets Operator جهت حذف Hardcoded Secrets"
+  - "استقرار CNI پیشرفته Cilium مبتنی بر eBPF برای امنیت شبکه، مقیاس‌پذیری بالا و جایگزینی کامل kube-proxy"
+  - "اجرای پشته جامع Observability شامل OpenTelemetry برای Distributed Tracing، VictoriaMetrics و Loki جهت عیب‌یابی (Troubleshooting) در لحظه"
+techs: ["Kubernetes", "Cilium eBPF", "HashiCorp Vault", "OpenTelemetry", "ArgoCD", "GitOps"]
 ---
 

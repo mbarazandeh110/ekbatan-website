@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="درخواست ارزیابی معماری زیرساخت | اکباتان">
+  <Navbar />
+  <main class="min-h-screen bg-[#020617] py-20 px-6">
+    <div class="max-w-3xl mx-auto">
+      <div class="mb-10 text-center">
+        <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">Infrastructure Assessment</span>
+        <h1 class="text-3xl md:text-5xl font-black text-white mt-4 mb-4">طراحی معماری Target و ارزیابی زیرساخت</h1>
+        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+          برای استقرار بارهای کاری Mission-Critical، نیازمندی‌های خود را با جزئیات فنی وارد کنید. تیم SRE ما پس از بررسی لاگ‌ها، معماری فعلی و SLA مورد نیاز، برای تدوین Blueprint با شما تماس خواهد گرفت.
+        </p>
+      </div>
+
+      <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+        <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" class="space-y-6 text-right" dir="rtl">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-2">نام سازمان / شرکت</label>
+              <input type="text" name="company" required class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-slate-300 mb-2">ایمیل سازمانی</label>
+              <input type="email" name="email" required class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors" dir="ltr" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-2">نوع بارهای کاری (Workload Type)</label>
+            <select name="workload_type" class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors">
+              <option value="high-traffic-microservices">مایکروسرویس‌های پرترافیک / Kubernetes</option>
+              <option value="big-data-olap">کلان‌داده و OLAP (ClickHouse, Hadoop)</option>
+              <option value="ai-mlops">پردازش هوش مصنوعی و MLOps (GPU Intensive)</option>
+              <option value="cdn-streaming">توزیع محتوا، Edge و WebRTC</option>
+              <option value="storage-ceph">ذخیره‌سازی توزیع‌شده (Ceph PB-Scale)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-2">مقیاس تقریبی زیرساخت فعلی (تعداد Node / ترافیک / حجم داده)</label>
+            <input type="text" name="scale" placeholder="مثال: 50 نود کوبرنتیز، 2PB استوریج، 100Gbps ترافیک" class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-2">چالش‌های اصلی و نیازمندی‌های معماری (SLA, HA, Latency)</label>
+            <textarea name="challenges" rows="5" required placeholder="لطفا گلوگاه‌های Performance، مشکلات دیتابیس یا نیازهای Disaster Recovery را شرح دهید..." class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors resize-none"></textarea>
+          </div>
+
+          <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-lg py-4 rounded-xl transition-all shadow-lg shadow-cyan-500/20">
+            ثبت درخواست بررسی معماری
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

@@ -1,0 +1,270 @@
+---
+
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+------------------------------------------------
+
+<Layout
+title="درباره اکباتان | تخصص در سطح مأموریت‌بحرانی"
+description="تیم مهندسی پلتفرم و معماری ابری اکباتان. متخصص در SRE، Kubernetes و زیرساخت‌های Enterprise."
+
+>
+
+  <Navbar />
+
+  <main class="min-h-screen py-24 px-6 max-w-5xl mx-auto">
+
+```
+<!-- Hero -->
+<section class="text-center mb-20">
+  <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">
+    ABOUT EKBATAN
+  </span>
+
+  <h1 class="text-4xl md:text-6xl font-black text-white mt-4 mb-6">
+    مهندسی پلتفرم در مقیاس Enterprise
+  </h1>
+
+  <p class="text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed">
+    اکباتان یک آژانس پشتیبانی IT نیست؛ ما یک تیم تخصصی
+    <strong class="text-slate-200">Platform Engineering</strong>
+    و
+    <strong class="text-slate-200">SRE</strong>
+    هستیم. تمرکز ما طراحی، پیاده‌سازی و نگهداری زیرساخت‌هایی است که
+    کسب‌وکارهای ملی و لبه‌تکنولوژی روی آن‌ها بدون قطعی
+    <strong class="text-slate-200">(Zero-Downtime)</strong>
+    رشد می‌کنند.
+  </p>
+</section>
+
+<!-- Core Principles -->
+<section
+  class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20"
+  aria-label="اصول و رویکرد اکباتان"
+>
+
+  <!-- SRE -->
+  <article
+    class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl"
+  >
+    <h2 class="text-xl font-bold text-white mb-4">
+      رویکرد SRE-First
+    </h2>
+
+    <p class="text-sm text-slate-400 leading-relaxed">
+      مانیتورینگ عمیق با
+      <strong class="text-slate-300">OpenTelemetry</strong>،
+      مدیریت
+      <strong class="text-slate-300">Error Budget</strong>
+      و پیاده‌سازی خودکار
+      <strong class="text-slate-300">Node Remediation</strong>.
+      ما اعتقاد داریم پایداری ۹۹.۹۹٪ با تنظیمات دستی به دست نمی‌آید؛
+      بلکه باید مهندسی شود.
+    </p>
+  </article>
+
+  <!-- Security / GitOps -->
+  <article
+    class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl"
+  >
+    <h2 class="text-xl font-bold text-white mb-4">
+      امنیت و GitOps
+    </h2>
+
+    <p class="text-sm text-slate-400 leading-relaxed">
+      تمامی تغییرات زیرساخت ما مبتنی بر
+      <strong class="text-slate-300">Infrastructure as Code (IaC)</strong>
+      و مدیریت متمرکز اسرار با
+      <strong class="text-slate-300">HashiCorp Vault</strong>
+      است. استقرارهای
+      <strong class="text-slate-300">Air-gapped</strong>
+      و ممیزی‌های
+      <strong class="text-slate-300">Supply Chain Security</strong>
+      بخشی از استانداردهای ما هستند.
+    </p>
+  </article>
+
+  <!-- Engagement -->
+  <article
+    class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl"
+  >
+    <h2 class="text-xl font-bold text-white mb-4">
+      مدل‌های همکاری
+    </h2>
+
+    <p class="text-sm text-slate-400 leading-relaxed">
+      از معماری و ارزیابی
+      <strong class="text-slate-300">(Assessment)</strong>
+      در بازه ۱ تا ۲ هفته، تا پیاده‌سازی کامل و قراردادهای
+      <strong class="text-slate-300">Managed Services</strong>
+      ماهانه با SLA مشخص برای زیرساخت‌های حیاتی سازمان.
+    </p>
+  </article>
+
+</section>
+
+<!-- What We Do -->
+<section class="mb-20">
+
+  <div class="text-center mb-12">
+    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">
+      WHAT WE DO
+    </span>
+
+    <h2 class="text-3xl md:text-4xl font-bold text-white mt-3">
+      مهندسی برای پایداری، مقیاس و سرعت
+    </h2>
+
+    <p class="text-slate-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+      ما زیرساخت را صرفاً اجرا نمی‌کنیم؛ آن را برای رشد، اتوماسیون،
+      مشاهده‌پذیری و تحمل خطا طراحی می‌کنیم.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+    <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+      <h3 class="text-lg font-bold text-white mb-2">
+        Platform Engineering
+      </h3>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        طراحی و پیاده‌سازی پلتفرم‌های داخلی برای توسعه، استقرار و
+        مدیریت سرویس‌ها با تمرکز بر Developer Experience.
+      </p>
+    </div>
+
+    <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+      <h3 class="text-lg font-bold text-white mb-2">
+        Kubernetes & Cloud Native
+      </h3>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        طراحی، مهاجرت، بهینه‌سازی و مدیریت کلاسترهای Kubernetes و
+        زیرساخت‌های Cloud Native در محیط‌های Enterprise.
+      </p>
+    </div>
+
+    <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+      <h3 class="text-lg font-bold text-white mb-2">
+        SRE & Observability
+      </h3>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        طراحی سیستم‌های مانیتورینگ، Logging، Tracing، Alerting،
+        SLO و Error Budget برای افزایش قابلیت اطمینان سرویس‌ها.
+      </p>
+    </div>
+
+    <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+      <h3 class="text-lg font-bold text-white mb-2">
+        Infrastructure Automation
+      </h3>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        اتوماسیون زیرساخت و فرآیندهای عملیاتی با IaC، CI/CD و GitOps
+        برای کاهش خطای انسانی و افزایش سرعت تحویل.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Technology -->
+<section class="mb-20">
+
+  <div class="border border-slate-800 rounded-3xl p-8 md:p-12 bg-slate-900/30">
+
+    <div class="text-center mb-10">
+      <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">
+        TECHNOLOGY
+      </span>
+
+      <h2 class="text-3xl font-bold text-white mt-3">
+        تکنولوژی در خدمت معماری
+      </h2>
+
+      <p class="text-slate-400 mt-4 max-w-2xl mx-auto leading-relaxed">
+        انتخاب فناوری برای ما هدف نیست؛ فناوری باید در خدمت قابلیت
+        اطمینان، امنیت، مقیاس‌پذیری و سادگی عملیات باشد.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3">
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        Kubernetes
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        Linux
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        GitOps
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        Terraform
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        Ansible
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        Argo CD
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        OpenTelemetry
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        VictoriaMetrics
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        Elasticsearch
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        HashiCorp Vault
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        Cilium
+      </span>
+
+      <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">
+        GitLab CI/CD
+      </span>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- CTA -->
+<section class="text-center pb-8">
+
+  <h2 class="text-3xl md:text-4xl font-bold text-white mb-5">
+    زیرساخت شما، شایسته مهندسی است.
+  </h2>
+
+  <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8">
+    اگر زیرساخت شما با رشد کسب‌وکار پیچیده‌تر شده، زمان آن رسیده است
+    که به‌جای مدیریت دستی مشکلات، یک پلتفرم مهندسی‌شده بسازید.
+  </p>
+
+  <a
+    href="/contact"
+    class="inline-flex items-center justify-center px-7 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold transition-colors"
+  >
+    شروع یک گفتگو
+  </a>
+
+</section>
+```
+
+  </main>
+
+  <Footer />
+</Layout>

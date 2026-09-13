@@ -22,20 +22,21 @@
       <p><span class="text-cyan-400">apiVersion</span>: core.ekbatan.tech/v1alpha1</p>
       <p><span class="text-cyan-400">kind</span>: InfrastructureTopology</p>
       <p><span class="text-cyan-400">metadata</span>:</p>
-      <p class="pl-4"><span class="text-cyan-400">name</span>: <span class="text-emerald-300">Ekbatan-prod-cluster</span></p>
+      <p class="pl-4"><span class="text-cyan-400">name</span>: <span class="text-emerald-300">ekbatan-prod-cluster</span></p>
       <p><span class="text-cyan-400">spec</span>:</p>
       <p class="pl-4"><span class="text-cyan-400">compute</span>:</p>
-      <p class="pl-8"><span class="text-cyan-400">orchestration</span>: <span class="text-amber-200">Kubernetes High-Availability (3 Control Planes)</span></p>
-      <p class="pl-8"><span class="text-cyan-400">ai_workloads</span>: <span class="text-amber-200">HPE ProLiant DL380a Gen11 / NVIDIA H200 NVL w/ 4-way NVLink</span></p>
-      <p class="pl-4"><span class="text-cyan-400">networking</span>:</p>
-      <p class="pl-8"><span class="text-cyan-400">cni</span>: <span class="text-amber-200">Cilium eBPF (v1.18.1) + Anycast BGP Peering</span></p>
-      <p class="pl-8"><span class="text-cyan-400">edge_ingress</span>: <span class="text-amber-200">Golang Custom Controller (mlb-controller) w/ Envoy xDS/SDS</span></p>
-      <p class="pl-4"><span class="text-cyan-400">storage</span>:</p>
-      <p class="pl-8"><span class="text-cyan-400">engine</span>: <span class="text-amber-200">Ceph CSI (Block, File, S3-Compatible Object Store)</span></p>
+      <p class="pl-8"><span class="text-cyan-400">orchestration</span>: <span class="text-amber-200">Kubernetes HA (3 Control Planes)</span></p>
+      <p class="pl-8"><span class="text-cyan-400">ai_workloads</span>: <span class="text-amber-200">HPE ProLiant DL380a Gen11 / NVIDIA H200 NVL w/ NVLink</span></p>
+      <p class="pl-4"><span class="text-cyan-400">networking_and_security</span>:</p>
+      <p class="pl-8"><span class="text-cyan-400">cni</span>: <span class="text-amber-200">Cilium eBPF (v1.18.1) + Anycast BGP</span></p>
+      <p class="pl-8"><span class="text-cyan-400">secrets_management</span>: <span class="text-amber-200">HashiCorp Vault w/ External Secrets Operator</span></p>
+      <p class="pl-8"><span class="text-cyan-400">edge_ingress</span>: <span class="text-amber-200">Golang Custom Controller (mlb-controller) w/ Envoy xDS</span></p>
+      <p class="pl-4"><span class="text-cyan-400">observability</span>:</p>
+      <p class="pl-8"><span class="text-cyan-400">tracing_metrics</span>: <span class="text-amber-200">OpenTelemetry + VictoriaMetrics + Loki</span></p>
       <p class="pl-4"><span class="text-cyan-400">enterpriseOperators</span>:</p>
       <p class="pl-8">- <span class="text-slate-400">name</span>: <span class="text-indigo-300">altinity-clickhouse-operator</span> | <span class="text-slate-400">status</span>: <span class="text-emerald-400">Active</span></p>
       <p class="pl-8">- <span class="text-slate-400">name</span>: <span class="text-indigo-300">eck-operator</span> | <span class="text-slate-400">status</span>: <span class="text-emerald-400">Active</span></p>
-      <p class="mt-4 text-slate-500"># Cluster Status: 0 Unhealthy Nodes | Availability (SLA) > 99.999% | Error Budget &lt; 5.26 mins/year</p>
+      <p class="mt-4 text-emerald-400/80"># Cluster Status: Automated Node Remediation Active | Availability (SLA) > 99.999% | Error Budget &lt; 5.26 mins/year</p>
     </div>
   </div>
 </section>

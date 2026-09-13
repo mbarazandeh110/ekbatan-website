@@ -1,17 +1,18 @@
 ---
 const navItems = [
-  { name: "زیرساخت ابری", href: "#infrastructure" },
-  { name: "هوش و کلان‌داده", href: "#data-ai" },
-  { name: "استک‌های سازمانی", href: "#enterprise-stack" },
-  { name: "معماری سیستم", href: "#architecture" },
+  { name: "زیرساخت ابری", href: "/#infrastructure" },
+  { name: "هوش و کلان‌داده", href: "/#data-ai" },
+  { name: "مطالعات موردی", href: "/#track-record" },
+  { name: "استک‌های سازمانی", href: "/#enterprise-stack" },
+  { name: "معماری سیستم", href: "/#architecture" },
+  { name: "درباره ما / تیم", href: "/about" },
 ];
 ---
 
 <nav class="sticky top-0 z-50 backdrop-blur-md bg-[#090D16]/80 border-b border-slate-800/80 px-6 py-4">
   <div class="max-w-7xl mx-auto flex items-center justify-between">
     <div class="flex items-center gap-4">
-      <div class="flex items-center gap-4">
-        <!-- بهینه‌سازی LCP با استفاده از فرمت نسل جدید -->
+      <a href="/" class="flex items-center gap-4">
         <picture>
           <source srcset="/Ekbatan_logo.webp" type="image/webp" />
           <img 
@@ -20,19 +21,21 @@ const navItems = [
             class="h-12 w-auto mix-blend-lighten opacity-90 hover:opacity-100 transition-opacity"
             width="48"
             height="48"
+            decoding="async"
+            loading="eager"
           />
         </picture>
-      </div>
-      <div>
-        <span class="text-lg font-black tracking-wider text-white">EKbatan</span>
-        <span class="text-[10px] block font-mono text-cyan-400 tracking-widest uppercase">Ekbatan</span>
-      </div>
+        <div>
+          <span class="text-lg font-black tracking-wider text-white">EKBATAN</span>
+          <span class="text-[10px] block font-mono text-cyan-400 tracking-widest uppercase">Infrastructure</span>
+        </div>
+      </a>
     </div>
 
     <ul class="hidden md:flex items-center gap-8 text-sm text-slate-300">
       {navItems.map((item) => (
         <li>
-          <a href={item.href} class="transition-colors hover:text-cyan-400">
+          <a href={item.href} class="transition-colors hover:text-cyan-400 font-medium">
             {item.name}
           </a>
         </li>
@@ -42,14 +45,17 @@ const navItems = [
     <div class="flex items-center gap-3">
       <a 
         href="/assessment" 
-        class="text-xs font-semibold px-4 py-2 rounded-full border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all shadow-sm"
+        class="text-xs font-semibold px-5 py-2.5 rounded-lg border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all shadow-sm flex items-center gap-2"
       >
-        فرم ارزیابی معماری
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+        </span>
+        درخواست ارزیابی زیرساخت
       </a>
     </div>
   </div>
   
-  <!-- SEO: Enterprise IT Service Schema Markup -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
