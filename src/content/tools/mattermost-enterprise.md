@@ -2,18 +2,19 @@
 name: "Mattermost Enterprise"
 category: "Secure Real-Time Messaging"
 badge: "High-Throughput Chat"
-description: "راه‌اندازی پیام‌رسان سازمانی امن با قابلیت مقیاس‌پذیری بالا، ایمن‌سازی ارتباطات تیمی و انطباق کامل با استانداردهای حریم خصوصی درون‌شبکه."
+description: "راه‌اندازی پیام‌رسان سازمانی امن با معماری Scale-out افقی و تحمل خرابی نود (Failure-aware architecture)."
 architectureDetails:
-  - "کلاسترینگ وب‌سرویس‌ها پشت لودبالانسر با استقرار Stateless"
-  - "استفاده از دیتابیس PostgreSQL مجهز به Patroni برای پایداری ۱۰۰٪"
-  - "مدیریت فایل‌ها و پیوست‌ها در بستر Ceph S3 Storage"
-  - "اتصال به دایرکتوری‌های سازمانی (LDAP / Active Directory / SAML SSO)"
+  - "استقرار کاملاً Stateless با توزیع بار هوشمند"
+  - "مدیریت دیتابیس خارجی PostgreSQL با Patroni"
+  - "استفاده از Ceph S3 برای پایداری فایل‌ها بدون وابستگی به دیسک محلی"
+  - "اتصال به Active Directory / SAML سازمانی"
 features:
-  - "امنیت کامل داده‌ها در شبکه داخلی (Air-Gapped)"
-  - "پشتیبانی از پلتفرم‌های مختلف و ربات‌های اتوماسیون"
-  - "مدیریت دسترسی‌های پیشرفته سازمانی"
-  - "عملکرد بی‌نقص در ترافیک‌های سنگین تیمی"
+  - "طراحی برای Availability هدف‌گذاری شده تا 99.99%"
+  - "پشتیبانی از ترافیک سنگین تیمی بدون افت پرفورمنس"
+  - "کنترل دسترسی دقیق (RBAC) و Audit Logging"
+  - "پیکربندی Alerting پیشرفته در لایه زیرساخت"
 yamlCode: |
+  # Architecture Snapshot for Mattermost HA Deployment
   apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -21,10 +22,32 @@ yamlCode: |
     namespace: collaboration
   spec:
     replicas: 3
+    selector:
+      matchLabels:
+        app: mattermost
     template:
       spec:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values: ["mattermost"]
+              topologyKey: "kubernetes.io/hostname"
         containers:
         - name: mattermost
-          image: mattermost/mattermost-enterprise-edition:latest
+          image: mattermost/mattermost-enterprise-edition:9.5.1
+          resources:
+            requests:
+              cpu: "1000m"
+              memory: "2Gi"
+          env:
+            - name: MM_SQLSETTINGS_DATASOURCE
+              valueFrom:
+                secretKeyRef:
+                  name: pg-patroni-secret
+                  key: connection_string
 ---
 
