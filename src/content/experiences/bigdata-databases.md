@@ -4,7 +4,7 @@ scale: "40+ Nodes Clusters (StarRocks & ClickHouse)"
 category: "Distributed Data & Analytics"
 description: "طراحی معماری و استقرار کلاسترهای Stateful دیتابیس‌های تحلیلی (OLAP) و پردازش جریانی (Stream Processing) بر بستر کوبرنتیز با تمرکز بر Performance Tuning دیسک‌ها."
 highlights:
-  - "استقرار و مدیریت کلاسترهای ۴۰+ نودی StarRocks و ClickHouse روی توپولوژی‌های Multi-Rack با استفاده از Altinity Operator و تنظیمات Anti-Affinity"
+  - "استقرار و مدیریت کلاسترهای ۴۰+ نودی StarRocks و ClickHouse روی توپولوژی‌های Multi-Rack با تنظیمات Anti-Affinity"
   - "بهینه‌سازی لایه ذخیره‌سازی با تخصیص Local NVMe و استفاده از DirectPV برای رفع چالش‌های I/O در Workloadهای سنگین Stateful روی کوبرنتیز"
   - "پیاده‌سازی معماری Change Data Capture (CDC) با Apache Kafka و استریم داده‌ها به دیتالیک‌های مبتنی بر Ceph S3"
   - "تأمین حاکمیت داده (Data Governance) و امنیت دسترسی‌ها با پیاده‌سازی کامل Apache Ranger و Knox در اکوسیستم کلان‌داده"
