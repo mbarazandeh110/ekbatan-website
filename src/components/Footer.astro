@@ -1,27 +1,52 @@
 ---
 ---
-
-<footer class="border-t border-slate-850 bg-[#070A10] py-14 px-6 text-sm">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-    <div>
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-white tracking-wide text-base">شرکت فناوری اکباتان</span>
-        <span class="text-xs text-cyan-400 font-mono">(Ekbatan)</span>
+<footer id="contact" class="border-t border-slate-800 bg-[#040812] pt-16 pb-8 px-6">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+    <div class="col-span-1 md:col-span-2">
+      <div class="flex items-center gap-3 mb-4">
+        <img src="/Ekbatan_logo.webp" alt="Ekbatan Logo" class="h-10 w-10 opacity-90" />
+        <span class="font-black text-white text-xl tracking-wide">EKBATAN</span>
       </div>
-      <p class="text-xs text-slate-500 mt-1">
-        A place where data, intelligence and technology come together.
+      <p class="text-sm text-slate-400 leading-relaxed max-w-md">
+        اکباتان یک آژانس پشتیبانی IT نیست؛ ما یک تیم مهندسی پلتفرم (Platform Engineering) و SRE هستیم که با تمرکز بر معماری‌های ابری، هوش مصنوعی و کلان‌داده، زیرساخت‌های مأموریت‌بحرانی را در بالاترین سطح پایداری و امنیت، طراحی و نگهداری می‌کنیم.
       </p>
     </div>
 
-    <div class="flex flex-wrap items-center gap-6 text-xs text-slate-400">
-      <span>DevOps & SRE</span>
-      <span>Kubernetes Operators</span>
-      <span>Enterprise Tooling</span>
-      <span>High-Throughput WebRTC</span>
+    <div>
+      <h4 class="text-white font-bold mb-4 font-mono text-sm">ارتباط با تیم مهندسی</h4>
+      <ul class="space-y-3 text-sm text-slate-400">
+        <li class="flex items-center gap-2">
+          <span class="text-cyan-500">✉</span>
+          <a href="mailto:architecture@ekbatan.tech" class="hover:text-cyan-400 transition-colors" dir="ltr">architecture@ekbatan.tech</a>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="text-cyan-500">☏</span>
+          <a href="tel:+9800000000" class="hover:text-cyan-400 transition-colors" dir="ltr">+98 (0) 21 0000 0000</a>
+        </li>
+        <li class="flex items-start gap-2 mt-4">
+          <span class="text-cyan-500">⚑</span>
+          <address class="not-italic leading-relaxed">تهران، منطقه نوآوری، پارک فناوری<br />دپارتمان زیرساخت و معماری ابری</address>
+        </li>
+      </ul>
     </div>
 
-    <div class="text-xs font-mono text-slate-500" dir="ltr">
-      © {new Date().getFullYear()} Ekbatan Tech. All rights reserved.
+    <div>
+      <h4 class="text-white font-bold mb-4 font-mono text-sm">پیوندهای حیاتی</h4>
+      <ul class="space-y-3 text-sm text-slate-400">
+        <li><a href="/assessment" class="hover:text-cyan-400 transition-colors">درخواست ارزیابی معماری</a></li>
+        <li><a href="https://linkedin.com/company/ekbatan" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">پروفایل لینکدین (معرفی تیم)</a></li>
+        <li><a href="https://github.com/ekbatan-tech" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">مشارکت‌های متن‌باز (GitHub)</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto border-t border-slate-800/60 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+    <div>
+      طراحی شده برای پایداری. <span class="text-emerald-500">SLA 99.999%</span>
+    </div>
+    <div class="font-mono" dir="ltr">
+      &copy; {new Date().getFullYear()} Ekbatan Infrastructure Engineering.
     </div>
   </div>
 </footer>
+
