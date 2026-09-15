@@ -21,4 +21,17 @@ import Footer from '../components/Footer.astro';
     <Cta />
   </main>
   <Footer />
+  
+  <!-- Schema Markup for Homepage -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Ekbatan Tech",
+      "url": "https://ekbatan.tech",
+      "logo": "https://ekbatan.tech/Ekbatan_logo.png",
+      "description": "معماری زیرساخت‌های ابری، MLOps، دیتابیس‌های توزیع‌شده و کلاسترهای Enterprise Kubernetes.",
+      "sameAs": ["https://linkedin.com/company/ekbatantech"]
+    }
+  </script>
 </Layout>

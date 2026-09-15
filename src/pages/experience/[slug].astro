@@ -15,11 +15,19 @@ export async function getStaticPaths() {
 const { exp } = Astro.props;
 const { Content } = await render(exp);
 const data = exp.data;
+
+// تضمین طول مناسب Meta Description برای سئو (حداکثر ۱۵۵ کاراکتر)
+const truncateDescription = (text: string, maxLength = 155) => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength).trim() + '...';
+};
+
+const optimizedDescription = truncateDescription(data.description);
 ---
 
 <Layout 
   title={`${data.title} | تجربیات اجرایی اکباتان`}
-  description={data.description}
+  description={optimizedDescription}
 >
   <Navbar />
   
@@ -84,4 +92,16 @@ const data = exp.data;
   </main>
 
   <Footer />
+  
+  <!-- Schema Markup for Case Study / Article -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": data.title,
+    "description": optimizedDescription,
+    "author": {
+      "@type": "Organization",
+      "name": "Ekbatan Tech"
+    }
+  })} />
 </Layout>

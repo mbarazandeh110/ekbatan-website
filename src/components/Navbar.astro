@@ -35,7 +35,7 @@ const navItems = [
     <ul class="hidden md:flex items-center gap-8 text-sm text-slate-300">
       {navItems.map((item) => (
         <li>
-          <a href={item.href} class="transition-colors hover:text-cyan-400 font-medium">
+          <a href={item.href} class="nav-link transition-colors hover:text-cyan-400 font-medium">
             {item.name}
           </a>
         </li>
@@ -55,16 +55,25 @@ const navItems = [
       </a>
     </div>
   </div>
-  
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Ekbatan Tech",
-      "url": "https://ekbatan.tech",
-      "logo": "https://ekbatan.tech/Ekbatan_logo.png",
-      "description": "معماری زیرساخت‌های ابری، MLOps، دیتابیس‌های توزیع‌شده و کلاسترهای Enterprise Kubernetes.",
-      "sameAs": ["https://linkedin.com/company/ekbatantech"]
-    }
-  </script>
 </nav>
+
+<script>
+  // کنترل Anchorها برای جلوگیری از Layout Shift و اعمال Smooth Scroll در موبایل و دسکتاپ
+  document.addEventListener('DOMContentLoaded', () => {
+    const links = document.querySelectorAll('a.nav-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('/#') && window.location.pathname === '/') {
+          e.preventDefault();
+          const targetId = href.substring(2);
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', '#' + targetId);
+          }
+        }
+      });
+    });
+  });
+</script>
