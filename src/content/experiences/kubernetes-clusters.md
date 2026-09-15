@@ -10,4 +10,3 @@ highlights:
   - "پیاده‌سازی پشته جامع Observability شامل OpenTelemetry، Elastic APM، VictoriaMetrics و Elasticsearch برای پایش Metrics، تحلیل Logs و Distributed Tracing با هدف Troubleshooting و Root Cause Analysis."
 techs: ["Kubernetes", "Cilium eBPF", "HashiCorp Vault", "OpenTelemetry", "ArgoCD", "GitOps"]
 ---
-

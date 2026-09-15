@@ -10,4 +10,3 @@ highlights:
   - "تضمین پایداری، دوام و دسترسی‌پذیری بالا برای داده‌های حجیم سازمانی"
 techs: ["Ceph Storage", "Rook Ceph", "Object Storage", "Block Storage", "High Availability"]
 ---
-
