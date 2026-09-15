@@ -25,6 +25,6 @@ yamlCode: |
       spec:
         containers:
         - name: artifactory
-          image: releases-docker.jfrog.io/jfrog/artifactory-pro:latest
+          image: releases-docker.jfrog.io/jfrog/artifactory-pro:7.104.7
 ---
 

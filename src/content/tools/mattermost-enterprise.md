@@ -5,7 +5,7 @@ badge: "High-Throughput Chat"
 description: "راه‌اندازی پیام‌رسان سازمانی امن با معماری Scale-out افقی و تحمل خرابی نود (Failure-aware architecture)."
 architectureDetails:
   - "استقرار کاملاً Stateless با توزیع بار هوشمند"
-  - "مدیریت دیتابیس خارجی PostgreSQL با Patroni"
+  - "مدیریت دیتابیس خارجی PostgreSQL با Patroni/Cloudnative-pg"
   - "استفاده از Ceph S3 برای پایداری فایل‌ها بدون وابستگی به دیسک محلی"
   - "اتصال به Active Directory / SAML سازمانی"
 features:
@@ -38,7 +38,7 @@ yamlCode: |
               topologyKey: "kubernetes.io/hostname"
         containers:
         - name: mattermost
-          image: mattermost/mattermost-enterprise-edition:9.5.1
+          image: mattermost/mattermost-enterprise-edition:11.8.0
           resources:
             requests:
               cpu: "1000m"
@@ -47,7 +47,7 @@ yamlCode: |
             - name: MM_SQLSETTINGS_DATASOURCE
               valueFrom:
                 secretKeyRef:
-                  name: pg-patroni-secret
+                  name: pg-secret
                   key: connection_string
 ---
 

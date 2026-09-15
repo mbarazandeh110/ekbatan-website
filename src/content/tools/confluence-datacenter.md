@@ -25,6 +25,5 @@ yamlCode: |
       spec:
         containers:
         - name: confluence
-          image: atlassian/confluence:latest
+          image: atlassian/confluence:9.5.3
 ---
-
