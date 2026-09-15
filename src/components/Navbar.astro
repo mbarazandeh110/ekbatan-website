@@ -1,15 +1,14 @@
 ---
 const navItems = [
   { name: "زیرساخت ابری", href: "/#infrastructure" },
-  { name: "هوش و کلان‌داده", href: "/#data-ai" },
   { name: "مطالعات موردی", href: "/#track-record" },
+  { name: "مدل‌های همکاری", href: "/#engagement" },
   { name: "استک‌های سازمانی", href: "/#enterprise-stack" },
-  { name: "معماری سیستم", href: "/#architecture" },
   { name: "درباره ما / تیم", href: "/about" },
 ];
 ---
 
-<nav class="sticky top-0 z-50 backdrop-blur-md bg-[#090D16]/80 border-b border-slate-800/80 px-6 py-4">
+<nav class="sticky top-0 z-50 backdrop-blur-md bg-[#090D16]/80 border-b border-slate-800/80 px-6 py-4 relative">
   <div class="max-w-7xl mx-auto flex items-center justify-between">
     <div class="flex items-center gap-4">
       <a href="/" class="flex items-center gap-4">
@@ -32,6 +31,7 @@ const navItems = [
       </a>
     </div>
 
+    <!-- Desktop Menu -->
     <ul class="hidden md:flex items-center gap-8 text-sm text-slate-300">
       {navItems.map((item) => (
         <li>
@@ -45,21 +45,46 @@ const navItems = [
     <div class="flex items-center gap-3">
       <a 
         href="/assessment" 
-        class="text-xs font-semibold px-5 py-2.5 rounded-lg border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all shadow-sm flex items-center gap-2"
+        class="hidden sm:flex text-xs font-semibold px-5 py-2.5 rounded-lg border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all shadow-sm items-center gap-2"
       >
         <span class="relative flex h-2 w-2">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
         </span>
-        درخواست ارزیابی زیرساخت
+        درخواست ارزیابی
       </a>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white focus:outline-none" aria-label="منوی سایت">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
     </div>
+  </div>
+
+  <!-- Mobile Menu Dropdown -->
+  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-[#090D16]/95 border-b border-slate-800 backdrop-blur-xl px-6 py-6 shadow-2xl">
+    <ul class="flex flex-col gap-4">
+      {navItems.map((item) => (
+        <li>
+          <a href={item.href} class="nav-link block text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3">
+            {item.name}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href="/assessment" class="block text-center mt-2 text-sm font-semibold px-5 py-3 rounded-lg bg-cyan-500 text-slate-950 transition-all">
+          درخواست ارزیابی زیرساخت
+        </a>
+      </li>
+    </ul>
   </div>
 </nav>
 
 <script>
-  // کنترل Anchorها برای جلوگیری از Layout Shift و اعمال Smooth Scroll در موبایل و دسکتاپ
   document.addEventListener('DOMContentLoaded', () => {
+    // Smooth Scroll Control
     const links = document.querySelectorAll('a.nav-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -71,9 +96,18 @@ const navItems = [
           if (targetElement) {
             targetElement.scrollIntoView({ behavior: 'smooth' });
             history.pushState(null, '', '#' + targetId);
+            // Close mobile menu on click
+            document.getElementById('mobile-menu')?.classList.add('hidden');
           }
         }
       });
+    });
+
+    // Mobile Menu Toggle
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileBtn?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
     });
   });
 </script>
