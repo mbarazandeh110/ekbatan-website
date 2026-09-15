@@ -105,17 +105,17 @@ const optimizedDescription = truncateDescription(data.description);
 
   <Footer />
   
-  <!-- Schema Markup for Software/Enterprise Tool -->
+  <!-- Schema Markup for Enterprise Service -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": data.name,
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Kubernetes / Linux",
+    "@type": "Service",
+    "serviceType": "ITConsulting",
+    "name": `خدمات استقرار و معماری ${data.name}`,
     "description": optimizedDescription,
     "provider": {
       "@type": "ProfessionalService",
-      "name": "Ekbatan Tech"
+      "name": "اکباتان (Ekbatan Tech)",
+      "url": "https://ekbatan.tech"
     }
   })} />
 </Layout>
