@@ -68,7 +68,7 @@ spec:
     spec:
       containers:
       - name: webservice
-        image: gitlab/gitlab-ee:latest`
+        image: gitlab/gitlab-ee:19.3.1-ee.0`
   },
   {
     slug: 'mattermost-enterprise',
@@ -94,7 +94,7 @@ spec:
     spec:
       containers:
       - name: mattermost
-        image: mattermost/mattermost-enterprise-edition:latest`
+        image: mattermost/mattermost-enterprise-edition:11.8.0`
   },
   {
     slug: 'nexus-repository',
@@ -120,7 +120,7 @@ spec:
     spec:
       containers:
       - name: nexus
-        image: sonatype/nexus3:latest`
+        image: sonatype/nexus3:3.96.0`
   },
   {
     slug: 'jfrog-artifactory',
@@ -146,7 +146,7 @@ spec:
     spec:
       containers:
       - name: artifactory
-        image: releases-docker.jfrog.io/jfrog/artifactory-pro:latest`
+        image: releases-docker.jfrog.io/jfrog/artifactory:7.104.7`
   },
   {
     slug: 'n8n-enterprise',
@@ -164,7 +164,7 @@ spec:
     yamlCode: `version: '3.8'
 services:
   n8n-worker:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n:2.39.8
     command: worker
     deploy:
       replicas: 5`
@@ -193,7 +193,7 @@ spec:
     spec:
       containers:
       - name: jira
-        image: atlassian/jira-software:latest`
+        image: atlassian/jira-software:10.7.3`
   },
   {
     slug: 'confluence-datacenter',
@@ -219,7 +219,7 @@ spec:
     spec:
       containers:
       - name: confluence
-        image: atlassian/confluence:latest`
+        image: atlassian/confluence:9.5.3`
   },
   {
     slug: 'nextcloud-enterprise',
@@ -245,6 +245,6 @@ spec:
     spec:
       containers:
       - name: nextcloud
-        image: nextcloud:latest`
+        image: nextcloud:34.0.1`
   }
 ];

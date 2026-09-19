@@ -25,6 +25,5 @@ yamlCode: |
       spec:
         containers:
         - name: nexus
-          image: sonatype/nexus3:latest
+          image: sonatype/nexus3:3.96.0
 ---
-
