@@ -25,6 +25,5 @@ yamlCode: |
       spec:
         containers:
         - name: nextcloud
-          image: nextcloud:latest
+          image: nextcloud:34.0.1
 ---
-
