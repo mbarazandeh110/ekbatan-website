@@ -23,6 +23,11 @@ const experiencesCollection = defineCollection({
     description: z.string(),
     highlights: z.array(z.string()),
     techs: z.array(z.string()),
+    // فیلد اختیاری جدید برای نمایش دستاوردهای کمی
+    metrics: z.array(z.object({
+      label: z.string(),
+      value: z.string()
+    })).optional(),
   }),
 });
 
