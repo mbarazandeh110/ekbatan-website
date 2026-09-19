@@ -11,7 +11,10 @@ import Cta from '../components/Cta.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="مشاوره و استقرار زیرساخت ابری و کوبرنتیز | اکباتان">
+<Layout 
+  title="مشاوره و استقرار زیرساخت ابری و کوبرنتیز | اکباتان"
+  description="مشاوره، طراحی معماری و استقرار زیرساخت ابری، کلاسترهای کوبرنتیز سازمانی (Kubernetes)، ذخیره‌سازی توزیع‌شده (Ceph)، MLOps و خدمات SRE با تضمین SLA."
+>
   <Navbar />
   <main>
     <Hero />
@@ -25,8 +28,7 @@ import Footer from '../components/Footer.astro';
   <Footer />
   
   <!-- Schema Markup for Homepage -->
-  <script type="application/ld+json">
-    {
+  <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@type": "ProfessionalService",
       "name": "Ekbatan Tech",
@@ -34,6 +36,5 @@ import Footer from '../components/Footer.astro';
       "logo": "https://ekbatan.tech/Ekbatan_logo.png",
       "description": "معماری زیرساخت‌های ابری، MLOps، دیتابیس‌های توزیع‌شده و کلاسترهای Enterprise Kubernetes.",
       "sameAs": ["https://linkedin.com/company/ekbatantech"]
-    }
-  </script>
+  })} />
 </Layout>

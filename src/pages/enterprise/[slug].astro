@@ -16,10 +16,9 @@ const { tool } = Astro.props;
 const { Content } = await render(tool);
 const data = tool.data;
 
-// تضمین طول مناسب Meta Description برای سئو (حداکثر ۱۵۵ کاراکتر)
 const truncateDescription = (text: string, maxLength = 155) => {
   if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength).trim() + '...';
+  return text.substring(0, maxLength).replace(/\s+\S*$/, '') + '...';
 };
 
 const optimizedDescription = truncateDescription(data.description);
@@ -105,17 +104,27 @@ const optimizedDescription = truncateDescription(data.description);
 
   <Footer />
   
-  <!-- Schema Markup for Enterprise Service -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "serviceType": "ITConsulting",
-    "name": `خدمات استقرار و معماری ${data.name}`,
-    "description": optimizedDescription,
-    "provider": {
-      "@type": "ProfessionalService",
-      "name": "اکباتان (Ekbatan Tech)",
-      "url": "https://ekbatan.tech"
+  <script type="application/ld+json" set:html={JSON.stringify([
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "ITConsulting",
+      "name": `خدمات استقرار و معماری ${data.name}`,
+      "description": optimizedDescription,
+      "provider": {
+        "@type": "ProfessionalService",
+        "name": "اکباتان (Ekbatan Tech)",
+        "url": "https://ekbatan.tech"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
+        { "@type": "ListItem", "position": 2, "name": "سرویس‌های سازمانی", "item": "https://ekbatan.tech/#enterprise-stack" },
+        { "@type": "ListItem", "position": 3, "name": data.name, "item": Astro.url.href }
+      ]
     }
-  })} />
+  ])} />
 </Layout>

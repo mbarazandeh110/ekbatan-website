@@ -4,7 +4,10 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="درخواست ارزیابی معماری زیرساخت | اکباتان">
+<Layout 
+  title="درخواست ارزیابی معماری زیرساخت و کوبرنتیز | اکباتان"
+  description="فرم درخواست ارزیابی زیرساخت و معماری ابری. با تیم SRE اکباتان برای مقیاس‌پذیری، رفع گلوگاه‌ها و استقرار کوبرنتیز سازمانی مشورت کنید."
+>
   <Navbar />
   <main class="min-h-screen bg-[#020617] py-20 px-6">
     <div class="max-w-3xl mx-auto">
@@ -18,7 +21,6 @@ import Footer from '../components/Footer.astro';
 
       <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 shadow-2xl relative">
         
-        <!-- پیام تشکر که ابتدا مخفی است -->
         <div id="success-message" class="hidden absolute inset-0 bg-slate-900/95 rounded-2xl flex flex-col items-center justify-center p-8 text-center z-10 backdrop-blur-sm">
             <svg class="w-16 h-16 text-cyan-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <h3 class="text-2xl font-bold text-white mb-2">درخواست شما با موفقیت ثبت شد</h3>
@@ -26,7 +28,6 @@ import Footer from '../components/Footer.astro';
         </div>
 
         <form id="assessment-form" class="space-y-6 text-right" dir="rtl">
-          <!-- کلید دسترسی اختصاصی شما (حتما جایگزین کنید) -->
           <input type="hidden" name="access_key" value="7a1d3c08-b0d1-4a8b-873e-cfd95c1d6c6d">
           <input type="hidden" name="subject" value="درخواست جدید ارزیابی معماری از سایت Ekbatan.tech">
           <input type="hidden" name="from_name" value="Ekbatan Tech System">
@@ -67,7 +68,6 @@ import Footer from '../components/Footer.astro';
 
           <button id="submit-btn" type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-lg py-4 rounded-xl transition-all shadow-lg shadow-cyan-500/20 flex justify-center items-center gap-2">
             <span>ثبت درخواست بررسی معماری</span>
-            <!-- آیکون لودینگ (پیش‌فرض مخفی است) -->
             <svg id="loading-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-slate-950 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
           </button>
         </form>
@@ -85,17 +85,14 @@ import Footer from '../components/Footer.astro';
   const successMessage = document.getElementById('success-message');
 
   form.addEventListener('submit', async function(e) {
-    e.preventDefault(); // جلوگیری از رفرش صفحه
+    e.preventDefault();
 
-    // تغییر حالت دکمه به "در حال ارسال"
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
     submitText.innerText = 'در حال ارسال...';
     loadingSpinner.classList.remove('hidden');
 
     const formData = new FormData(form);
-    
-    // تبدیل اطلاعات فرم به فرمت JSON (الزام Web3Forms برای AJAX)
     const object = Object.fromEntries(formData);
     const json = JSON.stringify(object);
 
@@ -112,9 +109,8 @@ import Footer from '../components/Footer.astro';
       const result = await response.json();
       
       if (response.status === 200) {
-        // نمایش پیام موفقیت
         successMessage.classList.remove('hidden');
-        form.reset(); // پاک کردن فیلدها
+        form.reset();
       } else {
         alert("متاسفانه خطایی رخ داد: " + result.message);
       }
@@ -122,7 +118,6 @@ import Footer from '../components/Footer.astro';
       console.log(error);
       alert("خطا در برقراری ارتباط با سرور.");
     } finally {
-      // بازگرداندن دکمه به حالت اولیه
       submitBtn.disabled = false;
       submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
       submitText.innerText = 'ثبت درخواست بررسی معماری';

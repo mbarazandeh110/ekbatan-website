@@ -10,7 +10,7 @@ interface Props {
 
 const { 
   title, 
-  description = "اکباتان؛ نقطه تلاقی داده، هوش مصنوعی و زیرساخت‌های توزیع‌شده ابری.",
+  description = "اکباتان؛ مشاوره، معماری و استقرار زیرساخت ابری، کوبرنتیز سازمانی، Ceph، MLOps و خدمات SRE با تضمین پایداری ۹۹.۹۹٪.",
   image = "/Ekbatan_logo.png",
   robots = "index, follow"
 } = Astro.props;
@@ -37,6 +37,7 @@ const socialImageURL = new URL(image, Astro.url);
     <!-- Canonical URL and Language -->
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="fa" href={canonicalURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
 
     <!-- Open Graph / LinkedIn / Facebook -->
     <meta property="og:type" content="website" />
@@ -68,6 +69,18 @@ const socialImageURL = new URL(image, Astro.url);
           "name": "اکباتان (Ekbatan Tech)",
           "url": "https://ekbatan.tech",
           "logo": "https://ekbatan.tech/Ekbatan_logo.png",
+          "contactPoint": [{
+            "@type": "ContactPoint",
+            "telephone": "+989186100599",
+            "contactType": "customer service",
+            "areaServed": "IR",
+            "availableLanguage": ["fa", "en"]
+          }],
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "تهران",
+            "addressCountry": "IR"
+          },
           "sameAs": [
             "https://linkedin.com/company/ekbatantech",
             "https://github.com/ekbatan-tech"
@@ -96,8 +109,6 @@ const socialImageURL = new URL(image, Astro.url);
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('active');
-            // در صورت تمایل به اجرای فقط یک‌بار انیمیشن خط زیر را از کامنت خارج کنید:
-            // observer.unobserve(entry.target); 
           }
         });
       }, { threshold: 0.1 });
