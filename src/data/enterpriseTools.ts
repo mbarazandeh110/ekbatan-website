@@ -141,7 +141,7 @@ metadata:
   name: jfrog-artifactory
   namespace: devops
 spec:
-  replicas: 2
+  replicas: 3
   template:
     spec:
       containers:
@@ -214,7 +214,7 @@ metadata:
   name: confluence-datacenter
   namespace: management
 spec:
-  replicas: 2
+  replicas: 3
   template:
     spec:
       containers:
