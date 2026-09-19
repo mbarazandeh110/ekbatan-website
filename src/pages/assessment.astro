@@ -17,7 +17,15 @@ import Footer from '../components/Footer.astro';
       </div>
 
       <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 shadow-2xl">
-        <form action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST" class="space-y-6 text-right" dir="rtl">
+        <!-- تغییر آدرس اکشن به Web3Forms -->
+        <form action="https://api.web3forms.com/submit" method="POST" class="space-y-6 text-right" dir="rtl">
+
+          <input type="hidden" name="access_key" value="7a1d3c08-b0d1-4a8b-873e-cfd95c1d6c6d">
+          <!-- فیلدهای مخفی برای تنظیمات ایمیل و جلوگیری از اسپم -->
+          <input type="hidden" name="subject" value="درخواست جدید ارزیابی معماری از سایت Ekbatan.tech">
+          <input type="hidden" name="from_name" value="Ekbatan Tech System">
+          <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-medium text-slate-300 mb-2">نام سازمان / شرکت</label>
