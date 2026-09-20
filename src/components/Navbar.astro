@@ -1,10 +1,23 @@
 ---
+import { getCollection } from 'astro:content';
+
+// دریافت تمام سرویس‌ها و مرتب‌سازی
+const allServices = await getCollection('services');
+const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
+
+// گروه‌بندی هوشمند سرویس‌ها بر اساس تگ (دسته‌بندی)
+const servicesByCategory = sortedServices.reduce((acc, service) => {
+  const tag = service.data.tag;
+  if (!acc[tag]) acc[tag] = [];
+  acc[tag].push(service);
+  return acc;
+}, {} as Record<string, any[]>);
+
 const navItems = [
   { name: "زیرساخت ابری", href: "/#infrastructure" },
   { name: "مدل‌های همکاری", href: "/#engagement" },
   { name: "مطالعات موردی", href: "/#track-record" },
   { name: "استک‌های سازمانی", href: "/#enterprise-stack" },
-  { name: "خدمات", href: "/services" },
   { name: "بلاگ مهندسی", href: "/blog" },
   { name: "درباره ما / تیم", href: "/about" },
 ];
@@ -12,6 +25,7 @@ const navItems = [
 
 <nav class="sticky top-0 z-50 backdrop-blur-md bg-[#090D16]/80 border-b border-slate-800/80 px-6 py-4 relative">
   <div class="max-w-7xl mx-auto flex items-center justify-between">
+    <!-- Logo -->
     <div class="flex items-center gap-4">
       <a href="/" class="flex items-center gap-4">
         <picture>
@@ -35,7 +49,59 @@ const navItems = [
 
     <!-- Desktop Menu -->
     <ul class="hidden md:flex items-center gap-8 text-sm text-slate-300">
-      {navItems.map((item) => (
+      <li>
+        <a href="/#infrastructure" class="nav-link transition-colors hover:text-cyan-400 font-medium">زیرساخت ابری</a>
+      </li>
+
+      <!-- Dropdown دو مرحله‌ای خدمات -->
+      <li class="relative group py-4">
+        <a href="/services" class="nav-link flex items-center gap-1 transition-colors hover:text-cyan-400 font-medium">
+          خدمات
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180 text-slate-500 group-hover:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </a>
+
+        <!-- مرحله اول: لیست دسته‌بندی‌ها -->
+        <div class="absolute top-full right-0 w-64 bg-[#0B101B]/95 backdrop-blur-xl border border-slate-800/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50 py-2">
+          
+          <ul class="flex flex-col">
+            {Object.entries(servicesByCategory).map(([category, services]) => (
+              <li class="relative group/category">
+                <a href={`/services/category/${category}`} class="flex items-center justify-between px-5 py-3 text-sm text-slate-300 hover:text-cyan-300 hover:bg-slate-800/60 transition-colors">
+                  <span class="font-mono tracking-wide">{category}</span>
+                  <!-- آیکون فلش به سمت چپ (چون سایت RTL است) -->
+                  <svg class="w-4 h-4 text-slate-500 group-hover/category:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </a>
+
+                <!-- مرحله دوم: لیست خدمات هر دسته (باز شدن به سمت چپ) -->
+                <div class="absolute top-0 right-full w-72 mr-1 bg-[#0B101B]/95 backdrop-blur-xl border border-slate-800/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 translate-x-2 group-hover/category:translate-x-0 overflow-hidden py-2">
+                  <div class="px-5 py-2 mb-1 border-b border-slate-800/60 text-[10px] text-cyan-500 font-mono">خدمات {category}</div>
+                  <ul class="flex flex-col">
+                    {services.map(srv => (
+                      <li>
+                        <a href={`/services/${srv.id}`} class="block px-5 py-3 text-sm text-slate-300 hover:text-cyan-300 hover:bg-slate-800/60 transition-colors">
+                          {srv.data.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+          
+          <!-- دکمه کاتالوگ در پایین منوی اول -->
+          <div class="mt-2 bg-slate-900/80 border-t border-slate-800/80 p-4 text-center rounded-b-2xl">
+            <a href="/services" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors">مشاهده کاتالوگ خدمات →</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- سایر لینک‌ها -->
+      {navItems.slice(1).map((item) => (
         <li>
           <a href={item.href} class="nav-link transition-colors hover:text-cyan-400 font-medium">
             {item.name}
@@ -44,6 +110,7 @@ const navItems = [
       ))}
     </ul>
 
+    <!-- CTA & Mobile Toggle -->
     <div class="flex items-center gap-3">
       <a 
         href="/assessment" 
@@ -56,7 +123,6 @@ const navItems = [
         درخواست ارزیابی
       </a>
 
-      <!-- Mobile Hamburger Button -->
       <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white focus:outline-none" aria-label="منوی سایت">
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -66,17 +132,57 @@ const navItems = [
   </div>
 
   <!-- Mobile Menu Dropdown -->
-  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-[#090D16]/95 border-b border-slate-800 backdrop-blur-xl px-6 py-6 shadow-2xl">
-    <ul class="flex flex-col gap-4">
-      {navItems.map((item) => (
+  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-[#090D16]/95 border-b border-slate-800 backdrop-blur-xl px-6 py-6 shadow-2xl max-h-[85vh] overflow-y-auto">
+    <ul class="flex flex-col gap-2">
+      <li>
+        <a href="/#infrastructure" class="nav-link block text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3 pt-2">
+          زیرساخت ابری
+        </a>
+      </li>
+      
+      <!-- آکاردئون دو مرحله‌ای موبایل -->
+      <li>
+        <button id="mobile-services-btn" class="flex items-center justify-between w-full text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3 pt-2 focus:outline-none">
+          خدمات
+          <svg id="mobile-services-icon" class="w-4 h-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div id="mobile-services-menu" class="hidden bg-slate-900/30 rounded-xl mt-2 p-3 border border-slate-800/50">
+          <ul class="flex flex-col gap-2">
+            {Object.entries(servicesByCategory).map(([category, services], index) => (
+              <li>
+                <button class="mobile-cat-btn flex items-center justify-between w-full text-sm font-mono text-cyan-400 bg-slate-800/40 px-4 py-3 rounded-lg focus:outline-none" data-target={`mobile-cat-${index}`}>
+                  {category}
+                  <svg class="w-3 h-3 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <ul id={`mobile-cat-${index}`} class="hidden flex flex-col gap-1 mt-1 px-2 border-r-2 border-slate-800/80 mr-2">
+                  {services.map(srv => (
+                    <li>
+                      <a href={`/services/${srv.id}`} class="block text-sm text-slate-300 hover:text-cyan-300 py-2.5 px-3 rounded-md hover:bg-slate-800/50">
+                        {srv.data.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+          <a href="/services" class="block text-center mt-4 text-xs font-bold text-cyan-400 hover:text-cyan-300">مشاهده همه سرویس‌ها →</a>
+        </div>
+      </li>
+
+      {navItems.slice(1).map((item) => (
         <li>
-          <a href={item.href} class="nav-link block text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3">
+          <a href={item.href} class="nav-link block text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3 pt-2">
             {item.name}
           </a>
         </li>
       ))}
-      <li>
-        <a href="/assessment" class="block text-center mt-2 text-sm font-semibold px-5 py-3 rounded-lg bg-cyan-500 text-slate-950 transition-all">
+      <li class="pt-4">
+        <a href="/assessment" class="block text-center text-sm font-semibold px-5 py-3 rounded-xl bg-cyan-500 text-slate-950 transition-all">
           درخواست ارزیابی زیرساخت
         </a>
       </li>
@@ -86,6 +192,7 @@ const navItems = [
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Smooth Scroll Control
     const links = document.querySelectorAll('a.nav-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -103,10 +210,35 @@ const navItems = [
       });
     });
 
+    // Mobile Main Menu Toggle
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     mobileBtn?.addEventListener('click', () => {
       mobileMenu?.classList.toggle('hidden');
+    });
+
+    // Mobile Services Main Accordion Toggle
+    const mobileServicesBtn = document.getElementById('mobile-services-btn');
+    const mobileServicesMenu = document.getElementById('mobile-services-menu');
+    const mobileServicesIcon = document.getElementById('mobile-services-icon');
+    
+    mobileServicesBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      mobileServicesMenu?.classList.toggle('hidden');
+      mobileServicesIcon?.classList.toggle('rotate-180');
+    });
+
+    // Mobile Nested Categories Accordion Toggle
+    document.querySelectorAll('.mobile-cat-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = btn.getAttribute('data-target');
+        const targetMenu = document.getElementById(targetId);
+        const icon = btn.querySelector('svg');
+        
+        targetMenu?.classList.toggle('hidden');
+        icon?.classList.toggle('rotate-180');
+      });
     });
   });
 </script>
