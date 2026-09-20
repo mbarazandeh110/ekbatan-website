@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import Navbar from '../../../components/Navbar.astro';
+import Footer from '../../../components/Footer.astro';
+
+export async function getStaticPaths() {
+  const allServices = await getCollection('services');
+  const uniqueCategories = [...new Set(allServices.map((service) => service.data.tag))];
+
+  return uniqueCategories.map((category) => {
+    const filteredServices = allServices
+      .filter((service) => service.data.tag === category)
+      .sort((a, b) => a.data.order - b.data.order);
+
+    return {
+      params: { category },
+      props: { services: filteredServices, allCategories: uniqueCategories },
+    };
+  });
+}
+
+const { category } = Astro.params;
+const { services, allCategories } = Astro.props;
+
+const title = `سرویس‌های ${category} | اکباتان`;
+const description = `لیست خدمات و سرویس‌های مهندسی اکباتان در دسته ${category}.`;
+---
+
+<Layout title={title} description={description}>
+  <Navbar />
+  
+  <main class="py-20 px-6 max-w-5xl mx-auto min-h-[70vh]">
+    <div class="mb-12 text-center">
+      <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">SERVICE CATEGORY</span>
+      <h1 class="text-4xl md:text-5xl font-black text-white mt-4 mb-6">
+        خدمات <span class="text-cyan-400 font-mono">{category}</span>
+      </h1>
+    </div>
+
+    <!-- نوار دسته‌بندی‌ها -->
+    <div class="flex flex-wrap items-center justify-center gap-3 mb-16">
+      <a href="/services" class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-bold">تمام سرویس‌ها</a>
+      {allCategories.map(cat => (
+        <a 
+          href={`/services/category/${cat}`} 
+          class={`px-5 py-2 rounded-full text-sm font-mono transition-colors ${
+            cat === category 
+            ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/20' 
+            : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800'
+          }`}
+        >
+          {cat}
+        </a>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {services.map((service) => (
+        <a href={`/services/${service.id}`.replace('//', '/')} class="group p-8 rounded-2xl border transition-all flex flex-col justify-between bg-slate-900/50 border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 shadow-lg cursor-pointer">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-[10px] font-mono text-cyan-400 tracking-wider bg-cyan-950/40 px-2 py-1 rounded border border-cyan-900/40">
+                {service.data.tag}
+              </span>
+            </div>
+            <h2 class="text-xl font-bold mb-3 transition-colors text-white group-hover:text-cyan-300">
+              {service.data.title}
+            </h2>
+            <p class="text-slate-400 text-sm leading-relaxed mb-6 font-light">
+              {service.data.description}
+            </p>
+          </div>
+          <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-cyan-400">
+            <span class="font-medium">بررسی جزئیات سرویس</span>
+            <span class="font-mono group-hover:translate-x-[-4px] transition-transform">←</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Layout>
