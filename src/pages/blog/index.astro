@@ -7,8 +7,16 @@ import { getCollection } from 'astro:content';
 const posts = await getCollection('blog');
 const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-// استخراج تمام تگ‌های یونیک از مقالات
-const uniqueTags = [...new Set(posts.map((post) => post.data.tags || []).flat())];
+// استخراج تگ‌ها و محاسبه تعداد تکرار هر تگ
+const tagCounts: Record<string, number> = {};
+posts.forEach(post => {
+  (post.data.tags || []).forEach(tag => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
+});
+
+// مرتب‌سازی تگ‌ها بر اساس بیشترین تکرار
+const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
 
 const title = "بلاگ مهندسی و فنی | اکباتان";
 const description = "مقالات تخصصی تیم مهندسی اکباتان در حوزه زیرساخت ابری، کوبرنتیز، SRE، معماری نرم‌افزار و DevOps.";
@@ -28,21 +36,65 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       </p>
     </div>
 
-    <!-- نوار دسته‌بندی‌ها -->
-    <div class="flex flex-wrap items-center justify-center gap-3 mb-16">
-      <a href="/blog" class="px-5 py-2 rounded-full bg-cyan-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20">همه مقالات</a>
-      {uniqueTags.map(tag => (
-        <a href={`/blog/category/${tag}`} class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-mono">
-          {tag}
-        </a>
-      ))}
+    <!-- بخش فیلتر پیشرفته -->
+    <div class="mb-16 relative flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-slate-900/40 p-4 rounded-2xl border border-slate-800 shadow-inner">
+      
+      <!-- تگ‌های فعال (Chips) -->
+      <div id="active-tags-container" class="flex flex-wrap gap-2 flex-grow min-h-[32px] items-center">
+        <span class="text-sm text-slate-500 ml-2">فیلترهای فعال:</span>
+        <span id="no-active-tags" class="text-sm text-slate-400 font-mono">ALL_POSTS</span>
+        <!-- چیپ‌ها توسط جاوااسکریپت اینجا تزریق می‌شوند -->
+      </div>
+
+      <!-- دراپ‌داون انتخاب تگ -->
+      <div class="relative w-full md:w-auto shrink-0 z-20">
+        <button id="tag-dropdown-btn" class="w-full md:w-auto flex items-center justify-between gap-3 px-5 py-2.5 bg-cyan-950/40 border border-cyan-800/60 hover:bg-cyan-900/60 text-cyan-400 rounded-xl transition-all shadow-lg shadow-cyan-900/20 text-sm font-bold">
+          <span>دسته‌بندی‌ها / تگ‌ها</span>
+          <svg class="w-4 h-4 transition-transform duration-200" id="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- پنل بازشو -->
+        <div id="tag-dropdown-panel" class="absolute top-full left-0 md:right-0 mt-2 w-full md:w-72 bg-[#0B101B] border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden">
+          <div class="p-3 border-b border-slate-800/80 bg-slate-900/50">
+            <input 
+              type="text" 
+              id="tag-search-input" 
+              placeholder="جستجوی تگ..." 
+              class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors font-mono" 
+              dir="ltr" 
+            />
+          </div>
+          <ul id="tag-list" class="max-h-60 overflow-y-auto p-2 custom-scrollbar">
+            {sortedTags.map(tag => (
+              <li>
+                <label class="tag-item flex items-center justify-between px-3 py-2.5 hover:bg-slate-800/50 rounded-lg cursor-pointer transition-colors group" data-tag-name={tag.toLowerCase()}>
+                  <div class="flex items-center gap-3">
+                    <input type="checkbox" value={tag} class="tag-checkbox w-4 h-4 rounded border-slate-700 text-cyan-500 focus:ring-cyan-500/50 bg-slate-900 cursor-pointer" />
+                    <span class="text-sm text-slate-300 select-none font-mono group-hover:text-cyan-300 transition-colors">{tag}</span>
+                  </div>
+                  <span class="text-[10px] font-mono text-slate-500 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded-full">{tagCounts[tag]}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- لیست مقالات -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="posts-grid">
       {sortedPosts.map((post) => {
         const formattedDate = new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.pubDate);
+        const postTags = post.data.tags?.join(',') || '';
+
         return (
-          <a href={`/blog/${post.id}`.replace('//', '/')} class="group p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between shadow-lg">
+          <a 
+            href={`/blog/${post.id}`.replace('//', '/')} 
+            class="post-card group p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between shadow-lg"
+            data-tags={postTags}
+          >
             <div>
               <div class="flex items-center gap-4 text-xs font-mono text-slate-400 mb-4">
                 <time datetime={post.data.pubDate.toISOString()} class="text-cyan-400">{formattedDate}</time>
@@ -60,6 +112,155 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
         );
       })}
     </div>
+
+    <!-- پیام خالی بودن لیست -->
+    <div id="no-results" class="hidden text-center py-16 border border-slate-800/50 border-dashed rounded-2xl bg-slate-900/20">
+      <p class="text-slate-400 text-lg mb-4">مقاله‌ای با این ترکیب از تگ‌ها یافت نشد.</p>
+      <button id="reset-filters" class="px-6 py-2 rounded-lg bg-slate-800 text-cyan-400 hover:bg-slate-700 hover:text-cyan-300 text-sm font-bold transition-colors">حذف فیلترها</button>
+    </div>
   </main>
   <Footer />
 </Layout>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #1e293b; border-radius: 10px; }
+  
+  /* مخفی کردن چک‌باکس پیش‌فرض و استفاده از استایل Tailwind */
+  .tag-checkbox { accent-color: #06b6d4; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdownBtn = document.getElementById('tag-dropdown-btn');
+    const dropdownPanel = document.getElementById('tag-dropdown-panel');
+    const dropdownIcon = document.getElementById('dropdown-icon');
+    const searchInput = document.getElementById('tag-search-input') as HTMLInputElement;
+    const tagItems = document.querySelectorAll('.tag-item');
+    const tagCheckboxes = document.querySelectorAll('.tag-checkbox') as NodeListOf<HTMLInputElement>;
+    const activeTagsContainer = document.getElementById('active-tags-container');
+    const noActiveTagsMsg = document.getElementById('no-active-tags');
+    const postCards = document.querySelectorAll('.post-card');
+    const noResultsMsg = document.getElementById('no-results');
+    const resetBtn = document.getElementById('reset-filters');
+
+    let activeTags: string[] = [];
+
+    // مدیریت باز و بسته شدن دراپ‌داون
+    dropdownBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownPanel?.classList.toggle('opacity-0');
+      dropdownPanel?.classList.toggle('invisible');
+      dropdownPanel?.classList.toggle('translate-y-2');
+      dropdownIcon?.classList.toggle('rotate-180');
+      if (!dropdownPanel?.classList.contains('invisible')) {
+        searchInput?.focus();
+      }
+    });
+
+    // بستن دراپ‌داون هنگام کلیک بیرون از آن
+    document.addEventListener('click', (e) => {
+      if (dropdownPanel && dropdownBtn && !dropdownBtn.contains(e.target as Node) && !dropdownPanel.contains(e.target as Node)) {
+        dropdownPanel.classList.add('opacity-0', 'invisible', 'translate-y-2');
+        dropdownIcon?.classList.remove('rotate-180');
+      }
+    });
+
+    // جستجوی زنده (Live Search) درون دراپ‌داون
+    searchInput?.addEventListener('input', (e) => {
+      const term = (e.target as HTMLInputElement).value.toLowerCase().trim();
+      tagItems.forEach(item => {
+        const tagName = item.getAttribute('data-tag-name') || '';
+        const parentLi = item.closest('li');
+        if (parentLi) {
+          parentLi.style.display = tagName.includes(term) ? 'block' : 'none';
+        }
+      });
+    });
+
+    // مدیریت انتخاب چک‌باکس‌ها
+    tagCheckboxes.forEach(cb => {
+      cb.addEventListener('change', (e) => {
+        const tag = (e.target as HTMLInputElement).value;
+        if ((e.target as HTMLInputElement).checked) {
+          if (!activeTags.includes(tag)) activeTags.push(tag);
+        } else {
+          activeTags = activeTags.filter(t => t !== tag);
+        }
+        updateUI();
+      });
+    });
+
+    // حذف تگ از طریق کلیک روی دکمه ضربدر چیپ‌ها
+    activeTagsContainer?.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      const removeBtn = target.closest('.remove-tag-btn');
+      if (removeBtn) {
+        const tagToRemove = removeBtn.getAttribute('data-tag');
+        activeTags = activeTags.filter(t => t !== tagToRemove);
+        
+        // برداشتن تیک چک‌باکس متناظر
+        const cb = document.querySelector(`.tag-checkbox[value="${tagToRemove}"]`) as HTMLInputElement;
+        if (cb) cb.checked = false;
+        
+        updateUI();
+      }
+    });
+
+    // دکمه ریست کل فیلترها
+    resetBtn?.addEventListener('click', () => {
+      activeTags = [];
+      tagCheckboxes.forEach(cb => cb.checked = false);
+      updateUI();
+    });
+
+    function updateUI() {
+      // بروزرسانی چیپ‌ها (Chips)
+      if (activeTagsContainer && noActiveTagsMsg) {
+        // پاک کردن چیپ‌های قبلی
+        activeTagsContainer.querySelectorAll('.tag-chip').forEach(el => el.remove());
+        
+        if (activeTags.length === 0) {
+          noActiveTagsMsg.style.display = 'inline';
+        } else {
+          noActiveTagsMsg.style.display = 'none';
+          
+          activeTags.forEach(tag => {
+            const chip = document.createElement('span');
+            chip.className = 'tag-chip flex items-center gap-2 px-3 py-1 bg-cyan-950/60 border border-cyan-800/50 text-cyan-300 text-xs rounded-lg font-mono animate-fade-in';
+            chip.innerHTML = `${tag} <button class="remove-tag-btn text-cyan-500 hover:text-red-400 transition-colors" data-tag="${tag}">✕</button>`;
+            activeTagsContainer.appendChild(chip);
+          });
+        }
+      }
+
+      // فیلتر کردن مقالات (منطق AND)
+      let visibleCount = 0;
+      postCards.forEach(card => {
+        const cardTagsStr = card.getAttribute('data-tags');
+        const cardTags = cardTagsStr ? cardTagsStr.split(',') : [];
+        
+        const hasAllTags = activeTags.every(t => cardTags.includes(t));
+        
+        if (activeTags.length === 0 || hasAllTags) {
+          card.classList.remove('hidden');
+          card.classList.add('flex');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+          card.classList.remove('flex');
+        }
+      });
+
+      // نمایش یا عدم نمایش پیام عدم وجود نتیجه
+      if (noResultsMsg) {
+        if (visibleCount === 0) {
+          noResultsMsg.classList.remove('hidden');
+        } else {
+          noResultsMsg.classList.add('hidden');
+        }
+      }
+    }
+  });
+</script>
