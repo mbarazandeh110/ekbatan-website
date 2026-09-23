@@ -11,3 +11,9 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+pre, code, kbd, samp {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate;
+}
