@@ -3,7 +3,7 @@ title: "بهینه‌سازی هزینه‌های شبکه در Kubernetes با 
 description: "بررسی معماری Topology Aware Routing در کوبرنتیز برای کاهش Latency و هزینه‌های ترافیک بین زون‌ها در محیط‌های ابری."
 pubDate: 2026-09-22
 author: "تیم مهندسی اکباتان"
-tags: ["kubernetes", "networking", "cloud-cost", "sre", "devops"]
+tags: ["Kubernetes", "Networking", "Cloud-Cost", "SRE", "DevOps"]
 ---
 ## **مقدمه**
 
