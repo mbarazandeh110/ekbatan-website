@@ -1,11 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 
-// دریافت تمام سرویس‌ها و مرتب‌سازی
 const allServices = await getCollection('services');
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
 
-// گروه‌بندی هوشمند سرویس‌ها بر اساس تگ (دسته‌بندی)
+// گروه‌بندی ساختاریافته خدمات بر اساس تگ
 const servicesByCategory = sortedServices.reduce((acc, service) => {
   const tag = service.data.tag;
   if (!acc[tag]) acc[tag] = [];
@@ -19,225 +18,199 @@ const navItems = [
   { name: "مطالعات موردی", href: "/#track-record" },
   { name: "استک‌های سازمانی", href: "/#enterprise-stack" },
   { name: "بلاگ مهندسی", href: "/blog" },
-  { name: "درباره ما / تیم", href: "/about" },
+  { name: "درباره ما", href: "/about" },
 ];
 ---
 
-<nav class="sticky top-0 z-50 backdrop-blur-md bg-[#090D16]/80 border-b border-slate-800/80 px-6 py-4 relative">
-  <div class="max-w-7xl mx-auto flex items-center justify-between">
-    <!-- Logo -->
-    <div class="flex items-center gap-4">
-      <a href="/" class="flex items-center gap-4">
-        <picture>
-          <source srcset="/Ekbatan_logo.webp" type="image/webp" />
-          <img 
-            src="/Ekbatan_logo.png"
-            alt="لوگوی شرکت اکباتان - ارائه‌دهنده خدمات معماری زیرساخت ابری و کوبرنتیز" 
-            class="h-12 w-auto mix-blend-lighten opacity-90 hover:opacity-100 transition-opacity"
-            width="48"
-            height="48"
-            decoding="async"
-            loading="eager"
-          />
-        </picture>
-        <div>
-          <span class="text-lg font-black tracking-wider text-white">EKBATAN</span>
-          <span class="text-[10px] block font-mono text-cyan-400 tracking-widest uppercase">Infrastructure</span>
+<header class="sticky top-0 z-50 backdrop-blur-xl bg-[#070b14]/90 border-b border-slate-800/80 transition-all">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      
+      <!-- برند و لوگو -->
+      <a href="/" class="flex items-center gap-3.5 group focus:outline-none">
+        <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 border border-slate-800 group-hover:border-cyan-500/40 transition-colors shadow-inner">
+          <picture>
+            <source srcset="/Ekbatan_logo.webp" type="image/webp" />
+            <img 
+              src="/Ekbatan_logo.png" 
+              alt="لوگوی شرکت اکباتان" 
+              class="h-7 w-7 object-contain opacity-95 group-hover:scale-105 transition-transform" 
+              width="28" 
+              height="28" 
+              loading="eager" 
+              decoding="async"
+            />
+          </picture>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg font-black tracking-wider text-white font-mono leading-none group-hover:text-cyan-400 transition-colors">EKBATAN</span>
+          <span class="text-[10px] font-mono text-cyan-400 tracking-[0.2em] uppercase mt-1">Cloud Systems</span>
         </div>
       </a>
-    </div>
 
-    <!-- Desktop Menu -->
-    <ul class="hidden md:flex items-center gap-8 text-sm text-slate-300">
-      <li>
-        <a href="/#infrastructure" class="nav-link transition-colors hover:text-cyan-400 font-medium">زیرساخت ابری</a>
-      </li>
-
-      <!-- Dropdown دو مرحله‌ای خدمات -->
-      <li class="relative group py-4">
-        <a href="/services" class="nav-link flex items-center gap-1 transition-colors hover:text-cyan-400 font-medium">
-          خدمات
-          <svg class="w-4 h-4 transition-transform duration-300 group-hover:rotate-180 text-slate-500 group-hover:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
+      <!-- منوی دسکتاپ -->
+      <nav class="hidden lg:flex items-center gap-1 xl:gap-2">
+        <a href="/#infrastructure" class="nav-item px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors">
+          زیرساخت ابری
         </a>
 
-        <!-- مرحله اول: لیست دسته‌بندی‌ها -->
-        <div class="absolute top-full right-0 w-64 bg-[#0B101B]/95 backdrop-blur-xl border border-slate-800/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50 py-2">
-          
-          <ul class="flex flex-col">
-            {Object.entries(servicesByCategory).map(([category, services]) => (
-              <li class="relative group/category">
-                <a href={`/services/category/${category}`} class="flex items-center justify-between px-5 py-3 text-sm text-slate-300 hover:text-cyan-300 hover:bg-slate-800/60 transition-colors">
-                  <span class="font-mono tracking-wide">{category}</span>
-                  <!-- آیکون فلش به سمت چپ (چون سایت RTL است) -->
-                  <svg class="w-4 h-4 text-slate-500 group-hover/category:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </a>
+        <!-- مگا منوی شناور و شفاف خدمات -->
+        <div class="relative group/menu py-5">
+          <button class="nav-item flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors focus:outline-none">
+            <span>خدمات تخصصی</span>
+            <svg class="w-4 h-4 text-slate-500 transition-transform duration-300 group-hover/menu:rotate-180 group-hover/menu:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
 
-                <!-- مرحله دوم: لیست خدمات هر دسته (باز شدن به سمت چپ) -->
-                <div class="absolute top-0 right-full w-72 mr-1 bg-[#0B101B]/95 backdrop-blur-xl border border-slate-800/80 rounded-2xl shadow-2xl opacity-0 invisible group-hover/category:opacity-100 group-hover/category:visible transition-all duration-200 translate-x-2 group-hover/category:translate-x-0 overflow-hidden py-2">
-                  <div class="px-5 py-2 mb-1 border-b border-slate-800/60 text-[10px] text-cyan-500 font-mono">خدمات {category}</div>
-                  <ul class="flex flex-col">
-                    {services.map(srv => (
+          <!-- پنل مگا منو (بدون تداخل لایه‌ای و با Backdrop ایمن) -->
+          <div class="absolute top-[80px] -right-20 w-[840px] bg-[#080d19]/98 backdrop-blur-2xl border border-slate-700/80 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(6,182,212,0.12)] p-6 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 translate-y-3 group-hover/menu:translate-y-0 z-[100]">
+            <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <span class="text-xs font-mono font-semibold tracking-wider text-slate-300 uppercase">Architecture & Deployment Catalog</span>
+              </div>
+              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors">
+                مشاهده همه سرویس‌ها
+                <span class="font-mono">←</span>
+              </a>
+            </div>
+
+            <div class="grid grid-cols-3 gap-6 max-h-[60vh] overflow-y-auto pl-2">
+              {Object.entries(servicesByCategory).map(([category, services]) => (
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between border-b border-slate-800/60 pb-2">
+                    <span class="text-xs font-mono font-bold text-cyan-400 tracking-wide">{category}</span>
+                  </div>
+                  <ul class="space-y-1.5">
+                    {services.map((srv) => (
                       <li>
-                        <a href={`/services/${srv.id}`} class="block px-5 py-3 text-sm text-slate-300 hover:text-cyan-300 hover:bg-slate-800/60 transition-colors">
+                        <a 
+                          href={`/services/${srv.id}`}
+                          class="block px-2.5 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-slate-800/70 rounded-md transition-all font-medium"
+                        >
                           {srv.data.title}
                         </a>
                       </li>
                     ))}
                   </ul>
                 </div>
-              </li>
-            ))}
-          </ul>
-          
-          <!-- دکمه کاتالوگ در پایین منوی اول -->
-          <div class="mt-2 bg-slate-900/80 border-t border-slate-800/80 p-4 text-center rounded-b-2xl">
-            <a href="/services" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors">مشاهده کاتالوگ خدمات →</a>
+              ))}
+            </div>
           </div>
         </div>
-      </li>
 
-      <!-- سایر لینک‌ها -->
-      {navItems.slice(1).map((item) => (
-        <li>
-          <a href={item.href} class="nav-link transition-colors hover:text-cyan-400 font-medium">
+        {navItems.slice(1).map((item) => (
+          <a href={item.href} class="nav-item px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors">
             {item.name}
           </a>
-        </li>
-      ))}
-    </ul>
+        ))}
+      </nav>
 
-    <!-- CTA & Mobile Toggle -->
-    <div class="flex items-center gap-3">
-      <a 
-        href="/assessment" 
-        class="hidden sm:flex text-xs font-semibold px-5 py-2.5 rounded-lg border border-cyan-500/40 bg-cyan-500/10 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all shadow-sm items-center gap-2"
-      >
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-        </span>
-        درخواست ارزیابی
-      </a>
+      <!-- CTA و دکمه موبایل -->
+      <div class="flex items-center gap-3">
+        <a 
+          href="/assessment" 
+          class="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-xs text-cyan-300 bg-cyan-950/50 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/15 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all overflow-hidden"
+        >
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+          <span>درخواست ارزیابی معماری</span>
+        </a>
 
-      <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white focus:outline-none" aria-label="منوی سایت">
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
+        <!-- دکمه منوی همبرگری موبایل -->
+        <button 
+          id="mobile-menu-btn" 
+          class="lg:hidden p-2 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 hover:text-white focus:outline-none"
+          aria-label="باز کردن منو"
+        >
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
     </div>
   </div>
 
-  <!-- Mobile Menu Dropdown -->
-  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-[#090D16]/95 border-b border-slate-800 backdrop-blur-xl px-6 py-6 shadow-2xl max-h-[85vh] overflow-y-auto">
-    <ul class="flex flex-col gap-2">
-      <li>
-        <a href="/#infrastructure" class="nav-link block text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3 pt-2">
-          زیرساخت ابری
-        </a>
-      </li>
+  <!-- منوی بازشونده موبایل -->
+  <div id="mobile-menu" class="hidden lg:hidden fixed inset-x-0 top-20 bg-[#070b14]/98 border-b border-slate-800 backdrop-blur-2xl max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl z-[150]">
+    <div class="flex flex-col gap-3">
+      <a href="/#infrastructure" class="mobile-link text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60">زیرساخت ابری</a>
       
-      <!-- آکاردئون دو مرحله‌ای موبایل -->
-      <li>
-        <button id="mobile-services-btn" class="flex items-center justify-between w-full text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3 pt-2 focus:outline-none">
-          خدمات
-          <svg id="mobile-services-icon" class="w-4 h-4 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <!-- آکاردئون موبایل -->
+      <div>
+        <button id="mobile-services-toggle" class="flex items-center justify-between w-full text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60 focus:outline-none">
+          <span>خدمات تخصصی</span>
+          <svg id="mobile-arrow" class="w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
         </button>
-        <div id="mobile-services-menu" class="hidden bg-slate-900/30 rounded-xl mt-2 p-3 border border-slate-800/50">
-          <ul class="flex flex-col gap-2">
-            {Object.entries(servicesByCategory).map(([category, services], index) => (
-              <li>
-                <button class="mobile-cat-btn flex items-center justify-between w-full text-sm font-mono text-cyan-400 bg-slate-800/40 px-4 py-3 rounded-lg focus:outline-none" data-target={`mobile-cat-${index}`}>
-                  {category}
-                  <svg class="w-3 h-3 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <ul id={`mobile-cat-${index}`} class="hidden flex flex-col gap-1 mt-1 px-2 border-r-2 border-slate-800/80 mr-2">
-                  {services.map(srv => (
-                    <li>
-                      <a href={`/services/${srv.id}`} class="block text-sm text-slate-300 hover:text-cyan-300 py-2.5 px-3 rounded-md hover:bg-slate-800/50">
-                        {srv.data.title}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-          <a href="/services" class="block text-center mt-4 text-xs font-bold text-cyan-400 hover:text-cyan-300">مشاهده همه سرویس‌ها →</a>
+        <div id="mobile-services-list" class="hidden py-3 px-3 my-2 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-4">
+          {Object.entries(servicesByCategory).map(([category, services]) => (
+            <div>
+              <div class="text-[11px] font-mono text-cyan-400 mb-2">{category}</div>
+              <ul class="space-y-1.5 pr-2 border-r border-slate-800">
+                {services.map((srv) => (
+                  <li>
+                    <a href={`/services/${srv.id}`} class="mobile-link block text-xs text-slate-300 py-1 hover:text-cyan-300">
+                      {srv.data.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          <a href="/services" class="mobile-link block text-center text-xs font-bold text-cyan-400 pt-2 border-t border-slate-800">مشاهده کاتالوگ همه سرویس‌ها ←</a>
         </div>
-      </li>
+      </div>
 
       {navItems.slice(1).map((item) => (
-        <li>
-          <a href={item.href} class="nav-link block text-base font-medium text-slate-200 hover:text-cyan-400 border-b border-slate-800/60 pb-3 pt-2">
-            {item.name}
-          </a>
-        </li>
-      ))}
-      <li class="pt-4">
-        <a href="/assessment" class="block text-center text-sm font-semibold px-5 py-3 rounded-xl bg-cyan-500 text-slate-950 transition-all">
-          درخواست ارزیابی زیرساخت
+        <a href={item.href} class="mobile-link text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60">
+          {item.name}
         </a>
-      </li>
-    </ul>
+      ))}
+
+      <a href="/assessment" class="mt-4 text-center text-sm font-bold py-3 rounded-xl bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/25">
+        ثبت درخواست بررسی معماری
+      </a>
+    </div>
   </div>
-</nav>
+</header>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Smooth Scroll Control
-    const links = document.querySelectorAll('a.nav-link');
-    links.forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        if (href && href.startsWith('/#') && window.location.pathname === '/') {
-          e.preventDefault();
-          const targetId = href.substring(2);
-          const targetElement = document.getElementById(targetId);
-          if (targetElement) {
-            targetElement.scrollIntoView({ behavior: 'smooth' });
-            history.pushState(null, '', '#' + targetId);
-            document.getElementById('mobile-menu')?.classList.add('hidden');
-          }
-        }
-      });
-    });
-
-    // Mobile Main Menu Toggle
+    // باز و بسته شدن منوی موبایل
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     mobileBtn?.addEventListener('click', () => {
       mobileMenu?.classList.toggle('hidden');
     });
 
-    // Mobile Services Main Accordion Toggle
-    const mobileServicesBtn = document.getElementById('mobile-services-btn');
-    const mobileServicesMenu = document.getElementById('mobile-services-menu');
-    const mobileServicesIcon = document.getElementById('mobile-services-icon');
-    
-    mobileServicesBtn?.addEventListener('click', (e) => {
-      e.preventDefault();
-      mobileServicesMenu?.classList.toggle('hidden');
-      mobileServicesIcon?.classList.toggle('rotate-180');
+    // آکاردئون بخش خدمات موبایل
+    const servicesToggle = document.getElementById('mobile-services-toggle');
+    const servicesList = document.getElementById('mobile-services-list');
+    const arrow = document.getElementById('mobile-arrow');
+
+    servicesToggle?.addEventListener('click', () => {
+      servicesList?.classList.toggle('hidden');
+      arrow?.classList.toggle('rotate-180');
     });
 
-    // Mobile Nested Categories Accordion Toggle
-    document.querySelectorAll('.mobile-cat-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = btn.getAttribute('data-target');
-        const targetMenu = document.getElementById(targetId);
-        const icon = btn.querySelector('svg');
-        
-        targetMenu?.classList.toggle('hidden');
-        icon?.classList.toggle('rotate-180');
+    // اسکرول نرم برای لینک‌های داخلی
+    const links = document.querySelectorAll('a.nav-item, a.mobile-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('/#') && window.location.pathname === '/') {
+          e.preventDefault();
+          const targetId = href.substring(2);
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+            history.pushState(null, '', '#' + targetId);
+            mobileMenu?.classList.add('hidden');
+          }
+        }
       });
     });
   });

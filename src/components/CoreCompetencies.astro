@@ -2,52 +2,88 @@
 const services = [
   {
     title: "کوبرنتیز و ارکستراسیون پیشرفته",
-    desc: "طراحی کلاسترهای HA، راه‌اندازی CNIهای eBPF-based نظیر Cilium و توسعه کنترلرهای اختصاصی با Golang (مانند mlb-controller) جهت آپدیت داینامیک Upstreamهای Envoy/Nginx از طریق xDS.",
+    desc: "طراحی کلاسترهای High Availability، راه‌اندازی CNIهای مدرن eBPF-based نظیر Cilium و توسعه کنترلرهای بومی Golang جهت هدایت هوشمند ترافیک با Envoy xDS.",
     tag: "KUBERNETES & CLOUD",
+    icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>`
   },
   {
-    title: "زیرساخت ذخیره‌سازی Ceph و دیتابیس‌ها",
-    desc: "مدیریت کلاسترهای Storage مبتنی بر Ceph (Block, File, S3) و استقرار انواع دیتابیس‌های مقیاس‌پذیر روی توپولوژی‌های Multi-Rack.",
+    title: "ذخیره‌سازی توزیع‌شده Ceph و دیتابیس‌ها",
+    desc: "مهندسی کلاسترهای Petabyte-Scale مبتنی بر Ceph (Block, S3, CephFS) و پیکربندی تخصصی دیتابیس‌های توزیع‌شده با قابلیت Disaster Recovery بدون وقفه.",
     tag: "STORAGE & DATA",
+    icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>`
   },
   {
     title: "استریمینگ ویدیو و WebRTC بلادرنگ",
-    desc: "معماری سرورهای قدرتمند WebRTC SFU (نظیر mediasoup) با یکپارچه‌سازی Workerهای ایزوله روی Node.js جهت هندلینگ همزمانی بالا در روم‌های تعاملی با تاخیر زیر ثانیه.",
+    desc: "معماری سرورهای SFU با مقیاس همزمانی بالا (نظیر mediasoup) و کلاستربندی Workerهای ایزوله جهت دستیابی به تاخیر کمتر از ۱۵ میلی‌ثانیه در بستر اینترنت پرنوسان.",
     tag: "STREAMING & WEBRTC",
+    icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>`
   },
   {
     title: "MLOps و کلاسترهای هوش مصنوعی",
-    desc: "طراحی شبکه‌های AI-optimized برای کلاسترهای GPU-Dense (نظیر HPE ProLiant Gen11) مجهز به اتصالات NVLink جهت کاهش Latency در Training و Inference مدل‌های LLM.",
-    tag: "AI / ML / PIPELINES",
+    desc: "طراحی شبکه‌های پردازشی بدون گلوگاه برای کلاسترهای GPU-Dense (مانند سرورهای HPE ProLiant DL380a با NVIDIA H200 و NVLink) جهت شتاب‌بخشی به فاز Training و Inference.",
+    tag: "AI & ML PLATFORMS",
+    icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>`
   },
   {
     title: "شبکه‌های توزیع محتوا (CDN) و Edge",
-    desc: "معماری و توسعه لودبالانسرهای لبه شبکه، توزیع بار پویا، کش محتوای پراستفاده و انجام فرآیندهای TLS Offloading روی حجم عظیم ترافیک.",
+    desc: "معماری لودبالانسرهای توزیع‌شده با Anycast BGP، کش محتوای چندلایه و بهینه‌سازی هسته لینوکس و TLS Offloading برای میزبانی ده‌ها گیگابیت بر ثانیه ترافیک پایدار.",
     tag: "NETWORKING & CDN",
+    icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
   },
   {
     title: "اتوماسیون DevOps و مدیریت پیکربندی",
-    desc: "طراحی و اجرای ساختارهای مبتنی بر IaC، توسعه نقشه‌های کامپایل‌نشده (Raw Ansible Roles) برای سرویس‌های پایه نظیر DNS و NTP.",
+    desc: "استقرار استانداردهای GitOps، مدیریت چرخه حیات زیرساخت با Terraform و Ansible، و طراحی پایپ‌لاین‌های اعتبارسنجی خودکار قبل از اعمال تغییرات در Production.",
     tag: "INFRASTRUCTURE AS CODE",
+    icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>`
   }
 ];
 ---
 
-<section id="infrastructure" class="py-24 px-6 max-w-7xl mx-auto">
-  <div class="text-center mb-16">
-    <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">CAPABILITIES</span>
-    <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2">تخصص‌های هسته‌ای اکباتان</h2>
-    <p class="text-slate-400 max-w-2xl mx-auto mt-4 text-sm md:text-base">
-      تمرکز ما بر ساخت لایه‌های زیرساختی است که کسب‌وکارهای با ترافیک بالا بدون نگرانی از مقیاس‌پذیری روی آن‌ها رشد کنند.
+<section id="infrastructure" class="relative py-28 px-6 max-w-7xl mx-auto scroll-mt-20">
+  <!-- افکت نوری پس‌زمینه کارت‌ها -->
+  <div class="absolute -top-10 right-1/4 w-96 h-96 bg-cyan-500/5 blur-[120px] pointer-events-none rounded-full"></div>
+  
+  <div class="text-center mb-20">
+    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-cyan-950/40 border border-cyan-800/40 text-[11px] font-mono text-cyan-400 mb-4">
+      <span>CORE CAPABILITIES</span>
+    </div>
+    <h2 class="text-3xl md:text-5xl font-black text-white tracking-tight">
+      تخصص‌های هسته‌ای <span class="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">اکباتان</span>
+    </h2>
+    <p class="text-slate-400 max-w-2xl mx-auto mt-4 text-sm md:text-base leading-relaxed">
+      تمرکز ما بر ساخت لایه‌های زیرساختی مهندسی‌شده‌ای است که سامانه‌های پرترافیک ملی بدون هراس از افت کارایی یا قطعی بر روی آن‌ها پایدار بمانند.
     </p>
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {services.map((item) => (
-      <div class="group p-6 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-cyan-500/40 hover:bg-slate-900/80 transition-all duration-300 relative">
-        <div class="text-[11px] font-mono text-cyan-400/90 mb-3 tracking-wider">{item.tag}</div>
-        <h3 class="text-lg font-bold text-white mb-2 group-hover:text-cyan-200 transition-colors">{item.title}</h3>
-        <p class="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+      <div class="group relative p-7 rounded-2xl bg-gradient-to-b from-[#0f172a]/70 to-[#070b14]/90 border border-slate-800/80 hover:border-cyan-500/40 hover:shadow-[0_12px_40px_rgba(6,182,212,0.1)] transition-all duration-300 flex flex-col justify-between">
+        
+        <div>
+          <!-- هدر کارت: تگ و آیکون -->
+          <div class="flex items-center justify-between mb-6">
+            <span class="text-[10px] font-mono tracking-wider font-semibold text-cyan-400 bg-cyan-950/60 border border-cyan-800/40 px-2.5 py-1 rounded-md">
+              {item.tag}
+            </span>
+            <div class="text-slate-400 group-hover:text-cyan-400 group-hover:scale-110 transition-all duration-300" set:html={item.icon} />
+          </div>
+
+          <!-- عنوان کارت -->
+          <h3 class="text-lg font-bold text-white mb-3 group-hover:text-cyan-200 transition-colors leading-snug">
+            {item.title}
+          </h3>
+
+          <!-- توضیحات -->
+          <p class="text-slate-300/80 text-xs md:text-sm leading-relaxed font-normal">
+            {item.desc}
+          </p>
+        </div>
+
+        <div class="pt-5 mt-6 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-400">
+          <span class="group-hover:text-cyan-300 transition-colors">معماری تاب‌آور و مقیاس‌پذیر</span>
+          <span class="font-mono text-cyan-400 group-hover:translate-x-[-3px] transition-transform">→</span>
+        </div>
+
       </div>
     ))}
   </div>
