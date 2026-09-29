@@ -4,12 +4,15 @@ import { getCollection } from 'astro:content';
 const allServices = await getCollection('services');
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
 
+// گروه‌بندی ساختاریافته خدمات بر اساس تگ
 const servicesByCategory = sortedServices.reduce((acc, service) => {
   const tag = service.data.tag;
   if (!acc[tag]) acc[tag] = [];
   acc[tag].push(service);
   return acc;
 }, {} as Record<string, any[]>);
+
+const categories = Object.keys(servicesByCategory);
 
 const navItems = [
   { name: "زیرساخت ابری", href: "/#infrastructure" },
@@ -19,9 +22,6 @@ const navItems = [
   { name: "بلاگ مهندسی", href: "/blog" },
   { name: "درباره ما", href: "/about" },
 ];
-
-// تنظیم تعداد مجاز نمایش سرویس در هر ستون مگا منو
-const MAX_SERVICES_PER_CATEGORY = 4;
 ---
 
 <header class="sticky top-0 z-[100] backdrop-blur-xl bg-[#050811]/90 border-b border-slate-800 transition-all">
@@ -56,7 +56,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
           زیرساخت ابری
         </a>
 
-        <!-- مگا منوی شناور مقیاس‌پذیر -->
+        <!-- مگا منوی شناور Master-Detail -->
         <div class="relative group/menu py-5">
           <button class="nav-item flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors focus:outline-none">
             <span>خدمات تخصصی</span>
@@ -65,57 +65,79 @@ const MAX_SERVICES_PER_CATEGORY = 4;
             </svg>
           </button>
 
-          <!-- پنل مگا منو (بهینه‌شده برای ارتفاع بی‌نهایت با اسکرول داخلی) -->
-          <div class="absolute top-[calc(100%-8px)] right-0 w-[calc(100vw-2rem)] lg:w-[800px] xl:w-[900px] bg-[#020617] border border-cyan-900/60 rounded-2xl shadow-[0_30px_60px_-10px_rgba(0,0,0,1)] p-7 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-300 translate-y-3 group-hover/menu:translate-y-0 z-[999] before:absolute before:-top-2 before:right-[50px] before:w-4 before:h-4 before:bg-[#020617] before:border-t before:border-l before:border-cyan-900/60 before:rotate-45">
-            <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-800">
+          <!-- پنل اصلی مگا منو -->
+          <div class="absolute top-[calc(100%-8px)] right-0 w-[calc(100vw-2rem)] lg:w-[850px] xl:w-[900px] bg-[#020617] border border-cyan-900/60 rounded-2xl shadow-[0_30px_60px_-10px_rgba(0,0,0,1)] opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-300 translate-y-3 group-hover/menu:translate-y-0 z-[999] overflow-hidden flex flex-col before:absolute before:-top-2 before:right-[50px] before:w-4 before:h-4 before:bg-[#020617] before:border-t before:border-l before:border-cyan-900/60 before:rotate-45 before:z-20">
+            
+            <!-- هدر مگا منو -->
+            <div class="flex items-center justify-between px-7 py-4 border-b border-slate-800 bg-[#020617] relative z-10 shrink-0">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                 <span class="text-xs font-mono font-semibold tracking-wider text-slate-300 uppercase">Architecture & Deployment Catalog</span>
               </div>
-              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1.5 rounded-lg border border-cyan-900/50">
-                مشاهده کاتالوگ جامع
+              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors">
+                کاتالوگ جامع
                 <span class="font-mono">←</span>
               </a>
             </div>
 
-            <!-- کانتینر با اسکرول‌بار مخفی جهت کنترل ارتفاع در مانیتورهای کوچک -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-10 max-h-[65vh] overflow-y-auto mega-menu-scrollbar pr-2">
-              {Object.entries(servicesByCategory).map(([category, services]) => {
-                const displayServices = services.slice(0, MAX_SERVICES_PER_CATEGORY);
-                const hasMore = services.length > MAX_SERVICES_PER_CATEGORY;
-                
-                return (
-                  <div class="space-y-3 relative group/cat">
-                    <div class="flex items-center gap-2 pb-2">
-                      <span class="text-[11px] font-mono font-bold text-cyan-400 tracking-wider uppercase bg-cyan-950/40 px-2 py-0.5 rounded border border-cyan-900/40">{category}</span>
-                    </div>
-                    <ul class="space-y-1.5 relative z-10 md:border-r border-slate-800/60 md:pr-3">
-                      {displayServices.map((srv) => (
-                        <li>
+            <!-- ساختار دو ستونه Master-Detail -->
+            <div class="flex h-[400px]">
+              
+              <!-- ستون راست (Master): لیست دسته‌بندی‌ها -->
+              <div class="w-1/3 bg-[#050811] border-l border-slate-800/60 py-4 overflow-y-auto mega-menu-scrollbar shrink-0">
+                <ul class="flex flex-col gap-1 px-3">
+                  {categories.map((category, index) => (
+                    <li>
+                      <button 
+                        class={`category-tab w-full text-right flex items-center justify-between px-4 py-3 rounded-xl transition-all font-mono text-[11px] uppercase tracking-wide border ${index === 0 ? 'bg-cyan-950/40 text-cyan-400 border-cyan-900/50' : 'bg-transparent text-slate-400 border-transparent hover:bg-slate-900/80 hover:text-slate-200'}`}
+                        data-target={`pane-${index}`}
+                      >
+                        <span class="truncate">{category}</span>
+                        <svg class={`w-4 h-4 transition-transform ${index === 0 ? 'text-cyan-400' : 'text-slate-600 opacity-0 -translate-x-2'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <!-- ستون چپ (Detail): محتوای خدمات هر دسته -->
+              <div class="w-2/3 relative bg-[#020617] overflow-hidden">
+                {categories.map((category, index) => {
+                  const services = servicesByCategory[category];
+                  return (
+                    <div 
+                      id={`pane-${index}`} 
+                      class={`service-pane absolute inset-0 p-6 overflow-y-auto mega-menu-scrollbar transition-opacity duration-300 ${index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                    >
+                      <div class="text-lg font-bold text-white mb-6 border-b border-slate-800 pb-3 flex items-center justify-between">
+                        <span>خدمات {category}</span>
+                        <span class="text-xs font-mono text-slate-500 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">{services.length} Service(s)</span>
+                      </div>
+                      
+                      <div class="grid grid-cols-2 gap-4">
+                        {services.map((srv) => (
                           <a 
                             href={`/services/${srv.id}`}
-                            class="block px-3 py-2 text-xs text-slate-300 hover:text-white hover:bg-slate-800/80 rounded-md transition-all font-medium leading-relaxed"
+                            class="group block p-4 rounded-xl border border-slate-800 hover:border-cyan-700/50 hover:bg-slate-900/50 transition-all shadow-sm"
                           >
-                            {srv.data.title}
+                            <h4 class="text-sm font-bold text-slate-200 group-hover:text-cyan-300 transition-colors mb-2 leading-relaxed">{srv.data.title}</h4>
+                            <p class="text-[11px] text-slate-500 line-clamp-2 leading-relaxed font-light">{srv.data.description}</p>
                           </a>
-                        </li>
-                      ))}
-                      
-                      <!-- منطق Truncation: نمایش لینک آرشیو در صورت تعدد سرویس‌ها -->
-                      {hasMore && (
-                        <li class="pt-2 mt-2 border-t border-slate-800/40">
-                          <a 
-                            href={`/services/category/${category}`}
-                            class="flex items-center gap-1 px-3 py-1.5 text-[11px] text-cyan-500/80 hover:text-cyan-300 font-semibold transition-colors"
-                          >
-                            مشاهده تمام {services.length} سرویس...
-                          </a>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                );
-              })}
+                        ))}
+                      </div>
+
+                      <div class="mt-6 pt-4 text-center">
+                        <a href={`/services/category/${category}`} class="inline-block text-xs text-cyan-500 hover:text-cyan-400 font-semibold transition-colors">
+                          مشاهده آرشیو کامل این دسته →
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
             </div>
           </div>
         </div>
@@ -157,7 +179,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
     <div class="flex flex-col gap-3">
       <a href="/#infrastructure" class="mobile-link text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60">زیرساخت ابری</a>
       
-      <!-- آکاردئون موبایل -->
+      <!-- آکاردئون موبایل (منطبق با معماری جدید) -->
       <div>
         <button id="mobile-services-toggle" class="flex items-center justify-between w-full text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60 focus:outline-none">
           <span>خدمات تخصصی</span>
@@ -166,10 +188,11 @@ const MAX_SERVICES_PER_CATEGORY = 4;
           </svg>
         </button>
         <div id="mobile-services-list" class="hidden py-3 px-3 my-2 bg-slate-900/60 rounded-xl border border-slate-800/80 space-y-6">
-          {Object.entries(servicesByCategory).map(([category, services]) => {
-            // در موبایل نیز محدودیت اعمال می‌شود تا لیست خیلی طولانی نشود
-            const displayServicesMobile = services.slice(0, MAX_SERVICES_PER_CATEGORY + 1);
-            const hasMoreMobile = services.length > (MAX_SERVICES_PER_CATEGORY + 1);
+          {categories.map((category) => {
+            const services = servicesByCategory[category];
+            // در موبایل نمایش ۳ سرویس اول هر دسته برای پرهیز از اسکرول طولانی
+            const displayServicesMobile = services.slice(0, 3);
+            const hasMoreMobile = services.length > 3;
 
             return (
               <div>
@@ -211,7 +234,6 @@ const MAX_SERVICES_PER_CATEGORY = 4;
 </header>
 
 <style>
-  /* استایل اختصاصی اسکرول‌بار مگا منو تا با ظاهر سایت یکپارچه باشد */
   .mega-menu-scrollbar::-webkit-scrollbar { width: 4px; }
   .mega-menu-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .mega-menu-scrollbar::-webkit-scrollbar-thumb { background-color: #1e293b; border-radius: 10px; }
@@ -220,12 +242,14 @@ const MAX_SERVICES_PER_CATEGORY = 4;
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // 1. Mobile Menu Toggle
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     mobileBtn?.addEventListener('click', () => {
       mobileMenu?.classList.toggle('hidden');
     });
 
+    // 2. Mobile Accordion Toggle
     const servicesToggle = document.getElementById('mobile-services-toggle');
     const servicesList = document.getElementById('mobile-services-list');
     const arrow = document.getElementById('mobile-arrow');
@@ -235,6 +259,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
       arrow?.classList.toggle('rotate-180');
     });
 
+    // 3. Smooth Scrolling
     const links = document.querySelectorAll('a.nav-item, a.mobile-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
@@ -248,6 +273,50 @@ const MAX_SERVICES_PER_CATEGORY = 4;
             history.pushState(null, '', '#' + targetId);
             mobileMenu?.classList.add('hidden');
           }
+        }
+      });
+    });
+
+    // 4. Master-Detail Mega Menu Logic (Hover Interactions)
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const servicePanes = document.querySelectorAll('.service-pane');
+
+    categoryTabs.forEach(tab => {
+      tab.addEventListener('mouseenter', () => {
+        // Reset all tabs
+        categoryTabs.forEach(t => {
+          t.classList.remove('bg-cyan-950/40', 'text-cyan-400', 'border-cyan-900/50');
+          t.classList.add('bg-transparent', 'text-slate-400', 'border-transparent');
+          
+          const icon = t.querySelector('svg');
+          if(icon) {
+            icon.classList.remove('text-cyan-400', 'opacity-100', 'translate-x-0');
+            icon.classList.add('text-slate-600', 'opacity-0', '-translate-x-2');
+          }
+        });
+
+        // Set active tab
+        tab.classList.remove('bg-transparent', 'text-slate-400', 'border-transparent');
+        tab.classList.add('bg-cyan-950/40', 'text-cyan-400', 'border-cyan-900/50');
+        
+        const activeIcon = tab.querySelector('svg');
+        if(activeIcon) {
+          activeIcon.classList.remove('text-slate-600', 'opacity-0', '-translate-x-2');
+          activeIcon.classList.add('text-cyan-400', 'opacity-100', 'translate-x-0');
+        }
+
+        // Hide all panes
+        servicePanes.forEach(pane => {
+          pane.classList.remove('opacity-100', 'z-10');
+          pane.classList.add('opacity-0', 'z-0', 'pointer-events-none');
+        });
+
+        // Show target pane
+        const targetId = tab.getAttribute('data-target');
+        const targetPane = document.getElementById(targetId || '');
+        if(targetPane) {
+          targetPane.classList.remove('opacity-0', 'z-0', 'pointer-events-none');
+          targetPane.classList.add('opacity-100', 'z-10');
         }
       });
     });
