@@ -27,11 +27,11 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       <span class="text-slate-400 font-mono text-sm">در حال دریافت معماری مقالات...</span>
     </div>
 
-    <!-- محتوای اصلی (ابتدا مخفی است) -->
+    <!-- محتوای اصلی -->
     <div id="blog-content" class="hidden">
       
-      <!-- بخش فیلتر پیشرفته (طراحی شده برای صدها تگ) -->
-      <div class="mb-16 relative flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-slate-900/40 p-4 rounded-2xl border border-slate-800 shadow-inner z-20">
+      <!-- بخش فیلتر پیشرفته - Z-Index 80 جهت جلوگیری از تداخل با کارت‌های زیرین -->
+      <div class="mb-16 relative z-[80] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-slate-900/60 p-4 rounded-2xl border border-slate-800 shadow-inner">
         
         <!-- تگ‌های فعال (Chips) -->
         <div id="active-tags-container" class="flex flex-wrap gap-2 flex-grow min-h-[32px] items-center">
@@ -48,25 +48,25 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
             </svg>
           </button>
 
-          <!-- پنل بازشو -->
-          <div id="tag-dropdown-panel" class="absolute top-full left-0 md:right-0 mt-2 w-full md:w-80 bg-[#0B101B] border border-slate-800 rounded-xl shadow-2xl opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden flex flex-col">
-            <div class="p-3 border-b border-slate-800/80 bg-slate-900/50 shrink-0">
+          <!-- پنل بازشو - ارتقا یافته با رنگ روشن‌تر، سایه سایان و Z-index 100 -->
+          <div id="tag-dropdown-panel" class="absolute top-[120%] left-0 md:right-0 mt-2 w-full md:w-80 bg-slate-900 border border-cyan-800/80 rounded-xl shadow-[0_15px_40px_-10px_rgba(6,182,212,0.2)] opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden flex flex-col z-[100]">
+            <div class="p-3 border-b border-slate-800 bg-slate-800/50 shrink-0">
               <input 
                 type="text" 
                 id="tag-search-input" 
                 placeholder="جستجوی تگ (مثلاً K8s)..." 
-                class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors font-mono" 
+                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors font-mono shadow-inner" 
                 dir="ltr" 
               />
             </div>
             <!-- لیست تگ‌ها داینامیک پر می‌شود -->
-            <ul id="tag-list" class="max-h-72 overflow-y-auto p-2 custom-scrollbar"></ul>
+            <ul id="tag-list" class="max-h-72 overflow-y-auto p-2 custom-scrollbar bg-slate-900"></ul>
           </div>
         </div>
       </div>
 
       <!-- کانتینر کارت مقالات -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="posts-grid"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10" id="posts-grid"></div>
 
       <!-- پیام خالی بودن لیست -->
       <div id="no-results" class="hidden text-center py-16 border border-slate-800/50 border-dashed rounded-2xl bg-slate-900/20 mt-8">
@@ -82,12 +82,11 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
 <style>
   .custom-scrollbar::-webkit-scrollbar { width: 6px; }
   .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #1e293b; border-radius: 10px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 10px; }
   .tag-checkbox { accent-color: #06b6d4; }
 </style>
 
 <script>
-  // تعریف تایپ پست‌ها
   interface BlogPost {
     id: string;
     title: string;
@@ -114,25 +113,20 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
     let allPosts: BlogPost[] = [];
     let activeTags: string[] = [];
 
-    // 1. Fetch JSON Data
     try {
       const response = await fetch('/api/posts.json');
       if (!response.ok) throw new Error('Network response was not ok');
       allPosts = await response.json();
-      
       initializeBlog();
     } catch (error) {
       console.error('Failed to load posts:', error);
       if (loadingState) loadingState.innerHTML = '<span class="text-red-400">خطا در دریافت اطلاعات. لطفا صفحه را رفرش کنید.</span>';
     }
 
-    // 2. Initialize UI
     function initializeBlog() {
-      // مخفی کردن لودینگ و نمایش کانتینر اصلی
       loadingState?.classList.add('hidden');
       blogContent?.classList.remove('hidden');
 
-      // استخراج تگ‌ها و تعداد تکرار
       const tagCounts: Record<string, number> = {};
       allPosts.forEach(post => {
         post.tags.forEach(tag => {
@@ -140,25 +134,22 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
         });
       });
 
-      // مرتب‌سازی تگ‌ها بر اساس بیشترین استفاده
       const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
 
-      // رندر لیست تگ‌ها در Dropdown
       if (tagList) {
         tagList.innerHTML = sortedTags.map(tag => `
           <li class="tag-item" data-tag-name="${tag.toLowerCase()}">
-            <label class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-800/50 rounded-lg cursor-pointer transition-colors group">
+            <label class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-800 rounded-lg cursor-pointer transition-colors group">
               <div class="flex items-center gap-3">
-                <input type="checkbox" value="${tag}" class="tag-checkbox w-4 h-4 rounded border-slate-700 text-cyan-500 focus:ring-cyan-500/50 bg-slate-900 cursor-pointer" />
+                <input type="checkbox" value="${tag}" class="tag-checkbox w-4 h-4 rounded border-slate-700 text-cyan-500 focus:ring-cyan-500/50 bg-slate-950 cursor-pointer" />
                 <span class="text-sm text-slate-300 select-none font-mono group-hover:text-cyan-300 transition-colors">${tag}</span>
               </div>
-              <span class="text-[10px] font-mono text-slate-500 bg-slate-950 border border-slate-800 px-2 py-0.5 rounded-full">${tagCounts[tag]}</span>
+              <span class="text-[10px] font-mono text-cyan-500 bg-cyan-950/40 border border-cyan-900/50 px-2 py-0.5 rounded-full">${tagCounts[tag]}</span>
             </label>
           </li>
         `).join('');
       }
 
-      // اتصال Event Listener ها به المان‌های جدید (چک‌باکس‌ها)
       document.querySelectorAll('.tag-checkbox').forEach(cb => {
         cb.addEventListener('change', (e) => {
           const tag = (e.target as HTMLInputElement).value;
@@ -171,19 +162,15 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
         });
       });
 
-      // رندر اولیه تمام مقالات
       renderFilteredPosts();
     }
 
-    // 3. Render DOM Function
     function renderFilteredPosts() {
-      // فیلتر مقالات (منطق AND)
       const filteredPosts = allPosts.filter(post => {
         if (activeTags.length === 0) return true;
         return activeTags.every(tag => post.tags.includes(tag));
       });
 
-      // رندر کارت‌ها
       if (postsGrid) {
         if (filteredPosts.length > 0) {
           const cardsHtml = filteredPosts.map(post => {
@@ -219,7 +206,6 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
         }
       }
 
-      // آپدیت UI چیپ‌های تگ
       if (activeTagsContainer && noActiveTagsMsg) {
         activeTagsContainer.querySelectorAll('.tag-chip').forEach(el => el.remove());
         
@@ -237,7 +223,6 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       }
     }
 
-    // 4. UI Interactions (Dropdown & Search & Remove Tags)
     dropdownBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdownPanel?.classList.toggle('opacity-0');

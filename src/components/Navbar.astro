@@ -22,13 +22,13 @@ const navItems = [
 ];
 ---
 
-<header class="sticky top-0 z-50 backdrop-blur-xl bg-[#070b14]/90 border-b border-slate-800/80 transition-all">
+<header class="sticky top-0 z-[100] backdrop-blur-xl bg-[#050811]/90 border-b border-slate-800 transition-all">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       
       <!-- برند و لوگو -->
-      <a href="/" class="flex items-center gap-3.5 group focus:outline-none">
-        <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 border border-slate-800 group-hover:border-cyan-500/40 transition-colors shadow-inner">
+      <a href="/" class="flex items-center gap-3.5 group focus:outline-none relative z-10">
+        <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 border border-slate-700 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <picture>
             <source srcset="/Ekbatan_logo.webp" type="image/webp" />
             <img 
@@ -49,12 +49,12 @@ const navItems = [
       </a>
 
       <!-- منوی دسکتاپ -->
-      <nav class="hidden lg:flex items-center gap-1 xl:gap-2">
+      <nav class="hidden lg:flex items-center gap-1 xl:gap-2 relative z-10">
         <a href="/#infrastructure" class="nav-item px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors">
           زیرساخت ابری
         </a>
 
-        <!-- مگا منوی شناور و شفاف خدمات -->
+        <!-- مگا منوی شناور -->
         <div class="relative group/menu py-5">
           <button class="nav-item flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors focus:outline-none">
             <span>خدمات تخصصی</span>
@@ -63,31 +63,32 @@ const navItems = [
             </svg>
           </button>
 
-          <!-- پنل مگا منو (بدون تداخل لایه‌ای و با Backdrop ایمن) -->
-          <div class="absolute top-[80px] -right-20 w-[840px] bg-[#080d19]/98 backdrop-blur-2xl border border-slate-700/80 rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8),0_0_30px_rgba(6,182,212,0.12)] p-6 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-200 translate-y-3 group-hover/menu:translate-y-0 z-[100]">
+          <!-- پنل مگا منو (Solid Background + High Z-Index) -->
+          <!-- استفاده از رنگ کاملا سالید (#020617) به همراه drop-shadow سنگین برای پوشاندن کامل محتوای زیرین -->
+          <div class="absolute top-[75px] -right-12 w-[850px] bg-[#020617] border border-cyan-900/60 rounded-2xl shadow-[0_25px_60px_-10px_rgba(0,0,0,0.9)] p-7 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-300 translate-y-4 group-hover/menu:translate-y-0 z-[999] before:absolute before:-top-2 before:right-[5.5rem] before:w-4 before:h-4 before:bg-[#020617] before:border-t before:border-l before:border-cyan-900/60 before:rotate-45">
             <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-800">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                 <span class="text-xs font-mono font-semibold tracking-wider text-slate-300 uppercase">Architecture & Deployment Catalog</span>
               </div>
-              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors">
+              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1.5 rounded-lg border border-cyan-900/50">
                 مشاهده همه سرویس‌ها
                 <span class="font-mono">←</span>
               </a>
             </div>
 
-            <div class="grid grid-cols-3 gap-6 max-h-[60vh] overflow-y-auto pl-2">
+            <div class="grid grid-cols-3 gap-8">
               {Object.entries(servicesByCategory).map(([category, services]) => (
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between border-b border-slate-800/60 pb-2">
+                <div class="space-y-3 relative">
+                  <div class="flex items-center gap-2 pb-2">
                     <span class="text-xs font-mono font-bold text-cyan-400 tracking-wide">{category}</span>
                   </div>
-                  <ul class="space-y-1.5">
+                  <ul class="space-y-1 relative z-10 border-r border-slate-800/60 pr-3">
                     {services.map((srv) => (
                       <li>
                         <a 
                           href={`/services/${srv.id}`}
-                          class="block px-2.5 py-1.5 text-xs text-slate-300 hover:text-white hover:bg-slate-800/70 rounded-md transition-all font-medium"
+                          class="block px-3 py-2 text-xs text-slate-300 hover:text-cyan-100 hover:bg-slate-800/80 rounded-md transition-all font-medium"
                         >
                           {srv.data.title}
                         </a>
@@ -108,10 +109,10 @@ const navItems = [
       </nav>
 
       <!-- CTA و دکمه موبایل -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 relative z-10">
         <a 
           href="/assessment" 
-          class="relative inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-xs text-cyan-300 bg-cyan-950/50 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/15 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all overflow-hidden"
+          class="relative hidden sm:inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-xs text-cyan-300 bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/20 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all overflow-hidden"
         >
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
           <span>درخواست ارزیابی معماری</span>
@@ -120,7 +121,7 @@ const navItems = [
         <!-- دکمه منوی همبرگری موبایل -->
         <button 
           id="mobile-menu-btn" 
-          class="lg:hidden p-2 rounded-xl border border-slate-800 bg-slate-900/80 text-slate-300 hover:text-white focus:outline-none"
+          class="lg:hidden p-2 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white focus:outline-none"
           aria-label="باز کردن منو"
         >
           <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -133,7 +134,7 @@ const navItems = [
   </div>
 
   <!-- منوی بازشونده موبایل -->
-  <div id="mobile-menu" class="hidden lg:hidden fixed inset-x-0 top-20 bg-[#070b14]/98 border-b border-slate-800 backdrop-blur-2xl max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl z-[150]">
+  <div id="mobile-menu" class="hidden lg:hidden fixed inset-x-0 top-20 bg-[#050811] border-b border-slate-800 max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl z-[150]">
     <div class="flex flex-col gap-3">
       <a href="/#infrastructure" class="mobile-link text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60">زیرساخت ابری</a>
       
@@ -149,7 +150,7 @@ const navItems = [
           {Object.entries(servicesByCategory).map(([category, services]) => (
             <div>
               <div class="text-[11px] font-mono text-cyan-400 mb-2">{category}</div>
-              <ul class="space-y-1.5 pr-2 border-r border-slate-800">
+              <ul class="space-y-1.5 pr-2 border-r border-slate-700">
                 {services.map((srv) => (
                   <li>
                     <a href={`/services/${srv.id}`} class="mobile-link block text-xs text-slate-300 py-1 hover:text-cyan-300">
@@ -160,7 +161,7 @@ const navItems = [
               </ul>
             </div>
           ))}
-          <a href="/services" class="mobile-link block text-center text-xs font-bold text-cyan-400 pt-2 border-t border-slate-800">مشاهده کاتالوگ همه سرویس‌ها ←</a>
+          <a href="/services" class="mobile-link block text-center text-xs font-bold text-cyan-400 pt-2 border-t border-slate-800 mt-2">مشاهده کاتالوگ همه سرویس‌ها ←</a>
         </div>
       </div>
 
@@ -170,7 +171,7 @@ const navItems = [
         </a>
       ))}
 
-      <a href="/assessment" class="mt-4 text-center text-sm font-bold py-3 rounded-xl bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/25">
+      <a href="/assessment" class="mt-4 text-center text-sm font-bold py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-colors shadow-lg shadow-cyan-500/25">
         ثبت درخواست بررسی معماری
       </a>
     </div>
