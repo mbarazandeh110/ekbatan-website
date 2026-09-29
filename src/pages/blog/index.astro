@@ -28,7 +28,7 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
 
     <div id="blog-content" class="hidden">
       
-      <div class="mb-16 relative z-[80] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-slate-900/60 p-4 rounded-2xl border border-slate-800 shadow-inner">
+      <div class="mb-16 relative z-[80] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-[#070b14]/80 p-4 rounded-2xl border border-slate-800 shadow-inner">
         
         <div id="active-tags-container" class="flex flex-wrap gap-2 flex-grow min-h-[32px] items-center">
           <span class="text-sm text-slate-500 ml-2">فیلترهای فعال:</span>
@@ -36,14 +36,14 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
         </div>
 
         <div class="relative w-full md:w-auto shrink-0">
-          <button id="tag-dropdown-btn" class="w-full md:w-auto flex items-center justify-between gap-3 px-5 py-2.5 bg-cyan-950/40 border border-cyan-800/60 hover:bg-cyan-900/60 text-cyan-400 rounded-xl transition-all shadow-lg shadow-cyan-900/20 text-sm font-bold relative z-[101]">
+          <button id="tag-dropdown-btn" class="w-full md:w-auto flex items-center justify-between gap-3 px-5 py-2.5 bg-cyan-950/30 border border-cyan-800/50 hover:bg-cyan-900/50 text-cyan-400 rounded-xl transition-all shadow-sm text-sm font-bold relative z-[101]">
             <span>جستجو و انتخاب تگ‌ها</span>
             <svg class="w-4 h-4 transition-transform duration-200" id="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
-          <!-- پنل بازشو با Elevation قدرتمند و رنگ مجزا -->
+          <!-- پنل بازشو با طراحی جدید و Custom Checkboxes -->
           <div id="tag-dropdown-panel" class="absolute top-[calc(100%+12px)] left-0 md:right-0 w-full md:w-[340px] bg-[#0B1221] border border-cyan-700/50 rounded-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),0_0_20px_rgba(6,182,212,0.1)] opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden flex flex-col z-[100] before:absolute before:-top-[7px] before:right-[50px] before:md:left-[50px] before:w-3.5 before:h-3.5 before:bg-[#0B1221] before:border-t before:border-l before:border-cyan-700/50 before:rotate-45">
             
             <div class="p-4 border-b border-slate-800/80 bg-[#0B1221] shrink-0 relative z-10">
@@ -52,7 +52,7 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
                 id="tag-search-input" 
                 placeholder="جستجوی تگ (مثلاً K8s)..." 
                 class="w-full bg-[#050811] border border-slate-700/80 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors font-mono shadow-inner" 
-                dir="ltr" 
+                dir="rtl" 
               />
             </div>
             
@@ -63,7 +63,7 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10" id="posts-grid"></div>
 
-      <div id="no-results" class="hidden text-center py-16 border border-slate-800/50 border-dashed rounded-2xl bg-slate-900/20 mt-8">
+      <div id="no-results" class="hidden text-center py-16 border border-slate-800/50 border-dashed rounded-2xl bg-[#070b14]/50 mt-8">
         <p class="text-slate-400 text-lg mb-4">مقاله‌ای با این ترکیب از تگ‌ها یافت نشد.</p>
         <button id="reset-filters" class="px-6 py-2 rounded-lg bg-slate-800 text-cyan-400 hover:bg-slate-700 hover:text-cyan-300 text-sm font-bold transition-colors">حذف فیلترها</button>
       </div>
@@ -77,7 +77,6 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
   .custom-scrollbar::-webkit-scrollbar { width: 6px; }
   .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 10px; }
-  .tag-checkbox { accent-color: #06b6d4; }
 </style>
 
 <script>
@@ -131,11 +130,19 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
 
       if (tagList) {
+        // تغییرات: استفاده از Custom Checkbox به جای مرورگر با ساختار Tailwind Peer
         tagList.innerHTML = sortedTags.map(tag => `
           <li class="tag-item" data-tag-name="${tag.toLowerCase()}">
             <label class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-800/80 rounded-lg cursor-pointer transition-colors group">
               <div class="flex items-center gap-3">
-                <input type="checkbox" value="${tag}" class="tag-checkbox w-4 h-4 rounded border-slate-700 text-cyan-500 focus:ring-cyan-500/50 bg-[#050811] cursor-pointer" />
+                <div class="relative flex items-center justify-center w-4 h-4">
+                  <input type="checkbox" value="${tag}" class="tag-checkbox peer absolute w-full h-full opacity-0 cursor-pointer z-10" />
+                  <div class="w-4 h-4 rounded-[4px] border border-slate-600 bg-[#050811] peer-checked:bg-cyan-500 peer-checked:border-cyan-500 transition-colors flex items-center justify-center">
+                    <svg class="w-3 h-3 text-slate-950 opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
                 <span class="text-sm text-slate-300 select-none font-mono group-hover:text-cyan-300 transition-colors">${tag}</span>
               </div>
               <span class="text-[10px] font-mono text-cyan-400 bg-cyan-950/50 border border-cyan-800/60 px-2 py-0.5 rounded-full">${tagCounts[tag]}</span>
@@ -210,7 +217,7 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
           activeTags.forEach(tag => {
             const chip = document.createElement('span');
             chip.className = 'tag-chip flex items-center gap-2 px-3 py-1 bg-cyan-950/60 border border-cyan-800/50 text-cyan-300 text-xs rounded-lg font-mono animate-fade-in';
-            chip.innerHTML = `${tag} <button class="remove-tag-btn text-cyan-500 hover:text-red-400 transition-colors" data-tag="${tag}">✕</button>`;
+            chip.innerHTML = `${tag} <button class="remove-tag-btn text-cyan-500 hover:text-red-400 transition-colors focus:outline-none" data-tag="${tag}">✕</button>`;
             activeTagsContainer.appendChild(chip);
           });
         }
@@ -248,10 +255,8 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       if (removeBtn) {
         const tagToRemove = removeBtn.getAttribute('data-tag');
         activeTags = activeTags.filter(t => t !== tagToRemove);
-        
         const cb = document.querySelector(`.tag-checkbox[value="${tagToRemove}"]`) as HTMLInputElement;
         if (cb) cb.checked = false;
-        
         renderFilteredPosts();
       }
     });
