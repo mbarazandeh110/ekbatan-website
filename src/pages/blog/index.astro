@@ -21,54 +21,48 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       </p>
     </div>
 
-    <!-- UI لودینگ (Skeleton) -->
     <div id="loading-state" class="flex flex-col items-center justify-center py-20">
       <div class="w-10 h-10 border-4 border-slate-800 border-t-cyan-500 rounded-full animate-spin mb-4"></div>
       <span class="text-slate-400 font-mono text-sm">در حال دریافت معماری مقالات...</span>
     </div>
 
-    <!-- محتوای اصلی -->
     <div id="blog-content" class="hidden">
       
-      <!-- بخش فیلتر پیشرفته - Z-Index 80 جهت جلوگیری از تداخل با کارت‌های زیرین -->
       <div class="mb-16 relative z-[80] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-slate-900/60 p-4 rounded-2xl border border-slate-800 shadow-inner">
         
-        <!-- تگ‌های فعال (Chips) -->
         <div id="active-tags-container" class="flex flex-wrap gap-2 flex-grow min-h-[32px] items-center">
           <span class="text-sm text-slate-500 ml-2">فیلترهای فعال:</span>
           <span id="no-active-tags" class="text-sm text-slate-400 font-mono">ALL_POSTS</span>
         </div>
 
-        <!-- دراپ‌داون انتخاب تگ -->
         <div class="relative w-full md:w-auto shrink-0">
-          <button id="tag-dropdown-btn" class="w-full md:w-auto flex items-center justify-between gap-3 px-5 py-2.5 bg-cyan-950/40 border border-cyan-800/60 hover:bg-cyan-900/60 text-cyan-400 rounded-xl transition-all shadow-lg shadow-cyan-900/20 text-sm font-bold">
+          <button id="tag-dropdown-btn" class="w-full md:w-auto flex items-center justify-between gap-3 px-5 py-2.5 bg-cyan-950/40 border border-cyan-800/60 hover:bg-cyan-900/60 text-cyan-400 rounded-xl transition-all shadow-lg shadow-cyan-900/20 text-sm font-bold relative z-[101]">
             <span>جستجو و انتخاب تگ‌ها</span>
             <svg class="w-4 h-4 transition-transform duration-200" id="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
-          <!-- پنل بازشو - ارتقا یافته با رنگ روشن‌تر، سایه سایان و Z-index 100 -->
-          <div id="tag-dropdown-panel" class="absolute top-[120%] left-0 md:right-0 mt-2 w-full md:w-80 bg-slate-900 border border-cyan-800/80 rounded-xl shadow-[0_15px_40px_-10px_rgba(6,182,212,0.2)] opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden flex flex-col z-[100]">
-            <div class="p-3 border-b border-slate-800 bg-slate-800/50 shrink-0">
+          <!-- پنل بازشو با Elevation قدرتمند و رنگ مجزا -->
+          <div id="tag-dropdown-panel" class="absolute top-[calc(100%+12px)] left-0 md:right-0 w-full md:w-[340px] bg-[#0B1221] border border-cyan-700/50 rounded-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),0_0_20px_rgba(6,182,212,0.1)] opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden flex flex-col z-[100] before:absolute before:-top-[7px] before:right-[50px] before:md:left-[50px] before:w-3.5 before:h-3.5 before:bg-[#0B1221] before:border-t before:border-l before:border-cyan-700/50 before:rotate-45">
+            
+            <div class="p-4 border-b border-slate-800/80 bg-[#0B1221] shrink-0 relative z-10">
               <input 
                 type="text" 
                 id="tag-search-input" 
                 placeholder="جستجوی تگ (مثلاً K8s)..." 
-                class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors font-mono shadow-inner" 
+                class="w-full bg-[#050811] border border-slate-700/80 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors font-mono shadow-inner" 
                 dir="ltr" 
               />
             </div>
-            <!-- لیست تگ‌ها داینامیک پر می‌شود -->
-            <ul id="tag-list" class="max-h-72 overflow-y-auto p-2 custom-scrollbar bg-slate-900"></ul>
+            
+            <ul id="tag-list" class="max-h-72 overflow-y-auto p-2 custom-scrollbar bg-[#0B1221] relative z-10"></ul>
           </div>
         </div>
       </div>
 
-      <!-- کانتینر کارت مقالات -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10" id="posts-grid"></div>
 
-      <!-- پیام خالی بودن لیست -->
       <div id="no-results" class="hidden text-center py-16 border border-slate-800/50 border-dashed rounded-2xl bg-slate-900/20 mt-8">
         <p class="text-slate-400 text-lg mb-4">مقاله‌ای با این ترکیب از تگ‌ها یافت نشد.</p>
         <button id="reset-filters" class="px-6 py-2 rounded-lg bg-slate-800 text-cyan-400 hover:bg-slate-700 hover:text-cyan-300 text-sm font-bold transition-colors">حذف فیلترها</button>
@@ -139,12 +133,12 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       if (tagList) {
         tagList.innerHTML = sortedTags.map(tag => `
           <li class="tag-item" data-tag-name="${tag.toLowerCase()}">
-            <label class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-800 rounded-lg cursor-pointer transition-colors group">
+            <label class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-800/80 rounded-lg cursor-pointer transition-colors group">
               <div class="flex items-center gap-3">
-                <input type="checkbox" value="${tag}" class="tag-checkbox w-4 h-4 rounded border-slate-700 text-cyan-500 focus:ring-cyan-500/50 bg-slate-950 cursor-pointer" />
+                <input type="checkbox" value="${tag}" class="tag-checkbox w-4 h-4 rounded border-slate-700 text-cyan-500 focus:ring-cyan-500/50 bg-[#050811] cursor-pointer" />
                 <span class="text-sm text-slate-300 select-none font-mono group-hover:text-cyan-300 transition-colors">${tag}</span>
               </div>
-              <span class="text-[10px] font-mono text-cyan-500 bg-cyan-950/40 border border-cyan-900/50 px-2 py-0.5 rounded-full">${tagCounts[tag]}</span>
+              <span class="text-[10px] font-mono text-cyan-400 bg-cyan-950/50 border border-cyan-800/60 px-2 py-0.5 rounded-full">${tagCounts[tag]}</span>
             </label>
           </li>
         `).join('');
@@ -227,14 +221,14 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       e.stopPropagation();
       dropdownPanel?.classList.toggle('opacity-0');
       dropdownPanel?.classList.toggle('invisible');
-      dropdownPanel?.classList.toggle('translate-y-2');
+      dropdownPanel?.classList.toggle('translate-y-3');
       dropdownIcon?.classList.toggle('rotate-180');
       if (!dropdownPanel?.classList.contains('invisible')) searchInput?.focus();
     });
 
     document.addEventListener('click', (e) => {
       if (dropdownPanel && dropdownBtn && !dropdownBtn.contains(e.target as Node) && !dropdownPanel.contains(e.target as Node)) {
-        dropdownPanel.classList.add('opacity-0', 'invisible', 'translate-y-2');
+        dropdownPanel.classList.add('opacity-0', 'invisible', 'translate-y-3');
         dropdownIcon?.classList.remove('rotate-180');
       }
     });

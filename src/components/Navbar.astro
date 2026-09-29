@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 const allServices = await getCollection('services');
 const sortedServices = allServices.sort((a, b) => a.data.order - b.data.order);
 
-// گروه‌بندی ساختاریافته خدمات بر اساس تگ
 const servicesByCategory = sortedServices.reduce((acc, service) => {
   const tag = service.data.tag;
   if (!acc[tag]) acc[tag] = [];
@@ -63,9 +62,8 @@ const navItems = [
             </svg>
           </button>
 
-          <!-- پنل مگا منو (Solid Background + High Z-Index) -->
-          <!-- استفاده از رنگ کاملا سالید (#020617) به همراه drop-shadow سنگین برای پوشاندن کامل محتوای زیرین -->
-          <div class="absolute top-[75px] -right-12 w-[850px] bg-[#020617] border border-cyan-900/60 rounded-2xl shadow-[0_25px_60px_-10px_rgba(0,0,0,0.9)] p-7 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-300 translate-y-4 group-hover/menu:translate-y-0 z-[999] before:absolute before:-top-2 before:right-[5.5rem] before:w-4 before:h-4 before:bg-[#020617] before:border-t before:border-l before:border-cyan-900/60 before:rotate-45">
+          <!-- پنل مگا منو بهینه‌شده -->
+          <div class="absolute top-[calc(100%-8px)] right-0 w-[calc(100vw-2rem)] lg:w-[800px] xl:w-[850px] bg-[#020617] border border-cyan-900/60 rounded-2xl shadow-[0_30px_60px_-10px_rgba(0,0,0,1)] p-7 opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-300 translate-y-3 group-hover/menu:translate-y-0 z-[999] before:absolute before:-top-2 before:right-[50px] before:w-4 before:h-4 before:bg-[#020617] before:border-t before:border-l before:border-cyan-900/60 before:rotate-45">
             <div class="flex items-center justify-between pb-4 mb-5 border-b border-slate-800">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
@@ -77,13 +75,13 @@ const navItems = [
               </a>
             </div>
 
-            <div class="grid grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {Object.entries(servicesByCategory).map(([category, services]) => (
                 <div class="space-y-3 relative">
                   <div class="flex items-center gap-2 pb-2">
                     <span class="text-xs font-mono font-bold text-cyan-400 tracking-wide">{category}</span>
                   </div>
-                  <ul class="space-y-1 relative z-10 border-r border-slate-800/60 pr-3">
+                  <ul class="space-y-1 relative z-10 md:border-r border-slate-800/60 md:pr-3">
                     {services.map((srv) => (
                       <li>
                         <a 
@@ -180,14 +178,12 @@ const navItems = [
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // باز و بسته شدن منوی موبایل
     const mobileBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     mobileBtn?.addEventListener('click', () => {
       mobileMenu?.classList.toggle('hidden');
     });
 
-    // آکاردئون بخش خدمات موبایل
     const servicesToggle = document.getElementById('mobile-services-toggle');
     const servicesList = document.getElementById('mobile-services-list');
     const arrow = document.getElementById('mobile-arrow');
@@ -197,7 +193,6 @@ const navItems = [
       arrow?.classList.toggle('rotate-180');
     });
 
-    // اسکرول نرم برای لینک‌های داخلی
     const links = document.querySelectorAll('a.nav-item, a.mobile-link');
     links.forEach(link => {
       link.addEventListener('click', (e) => {
