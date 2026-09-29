@@ -29,6 +29,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
       
+      <!-- برند و لوگو -->
       <a href="/" class="flex items-center gap-3.5 group focus:outline-none relative z-10">
         <div class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-slate-900 border border-slate-700 group-hover:border-cyan-500/50 transition-colors shadow-inner">
           <picture>
@@ -50,48 +51,54 @@ const MAX_SERVICES_PER_CATEGORY = 4;
         </div>
       </a>
 
+      <!-- منوی دسکتاپ -->
       <nav class="hidden lg:flex items-center gap-1 xl:gap-2 relative z-10">
-        <a href="/#infrastructure" class="nav-item px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors">
+        <a href="/#infrastructure" class="nav-item px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-cyan-500 outline-none">
           زیرساخت ابری
         </a>
 
+        <!-- مگا منوی شناور Master-Detail -->
         <div class="relative group/menu py-5">
-          <button class="nav-item flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors focus:outline-none">
+          <button class="nav-item flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-cyan-500 outline-none">
             <span>خدمات تخصصی</span>
             <svg class="w-4 h-4 text-slate-500 transition-transform duration-300 group-hover/menu:rotate-180 group-hover/menu:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
+          <!-- پنل اصلی مگا منو -->
           <div class="absolute top-[calc(100%-8px)] right-0 w-[calc(100vw-2rem)] lg:w-[850px] xl:w-[950px] bg-[#020617] border border-cyan-900/60 rounded-2xl shadow-[0_30px_60px_-10px_rgba(0,0,0,1)] opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all duration-300 translate-y-3 group-hover/menu:translate-y-0 z-[999] overflow-hidden flex flex-col before:absolute before:-top-2 before:right-[50px] before:w-4 before:h-4 before:bg-[#020617] before:border-t before:border-l before:border-cyan-900/60 before:rotate-45 before:z-20">
             
+            <!-- هدر مگا منو -->
             <div class="flex items-center justify-between px-7 py-4 border-b border-slate-800 bg-[#020617] relative z-10 shrink-0">
               <div class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                 <span class="text-xs font-mono font-semibold tracking-wider text-slate-300 uppercase">Architecture & Deployment Catalog</span>
               </div>
-              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors">
-                کاتالوگ جامع
+              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1.5 rounded-lg border border-cyan-900/50">
+                مشاهده کاتالوگ جامع
                 <span class="font-mono">←</span>
               </a>
             </div>
 
-            <!-- تغییر ارتفاع ثابت به مینیمم و ماکزیمم برای جلوگیری از فشردگی -->
+            <!-- ساختار دو ستونه Master-Detail -->
             <div class="flex min-h-[450px] max-h-[70vh]">
               
-              <div class="w-[30%] bg-[#050811] py-4 overflow-y-auto mega-menu-scrollbar shrink-0">
+              <!-- ستون راست (Master) -->
+              <div class="w-[30%] bg-[#050811] py-4 mega-menu-scrollbar shrink-0">
                 <ul class="flex flex-col gap-1 pr-3 pl-0 relative">
-                  <!-- خط مرزی عمودی یکپارچه در سمت چپ لیست -->
-                  <div class="absolute top-0 bottom-0 left-0 w-px bg-slate-800/60"></div>
+                  <!-- خط مرزی عمودی -->
+                  <div class="absolute top-0 bottom-0 left-0 w-px bg-slate-800/60 z-0"></div>
                   
                   {categories.map((category, index) => (
                     <li>
                       <button 
-                        class={`category-tab w-full text-right flex items-center justify-between px-4 py-3.5 transition-all font-mono text-[11px] uppercase tracking-wide border-y border-r relative z-10 ${index === 0 ? 'bg-[#0B1221] text-cyan-400 border-slate-800/60 !border-l-0 rounded-r-xl rounded-l-none -ml-px' : 'bg-transparent text-slate-400 border-transparent hover:bg-slate-900/60 hover:text-slate-200 rounded-xl mr-2'}`}
+                        class="category-tab group/tab w-full text-right flex items-center justify-between px-4 py-3.5 transition-all font-mono text-[11px] uppercase tracking-wide border-y border-r relative z-10 outline-none data-[active=true]:bg-[#0B1221] data-[active=true]:text-cyan-400 data-[active=true]:border-slate-800/60 data-[active=true]:!border-l-0 data-[active=true]:rounded-r-xl data-[active=true]:rounded-l-none data-[active=true]:-ml-[1px] data-[active=true]:w-[calc(100%+1px)] data-[active=false]:bg-transparent data-[active=false]:text-slate-400 data-[active=false]:border-transparent data-[active=false]:hover:bg-slate-900/60 data-[active=false]:hover:text-slate-200 data-[active=false]:rounded-xl data-[active=false]:mr-2"
                         data-target={`pane-${index}`}
+                        data-active={index === 0 ? "true" : "false"}
                       >
                         <span class="truncate">{category}</span>
-                        <svg class={`w-4 h-4 transition-transform ${index === 0 ? 'text-cyan-400' : 'text-slate-600 opacity-0 -translate-x-2'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-4 h-4 transition-transform data-[active=true]:text-cyan-400 data-[active=true]:opacity-100 data-[active=true]:translate-x-0 group-data-[active=false]/tab:text-slate-600 group-data-[active=false]/tab:opacity-0 group-data-[active=false]/tab:-translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                       </button>
@@ -100,17 +107,18 @@ const MAX_SERVICES_PER_CATEGORY = 4;
                 </ul>
               </div>
 
-              <!-- رنگ پس‌زمینه پنل Detail هم‌رنگ با تب فعال تنظیم شد (#0B1221) -->
+              <!-- ستون چپ (Detail) -->
               <div class="w-[70%] relative bg-[#0B1221] overflow-hidden rounded-bl-2xl">
                 {categories.map((category, index) => {
                   const services = servicesByCategory[category];
-                  const displayServices = services.slice(0, 6); // نمایش هوشمند حداکثر ۶ کارت
+                  const displayServices = services.slice(0, 6);
                   const hasMore = services.length > 6;
 
                   return (
                     <div 
                       id={`pane-${index}`} 
-                      class={`service-pane absolute inset-0 p-8 overflow-y-auto mega-menu-scrollbar transition-opacity duration-300 ${index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                      class="service-pane absolute inset-0 p-8 overflow-y-auto mega-menu-scrollbar transition-opacity duration-300 data-[active=true]:opacity-100 data-[active=true]:z-10 data-[active=false]:opacity-0 data-[active=false]:z-0 data-[active=false]:pointer-events-none"
+                      data-active={index === 0 ? "true" : "false"}
                     >
                       <div class="text-lg font-bold text-white mb-6 border-b border-slate-800/80 pb-3 flex items-center justify-between">
                         <span class="bg-gradient-to-l from-white to-slate-400 bg-clip-text text-transparent">خدمات {category}</span>
@@ -121,7 +129,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
                         {displayServices.map((srv) => (
                           <a 
                             href={`/services/${srv.id}`}
-                            class="group block p-5 rounded-xl bg-[#070b14] border border-slate-800/80 hover:border-cyan-500/40 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_-5px_rgba(6,182,212,0.15)] relative overflow-hidden"
+                            class="group block p-5 rounded-xl bg-[#070b14] border border-slate-800/80 hover:border-cyan-500/40 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_-5px_rgba(6,182,212,0.15)] relative overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
                           >
                             <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <h4 class="relative z-10 text-sm font-bold text-slate-200 group-hover:text-cyan-300 transition-colors mb-2 leading-relaxed">{srv.data.title}</h4>
@@ -147,21 +155,23 @@ const MAX_SERVICES_PER_CATEGORY = 4;
         </div>
 
         {navItems.slice(1).map((item) => (
-          <a href={item.href} class="nav-item px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors">
+          <a href={item.href} class="nav-item px-3 py-2 text-sm font-medium text-slate-300 hover:text-cyan-400 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-cyan-500 outline-none">
             {item.name}
           </a>
         ))}
       </nav>
 
+      <!-- CTA و دکمه موبایل -->
       <div class="flex items-center gap-3 relative z-10">
         <a 
           href="/assessment" 
-          class="relative hidden sm:inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-xs text-cyan-300 bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/20 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all overflow-hidden"
+          class="relative hidden sm:inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-xs text-cyan-300 bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/20 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all overflow-hidden focus-visible:ring-2 focus-visible:ring-cyan-500 outline-none"
         >
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
           <span>درخواست ارزیابی معماری</span>
         </a>
 
+        <!-- دکمه منوی همبرگری موبایل -->
         <button 
           id="mobile-menu-btn" 
           class="lg:hidden p-2 rounded-xl border border-slate-700 bg-slate-900/80 text-slate-300 hover:text-white focus:outline-none"
@@ -176,10 +186,12 @@ const MAX_SERVICES_PER_CATEGORY = 4;
     </div>
   </div>
 
+  <!-- منوی بازشونده موبایل مقیاس‌پذیر -->
   <div id="mobile-menu" class="hidden lg:hidden fixed inset-x-0 top-20 bg-[#050811] border-b border-slate-800 max-h-[85vh] overflow-y-auto px-6 py-6 shadow-2xl z-[150]">
     <div class="flex flex-col gap-3">
       <a href="/#infrastructure" class="mobile-link text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60">زیرساخت ابری</a>
       
+      <!-- آکاردئون موبایل -->
       <div>
         <button id="mobile-services-toggle" class="flex items-center justify-between w-full text-sm font-medium text-slate-200 py-2 border-b border-slate-800/60 focus:outline-none">
           <span>خدمات تخصصی</span>
@@ -233,7 +245,14 @@ const MAX_SERVICES_PER_CATEGORY = 4;
 </header>
 
 <style>
-  .mega-menu-scrollbar::-webkit-scrollbar { width: 4px; }
+  /* تنظیم دقیق اسکرول‌بار برای از بین بردن حالت بومی (Native) در تمام مرورگرها به ویژه فایرفاکس */
+  .mega-menu-scrollbar {
+    overflow-y: auto;
+    overflow-x: hidden; /* کلید رفع مشکل بیرون‌زدگی و اسکرول نارنجی */
+    scrollbar-width: thin; /* پشتیبانی فایرفاکس */
+    scrollbar-color: #1e293b transparent; /* پشتیبانی فایرفاکس */
+  }
+  .mega-menu-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
   .mega-menu-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .mega-menu-scrollbar::-webkit-scrollbar-thumb { background-color: #1e293b; border-radius: 10px; }
   .mega-menu-scrollbar:hover::-webkit-scrollbar-thumb { background-color: #334155; }
@@ -273,41 +292,24 @@ const MAX_SERVICES_PER_CATEGORY = 4;
       });
     });
 
+    // منطق بسیار تمیز شده برای مدیریت State تب‌ها با Data Attributes
     const categoryTabs = document.querySelectorAll('.category-tab');
     const servicePanes = document.querySelectorAll('.service-pane');
 
     categoryTabs.forEach(tab => {
       tab.addEventListener('mouseenter', () => {
-        categoryTabs.forEach(t => {
-          t.classList.remove('bg-[#0B1221]', 'text-cyan-400', 'border-slate-800/60', '!border-l-0', 'rounded-r-xl', 'rounded-l-none', '-ml-px');
-          t.classList.add('bg-transparent', 'text-slate-400', 'border-transparent', 'rounded-xl', 'mr-2');
-          
-          const icon = t.querySelector('svg');
-          if(icon) {
-            icon.classList.remove('text-cyan-400', 'opacity-100', 'translate-x-0');
-            icon.classList.add('text-slate-600', 'opacity-0', '-translate-x-2');
-          }
-        });
+        // غیرفعال کردن تمام تب‌ها
+        categoryTabs.forEach(t => t.setAttribute('data-active', 'false'));
+        // فعال کردن تب فعلی
+        tab.setAttribute('data-active', 'true');
 
-        tab.classList.remove('bg-transparent', 'text-slate-400', 'border-transparent', 'rounded-xl', 'mr-2');
-        tab.classList.add('bg-[#0B1221]', 'text-cyan-400', 'border-slate-800/60', '!border-l-0', 'rounded-r-xl', 'rounded-l-none', '-ml-px');
-        
-        const activeIcon = tab.querySelector('svg');
-        if(activeIcon) {
-          activeIcon.classList.remove('text-slate-600', 'opacity-0', '-translate-x-2');
-          activeIcon.classList.add('text-cyan-400', 'opacity-100', 'translate-x-0');
-        }
-
-        servicePanes.forEach(pane => {
-          pane.classList.remove('opacity-100', 'z-10');
-          pane.classList.add('opacity-0', 'z-0', 'pointer-events-none');
-        });
-
+        // مخفی کردن تمام پنل‌ها
+        servicePanes.forEach(pane => pane.setAttribute('data-active', 'false'));
+        // نمایش پنل مرتبط
         const targetId = tab.getAttribute('data-target');
         const targetPane = document.getElementById(targetId || '');
         if(targetPane) {
-          targetPane.classList.remove('opacity-0', 'z-0', 'pointer-events-none');
-          targetPane.classList.add('opacity-100', 'z-10');
+          targetPane.setAttribute('data-active', 'true');
         }
       });
     });

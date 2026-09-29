@@ -74,9 +74,15 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
 </Layout>
 
 <style>
+  /* پشتیبانی کامل از Firefox برای جلوگیری از رندر شدن اسکرول‌بار بومی سیستم‌عامل */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #334155 transparent;
+  }
   .custom-scrollbar::-webkit-scrollbar { width: 6px; }
   .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 10px; }
+  .tag-checkbox { accent-color: #06b6d4; }
 </style>
 
 <script>
