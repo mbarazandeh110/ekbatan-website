@@ -1,7 +1,7 @@
 ---
 title: "زیرساخت ذخیره‌سازی توزیع‌شده Ceph"
 metaTitle: "معماری و استقرار استوریج توزیع‌شده Ceph در مقیاس Petabyte | اکباتان"
-description: "طراحی، پیاده‌سازی و نگهداری کلاسترهای Ceph با معماری Software-Defined Storage (SDS) برای ارائه سرویس‌های Block، File و Object (S3) با تضمین پایداری ۹۹.۹۹۹٪."
+description: "طراحی، پیاده‌سازی و نگهداری کلاسترهای Ceph با معماری Software-Defined Storage (SDS) برای ارائه سرویس‌های Block، File و Object (S3) با تضمین پایداری ۹۹.۹۶٪."
 tag: "STORAGE & DATA"
 order: 2
 faqs:
