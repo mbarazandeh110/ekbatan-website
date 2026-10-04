@@ -15,7 +15,9 @@ export async function getStaticPaths() {
 const { service } = Astro.props;
 const { Content } = await render(service);
 const data = service.data;
-const currentUrl = Astro.url.href;
+
+// تضمین آدرس مطلق با trailing slash برای Schema
+const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.site).href;
 
 const schemaData = [
   {
@@ -23,10 +25,11 @@ const schemaData = [
     "@type": "Service",
     "name": data.title,
     "description": data.description,
+    "url": canonicalUrl,
     "provider": {
       "@type": "ProfessionalService",
       "name": "اکباتان",
-      "url": "https://ekbatan.tech"
+      "url": "https://ekbatan.tech/"
     }
   },
   {
@@ -35,7 +38,7 @@ const schemaData = [
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
       { "@type": "ListItem", "position": 2, "name": "خدمات سازمانی", "item": "https://ekbatan.tech/services/" },
-      { "@type": "ListItem", "position": 3, "name": data.title, "item": currentUrl }
+      { "@type": "ListItem", "position": 3, "name": data.title, "item": canonicalUrl }
     ]
   }
 ];
