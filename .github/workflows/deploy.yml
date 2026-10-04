@@ -38,8 +38,8 @@ jobs:
 
       - name: Run SEO Smoke Check
         run: |
-          chmod +x seo-smoke-check.sh
-          ./seo-smoke-check.sh
+          chmod +x scripts/seo-smoke-check.sh
+          ./scripts/seo-smoke-check.sh
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
