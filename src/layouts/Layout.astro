@@ -15,8 +15,9 @@ const {
   robots = "index, follow"
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImageURL = new URL(image, Astro.url);
+const pathname = Astro.url.pathname.replace(/\/$/, '') + '/';
+const canonicalURL = new URL(pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.site);
 ---
 
 <!doctype html>
@@ -32,22 +33,22 @@ const socialImageURL = new URL(image, Astro.url);
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     
-    <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" hreflang="fa" href={canonicalURL} />
-    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+    <link rel="canonical" href={canonicalURL.href} />
+    <link rel="alternate" hreflang="fa" href={canonicalURL.href} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL.href} />
 
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={socialImageURL} />
+    <meta property="og:image" content={socialImageURL.href} />
     <meta property="og:locale" content="fa_IR" />
 
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:url" content={canonicalURL.href} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={socialImageURL} />
+    <meta property="twitter:image" content={socialImageURL.href} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,10 +56,7 @@ const socialImageURL = new URL(image, Astro.url);
   </head>
   <body class="bg-[#050811] text-[#E2E8F0] font-['Vazirmatn'] antialiased selection:bg-cyan-500/25 selection:text-cyan-200 relative overflow-x-hidden min-h-screen">
     
-    <!-- لایه شبکه گرید فنی پس‌زمینه با ماتیک کنترل‌شده -->
     <div class="fixed inset-0 bg-[linear-gradient(to_right,#1e293b0f_1px,transparent_1px),linear-gradient(to_bottom,#1e293b0f_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none -z-10"></div>
-    
-    <!-- نورپردازی سراسری ملایم هدر -->
     <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[380px] bg-gradient-to-tr from-cyan-600/12 via-indigo-600/10 to-transparent blur-[140px] pointer-events-none -z-10"></div>
 
     <slot />
