@@ -24,14 +24,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          
       - name: Install dependencies
         run: npm install
+        
       - name: Build with Astro
         run: npm run build
+
+      - name: Run SEO Smoke Check
+        run: |
+          chmod +x seo-smoke-check.sh
+          ./seo-smoke-check.sh
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -48,4 +57,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
