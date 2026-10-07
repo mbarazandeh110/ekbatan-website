@@ -1,3 +1,6 @@
+// ==========================================================
+// FilePath: src/components/Navbar.astro
+// ==========================================================
 ---
 import { getCollection } from 'astro:content';
 
@@ -13,13 +16,17 @@ const servicesByCategory = sortedServices.reduce((acc, service) => {
 
 const categories = Object.keys(servicesByCategory);
 
+// 👈 تابع اسلاگ‌ساز
+const slugify = (text) => text.toString().toLowerCase().replace(/\s+/g, '-').replace(/&/g, 'and').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-');
+
+// 👈 اصلاح آدرس‌های بلاگ و درباره ما جهت جلوگیری از ریدایرکت
 const navItems = [
   { name: "زیرساخت ابری", href: "/#infrastructure" },
   { name: "مدل‌های همکاری", href: "/#engagement" },
   { name: "مطالعات موردی", href: "/#track-record" },
   { name: "استک‌های سازمانی", href: "/#enterprise-stack" },
-  { name: "بلاگ مهندسی", href: "/blog" },
-  { name: "درباره ما", href: "/about" },
+  { name: "بلاگ مهندسی", href: "/blog/" },
+  { name: "درباره ما", href: "/about/" },
 ];
 
 const MAX_SERVICES_PER_CATEGORY = 4;
@@ -75,7 +82,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
                 <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                 <span class="text-xs font-mono font-semibold tracking-wider text-slate-300 uppercase">Architecture & Deployment Catalog</span>
               </div>
-              <a href="/services" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1.5 rounded-lg border border-cyan-900/50">
+              <a href="/services/" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition-colors bg-cyan-950/30 px-3 py-1.5 rounded-lg border border-cyan-900/50">
                 مشاهده کاتالوگ جامع
                 <span class="font-mono">←</span>
               </a>
@@ -128,7 +135,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
                       <div class="grid grid-cols-2 gap-4">
                         {displayServices.map((srv) => (
                           <a 
-                            href={`/services/${srv.id}`}
+                            href={`/services/${srv.id}/`}
                             class="group block p-5 rounded-xl bg-[#070b14] border border-slate-800/80 hover:border-cyan-500/40 transition-all duration-300 shadow-sm hover:shadow-[0_4px_20px_-5px_rgba(6,182,212,0.15)] relative overflow-hidden outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
                           >
                             <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -140,7 +147,8 @@ const MAX_SERVICES_PER_CATEGORY = 4;
 
                       {hasMore && (
                         <div class="mt-6 pt-4 text-center">
-                          <a href={`/services/category/${category}`} class="inline-block text-[13px] text-cyan-500 hover:text-cyan-400 font-bold transition-colors border-b border-dashed border-cyan-800 hover:border-cyan-400 pb-1">
+                          <!-- 👈 استفاده از تابع اسلاگ ساز و اضافه شدن اسلش -->
+                          <a href={`/services/category/${slugify(category)}/`} class="inline-block text-[13px] text-cyan-500 hover:text-cyan-400 font-bold transition-colors border-b border-dashed border-cyan-800 hover:border-cyan-400 pb-1">
                             مشاهده تمام {services.length} سرویس در این دسته →
                           </a>
                         </div>
@@ -164,7 +172,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
       <!-- CTA و دکمه موبایل -->
       <div class="flex items-center gap-3 relative z-10">
         <a 
-          href="/assessment" 
+          href="/assessment/" 
           class="relative hidden sm:inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-medium text-xs text-cyan-300 bg-cyan-950/40 border border-cyan-500/30 hover:border-cyan-400 hover:bg-cyan-500/20 hover:shadow-[0_0_20px_rgba(6,182,212,0.25)] transition-all overflow-hidden focus-visible:ring-2 focus-visible:ring-cyan-500 outline-none"
         >
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
@@ -211,14 +219,14 @@ const MAX_SERVICES_PER_CATEGORY = 4;
                 <ul class="space-y-2 pr-2 border-r border-slate-700">
                   {displayServicesMobile.map((srv) => (
                     <li>
-                      <a href={`/services/${srv.id}`} class="mobile-link block text-xs text-slate-300 py-1 hover:text-cyan-300">
+                      <a href={`/services/${srv.id}/`} class="mobile-link block text-xs text-slate-300 py-1 hover:text-cyan-300">
                         {srv.data.title}
                       </a>
                     </li>
                   ))}
                   {hasMoreMobile && (
                      <li>
-                        <a href={`/services/category/${category}`} class="mobile-link block text-[11px] text-cyan-500/80 font-bold py-1 hover:text-cyan-300">
+                        <a href={`/services/category/${slugify(category)}/`} class="mobile-link block text-[11px] text-cyan-500/80 font-bold py-1 hover:text-cyan-300">
                           مشاهده همه {services.length} مورد...
                         </a>
                       </li>
@@ -227,7 +235,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
               </div>
             );
           })}
-          <a href="/services" class="mobile-link block text-center text-xs font-bold text-cyan-400 pt-4 border-t border-slate-800 mt-4">مشاهده کاتالوگ جامع سرویس‌ها ←</a>
+          <a href="/services/" class="mobile-link block text-center text-xs font-bold text-cyan-400 pt-4 border-t border-slate-800 mt-4">مشاهده کاتالوگ جامع سرویس‌ها ←</a>
         </div>
       </div>
 
@@ -237,7 +245,7 @@ const MAX_SERVICES_PER_CATEGORY = 4;
         </a>
       ))}
 
-      <a href="/assessment" class="mt-4 text-center text-sm font-bold py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-colors shadow-lg shadow-cyan-500/25">
+      <a href="/assessment/" class="mt-4 text-center text-sm font-bold py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 transition-colors shadow-lg shadow-cyan-500/25">
         ثبت درخواست بررسی معماری
       </a>
     </div>
