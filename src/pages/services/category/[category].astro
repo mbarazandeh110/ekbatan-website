@@ -4,7 +4,6 @@ import Layout from '../../../layouts/Layout.astro';
 import Navbar from '../../../components/Navbar.astro';
 import Footer from '../../../components/Footer.astro';
 
-// 👈 تابع اسلاگ‌ساز برای تبدیل دسته‌بندی‌ها به URL استاندارد سئو
 const slugify = (text) => text.toString().toLowerCase()
   .replace(/\s+/g, '-')
   .replace(/&/g, 'and')
@@ -12,6 +11,12 @@ const slugify = (text) => text.toString().toLowerCase()
   .replace(/\-\-+/g, '-');
 
 export async function getStaticPaths() {
+  const slugify = (text) => text.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/&/g, 'and')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
+
   const allServices = await getCollection('services');
   const uniqueCategories = [...new Set(allServices.map((service) => service.data.tag))];
 

@@ -11,12 +11,16 @@ const slugify = (text) => text.toString().toLowerCase()
   .replace(/\-\-+/g, '-');
 
 export async function getStaticPaths() {
+  const slugify = (text) => text.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/&/g, 'and')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-');
+
   const allPosts = await getCollection('blog');
-  // استخراج تمام تگ‌ها
   const uniqueTags = [...new Set(allPosts.map((post) => post.data.tags || []).flat())];
 
   return uniqueTags.map((tag) => {
-    // فیلتر کردن مقالات مرتبط با هر تگ
     const filteredPosts = allPosts
       .filter((post) => post.data.tags?.includes(tag))
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
