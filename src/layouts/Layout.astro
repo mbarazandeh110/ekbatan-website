@@ -18,7 +18,10 @@ const {
 // اضافه کردن اسلش انتهایی برای یکپارچگی Canonical
 const pathname = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
 const canonicalURL = new URL(pathname, Astro.site);
+canonicalURL.protocol = 'https:';
+
 const socialImageURL = new URL(image, Astro.site);
+socialImageURL.protocol = 'https:';
 ---
 
 <!doctype html>
