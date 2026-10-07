@@ -20,7 +20,7 @@ const schemaData = [
     "itemListElement": sortedServices.map((service, index) => ({
       "@type": "ListItem",
       "position": index + 1,
-      "url": new URL(`/services/${service.id}`, currentUrl).href,
+      "url": new URL(`/services/${service.id}/`, currentUrl).href,
       "name": service.data.title
     }))
   },
@@ -51,9 +51,9 @@ const schemaData = [
 
     <!-- نوار دسته‌بندی‌ها -->
     <div class="flex flex-wrap items-center justify-center gap-3 mb-16">
-      <a href="/services" class="px-5 py-2 rounded-full bg-cyan-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20">تمام سرویس‌ها</a>
+      <a href="/services/" class="px-5 py-2 rounded-full bg-cyan-500 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20">تمام سرویس‌ها</a>
       {uniqueCategories.map(category => (
-        <a href={`/services/category/${category}`} class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-mono">
+        <a href={`/services/category/${category}/`} class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-mono">
           {category}
         </a>
       ))}
@@ -61,7 +61,7 @@ const schemaData = [
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       {sortedServices.map((service) => (
-        <a href={`/services/${service.id}`.replace('//', '/')} class="group p-8 rounded-2xl border transition-all flex flex-col justify-between bg-slate-900/50 border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 shadow-lg cursor-pointer">
+        <a href={`/services/${service.id}/`.replace('//', '/')} class="group p-8 rounded-2xl border transition-all flex flex-col justify-between bg-slate-900/50 border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 shadow-lg cursor-pointer">
           <div>
             <div class="flex items-center justify-between mb-4">
               <span class="text-[10px] font-mono text-cyan-400 tracking-wider bg-cyan-950/40 px-2 py-1 rounded border border-cyan-900/40">
@@ -86,7 +86,7 @@ const schemaData = [
     <div class="mt-20 p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white">
       نیاز به ترکیب چند تکنولوژی برای معماری خاص خود دارید؟
       <div class="mt-6">
-        <a href="/assessment" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25">
+        <a href="/assessment/" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25">
           طراحی معماری اختصاصی (Discovery)
           <span>↗</span>
         </a>
