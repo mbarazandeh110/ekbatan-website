@@ -4,41 +4,47 @@
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-16">
       <span class="text-xs font-mono text-emerald-400 tracking-widest uppercase">BUSINESS ENGAGEMENT</span>
-      <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2">مدل‌های همکاری سازمانی</h2>
+      <h2 class="text-3xl md:text-5xl font-extrabold text-white mt-2">مدل‌های همکاری سازمانی و تحویلی‌ها</h2>
       <p class="text-slate-400 max-w-2xl mx-auto mt-4 text-sm md:text-base">
-        ما بر اساس بلوغ زیرساخت و نیازمندی‌های حیاتی کسب‌وکار شما، مدل‌های تعاملی کاملاً شفاف و مبتنی بر کاهش TCO (Total Cost of Ownership) ارائه می‌دهیم.
+        ما بر اساس بلوغ زیرساخت و نیازمندی‌های حیاتی کسب‌وکار شما، مدل‌های تعاملی کاملاً شفاف و مبتنی بر کاهش TCO (Total Cost of Ownership) ارائه می‌دهیم. هر فاز، خروجی‌های مهندسی مشخصی دارد.
       </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="bg-slate-900/40 border border-slate-800 p-8 rounded-2xl">
-        <h3 class="text-xl font-bold text-white mb-2">۱. ارزیابی و طراحی (Discovery & Blueprint)</h3>
+        <h3 class="text-xl font-bold text-white mb-2">۱. ارزیابی و طراحی (Discovery)</h3>
         <div class="text-xs font-mono text-cyan-400 mb-4">بازه زمانی: ۲ تا ۴ هفته</div>
-        <p class="text-slate-400 text-sm mb-6">ممیزی کامل زیرساخت فعلی، کشف گلوگاه‌های شبکه و دیتابیس، و ارائه مستندات معماری هدف (Target Architecture) همراه با برآورد منابع.</p>
+        <p class="text-slate-400 text-sm mb-6">ممیزی کامل زیرساخت فعلی، کشف گلوگاه‌های شبکه و دیتابیس، و طراحی Target Architecture.</p>
+        <div class="text-xs font-bold text-white mb-2 uppercase tracking-wide">خروجی‌های کلیدی:</div>
         <ul class="text-sm text-slate-300 space-y-3">
-          <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> استخراج قطعی RTO و RPO</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> تدوین سند Architecture Review</li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>سند معماری کوبرنتیز متناسب با ظرفیت</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>ارزیابی Storage (Ceph) و شبکه (Cilium)</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>استخراج RTO، RPO و نیازمندی‌های امنیتی</span></li>
         </ul>
       </div>
 
       <div class="bg-slate-900/40 border border-cyan-900/50 p-8 rounded-2xl relative shadow-[0_0_30px_rgba(6,182,212,0.1)]">
         <div class="absolute top-0 right-8 -translate-y-1/2 bg-cyan-500 text-slate-950 text-xs font-bold px-3 py-1 rounded-full">Project-Based</div>
-        <h3 class="text-xl font-bold text-white mb-2">۲. پیاده‌سازی و مهاجرت (Implementation)</h3>
+        <h3 class="text-xl font-bold text-white mb-2">۲. پیاده‌سازی و استقرار (Implementation)</h3>
         <div class="text-xs font-mono text-cyan-400 mb-4">بازه زمانی: ۱ تا ۳ ماه</div>
-        <p class="text-slate-400 text-sm mb-6">استقرار کامل استک ابری یا دیتاسنتر محلی مبتنی بر IaC، راه‌اندازی کلاسترها، ایمن‌سازی سامانه (Security Hardening) و انتقال ترافیک.</p>
+        <p class="text-slate-400 text-sm mb-6">استقرار کامل استک ابری مبتنی بر IaC، راه‌اندازی کلاسترهای HA و مهاجرت ترافیک.</p>
+        <div class="text-xs font-bold text-white mb-2 uppercase tracking-wide">تحویلی‌های اصلی:</div>
         <ul class="text-sm text-slate-300 space-y-3">
-          <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> تحویل سورس‌کد زیرساخت (Terraform/Ansible)</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> مهاجرت بدون قطعی (Zero-Downtime)</li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>کلاستر Production Kubernetes با Observability</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>سورس‌کد زیرساخت (Terraform/Ansible) و GitOps</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>مستندات معماری، Runbookها و چک‌لیست Go-Live</span></li>
         </ul>
       </div>
 
       <div class="bg-slate-900/40 border border-slate-800 p-8 rounded-2xl">
-        <h3 class="text-xl font-bold text-white mb-2">۳. مهندسی پایداری (SRE & Managed Services)</h3>
-        <div class="text-xs font-mono text-cyan-400 mb-4">مدل قرارداد: سالیانه (SLA-Backed)</div>
-        <p class="text-slate-400 text-sm mb-6">پس از تحویل، تیم SRE ما به صورت ۲۴/۷ پایداری سیستم را تضمین کرده و تضمین می‌کند زمان متوسط بازیابی (MTTR) زیر ۱۵ دقیقه باشد.</p>
+        <h3 class="text-xl font-bold text-white mb-2">۳. مهندسی پایداری (Managed SRE)</h3>
+        <div class="text-xs font-mono text-cyan-400 mb-4">مدل قرارداد: سالیانه (SLO-Backed)</div>
+        <p class="text-slate-400 text-sm mb-6">پشتیبانی ۲۴/۷، مدیریت چرخه‌عمر کلاسترها و بازیابی از بحران (Disaster Recovery) بر اساس معماری شما.</p>
+        <div class="text-xs font-bold text-white mb-2 uppercase tracking-wide">خدمات جاری:</div>
         <ul class="text-sm text-slate-300 space-y-3">
-          <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> تعریف Error Budget و مدل جبران نقض SLA</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-400">✓</span> ارائه گزارش‌های ماهانه Post-mortem</li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>تعریف Error Budget و پایش شاخص‌های دسترسی</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>اجرای Backup/Restore و Upgradeهای دوره‌ای</span></li>
+          <li class="flex items-start gap-2"><span class="text-emerald-400 mt-1">✓</span> <span>ارائه گزارش‌های Incident و Post-mortem</span></li>
         </ul>
       </div>
     </div>

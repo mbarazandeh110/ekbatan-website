@@ -1,38 +1,38 @@
 ---
 const services = [
   {
-    title: "کوبرنتیز و ارکستراسیون پیشرفته",
-    desc: "طراحی کلاسترهای High Availability، راه‌اندازی CNIهای مدرن eBPF-based نظیر Cilium و توسعه کنترلرهای بومی Golang جهت هدایت هوشمند ترافیک با Envoy xDS.",
+    title: "کوبرنتیز و ارکستراسیون برای Production",
+    desc: "طراحی کلاسترهای High Availability متناسب با ظرفیت و نیازمندی‌های سازمان، پیاده‌سازی CNI با eBPF (Cilium) و یکپارچه‌سازی محیط‌های عملیاتی.",
     tag: "KUBERNETES & CLOUD",
     icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>`
   },
   {
-    title: "ذخیره‌سازی توزیع‌شده Ceph و دیتابیس‌ها",
-    desc: "مهندسی کلاسترهای Petabyte-Scale مبتنی بر Ceph (Block, S3, CephFS) و پیکربندی تخصصی دیتابیس‌های توزیع‌شده با قابلیت Disaster Recovery بدون وقفه.",
+    title: "ذخیره‌سازی توزیع‌شده برای Stateful Workloads",
+    desc: "طراحی و پیاده‌سازی استوریج‌های مبتنی بر Ceph برای تأمین Storage اختصاصی کلاسترهای کوبرنتیز با در نظر گرفتن سناریوهای Disaster Recovery.",
     tag: "STORAGE & DATA",
     icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>`
   },
   {
-    title: "استریمینگ ویدیو و WebRTC بلادرنگ",
-    desc: "معماری سرورهای SFU با مقیاس همزمانی بالا (نظیر mediasoup) و کلاستربندی Workerهای ایزوله جهت دستیابی به تاخیر کمتر از ۱۵ میلی‌ثانیه در بستر اینترنت پرنوسان.",
+    title: "استریمینگ ویدیو و معماری WebRTC",
+    desc: "معماری سرورهای SFU (نظیر mediasoup) با ایزوله‌سازی Workerها جهت بهینه‌سازی تأخیر (Latency) ارتباطات بلادرنگ در بستر شبکه‌های توزیع‌شده.",
     tag: "STREAMING & WEBRTC",
     icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>`
   },
   {
-    title: "MLOps و کلاسترهای هوش مصنوعی",
-    desc: "طراحی شبکه‌های پردازشی بدون گلوگاه برای کلاسترهای GPU-Dense (مانند سرورهای HPE ProLiant DL380a با NVIDIA H200 و NVLink) جهت شتاب‌بخشی به فاز Training و Inference.",
+    title: "بسترهای MLOps و کلاسترهای هوش مصنوعی",
+    desc: "طراحی معماری کلاسترهای GPU-Dense روی سرورهای اختصاصی (مانند H200/NVLink) برای بهینه‌سازی توان پردازشی در فازهای Training و Inference.",
     tag: "AI & ML PLATFORMS",
     icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>`
   },
   {
-    title: "شبکه‌های توزیع محتوا (CDN) و Edge",
-    desc: "معماری لودبالانسرهای توزیع‌شده با Anycast BGP، کش محتوای چندلایه و بهینه‌سازی هسته لینوکس و TLS Offloading برای میزبانی ده‌ها گیگابیت بر ثانیه ترافیک پایدار.",
+    title: "شبکه‌های توزیع محتوا و مدیریت ترافیک Edge",
+    desc: "پیاده‌سازی لودبالانسرهای Anycast BGP، کنترلرهای بومی هدایت ترافیک، و بهینه‌سازی کرنل لینوکس جهت پایداری شبکه در محیط‌های پرترافیک.",
     tag: "NETWORKING & CDN",
     icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
   },
   {
-    title: "اتوماسیون DevOps و مدیریت پیکربندی",
-    desc: "استقرار استانداردهای GitOps، مدیریت چرخه حیات زیرساخت با Terraform و Ansible، و طراحی پایپ‌لاین‌های اعتبارسنجی خودکار قبل از اعمال تغییرات در Production.",
+    title: "GitOps و اتوماسیون چرخه حیات زیرساخت",
+    desc: "طراحی فرآیندهای CI/CD با استانداردهای GitOps (Argo CD، Terraform، Ansible) جهت اعمال تغییرات امن و مدیریت یکپارچه‌ی Configuration.",
     tag: "INFRASTRUCTURE AS CODE",
     icon: `<svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>`
   }
@@ -51,7 +51,7 @@ const services = [
       تخصص‌های هسته‌ای <span class="bg-gradient-to-r from-cyan-400 to-indigo-400 bg-clip-text text-transparent">اکباتان</span>
     </h2>
     <p class="text-slate-400 max-w-2xl mx-auto mt-4 text-sm md:text-base leading-relaxed">
-      تمرکز ما بر ساخت لایه‌های زیرساختی مهندسی‌شده‌ای است که سامانه‌های پرترافیک ملی بدون هراس از افت کارایی یا قطعی بر روی آن‌ها پایدار بمانند.
+      ما زیرساخت را بر اساس نیازمندی‌ها و محدودیت‌های پروژه‌ی شما مهندسی می‌کنیم؛ با تمرکز بر پایداری، امنیت و عملیاتی‌سازی در مقیاس‌های بزرگ.
     </p>
   </div>
 

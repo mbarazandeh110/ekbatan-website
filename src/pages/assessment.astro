@@ -6,16 +6,16 @@ import Footer from '../components/Footer.astro';
 
 <Layout 
   title="درخواست ارزیابی معماری زیرساخت و کوبرنتیز | اکباتان"
-  description="فرم درخواست ارزیابی زیرساخت و معماری ابری. با تیم SRE اکباتان برای مقیاس‌پذیری، رفع گلوگاه‌ها و استقرار کوبرنتیز سازمانی مشورت کنید."
+  description="فرم درخواست ارزیابی معماری ابری و کوبرنتیز برای محیط‌های Production. با تیم SRE اکباتان برای مقیاس‌پذیری و آمادگی زیرساخت مشورت کنید."
 >
   <Navbar />
   <main class="min-h-screen bg-[#020617] py-20 px-6">
     <div class="max-w-3xl mx-auto">
       <div class="mb-10 text-center">
-        <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">Infrastructure Assessment</span>
-        <h1 class="text-3xl md:text-5xl font-black text-white mt-4 mb-4">طراحی معماری مطلوب و ارزیابی زیرساخت</h1>
+        <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">Production Readiness Assessment</span>
+        <h1 class="text-3xl md:text-5xl font-black text-white mt-4 mb-4">ارزیابی آمادگی زیرساخت برای محیط‌های Production</h1>
         <p class="text-slate-400 text-sm md:text-base leading-relaxed">
-          برای استقرار سیستم‌های حیاتی، نیازمندی‌های فنی خود را وارد کنید. تیم SRE ما پس از بررسی معماری فعلی و اهداف SLA، جهت تدوین طرح جامع معماری با شما تماس خواهد گرفت.
+          راه‌اندازی سیستم‌های مقیاس‌پذیر نیازمند طراحی دقیق Control Plane، شبکه و Storage است. نیازمندی‌های فنی خود را وارد کنید تا تیم SRE اکباتان جهت تدوین طرح معماری و ارزیابی آمادگی (Readiness) با شما تماس بگیرد.
         </p>
       </div>
 
@@ -23,13 +23,13 @@ import Footer from '../components/Footer.astro';
         
         <div id="success-message" class="hidden absolute inset-0 bg-slate-900/95 rounded-2xl flex flex-col items-center justify-center p-8 text-center z-10 backdrop-blur-sm">
             <svg class="w-16 h-16 text-cyan-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <h3 class="text-2xl font-bold text-white mb-2">درخواست شما با موفقیت ثبت شد</h3>
-            <p class="text-slate-300">تیم فنی اکباتان به زودی جهت بررسی معماری با شما تماس خواهد گرفت.</p>
+            <h3 class="text-2xl font-bold text-white mb-2">درخواست ارزیابی ثبت شد</h3>
+            <p class="text-slate-300">تیم مهندسی اکباتان به‌زودی جهت بررسی معماری با شما تماس خواهد گرفت.</p>
         </div>
 
         <form id="assessment-form" class="space-y-6 text-right" dir="rtl">
           <input type="hidden" name="access_key" value="7a1d3c08-b0d1-4a8b-873e-cfd95c1d6c6d">
-          <input type="hidden" name="subject" value="درخواست جدید ارزیابی معماری از سایت Ekbatan.tech">
+          <input type="hidden" name="subject" value="درخواست جدید ارزیابی معماری Production از سایت Ekbatan.tech">
           <input type="hidden" name="from_name" value="Ekbatan Tech System">
           <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
@@ -45,29 +45,29 @@ import Footer from '../components/Footer.astro';
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-slate-300 mb-2">نوع بارهای کاری (Workload Type)</label>
+            <label class="block text-sm font-medium text-slate-300 mb-2">نوع بارهای کاری و دغدغه اصلی</label>
             <select name="workload_type" class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-cyan-500 transition-colors">
-              <option value="high-traffic-microservices">مایکروسرویس‌های پرترافیک / Kubernetes</option>
-              <option value="big-data-olap">کلان‌داده و OLAP (ClickHouse, Hadoop)</option>
-              <option value="ai-mlops">پردازش هوش مصنوعی و MLOps (GPU Intensive)</option>
-              <option value="cdn-streaming">توزیع محتوا، Edge و WebRTC</option>
-              <option value="storage-ceph">ذخیره‌سازی توزیع‌شده (Ceph PB-Scale)</option>
-              <option value="others">سایر</option>
+              <option value="kubernetes-production">استقرار Kubernetes برای محیط Production</option>
+              <option value="stateful-storage">مدیریت Storage توزیع‌شده و Backup (Ceph)</option>
+              <option value="high-traffic-networking">گلوگاه‌های شبکه، Load Balancing و eBPF</option>
+              <option value="ai-mlops">زیرساخت MLOps و کلاسترهای GPU</option>
+              <option value="sre-observability">مهندسی پایداری (SRE) و Observability</option>
+              <option value="others">طراحی معماری جامع / سایر موارد</option>
             </select>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-slate-300 mb-2">مقیاس تقریبی زیرساخت فعلی (تعداد Node / ترافیک / حجم داده)</label>
-            <input type="text" name="scale" placeholder="مثال: 50 نود کوبرنتیز، 2PB استوریج، 100Gbps ترافیک" class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors" />
+            <label class="block text-sm font-medium text-slate-300 mb-2">مقیاس تقریبی محیط عملیاتی (Nodes / ترافیک / حجم Storage)</label>
+            <input type="text" name="scale" placeholder="مثلاً: ۳۰ نود کوبرنتیز روی Bare Metal، ترافیک 50Gbps" class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors" />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-slate-300 mb-2">چالش‌های اصلی و نیازمندی‌های معماری (SLA, HA, Latency)</label>
-            <textarea name="challenges" rows="5" required placeholder="لطفا گلوگاه‌های Performance، مشکلات دیتابیس یا نیازهای Disaster Recovery را شرح دهید..." class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors resize-none"></textarea>
+            <label class="block text-sm font-medium text-slate-300 mb-2">الزامات پایداری، اهداف HA و توضیحات تکمیلی</label>
+            <textarea name="challenges" rows="5" required placeholder="لطفاً نیازمندی‌های مرتبط با معماری Control Plane، چالش‌های Availability فعلی، یا اهداف Disaster Recovery را شرح دهید..." class="w-full bg-[#0B101B] border border-slate-700 rounded-lg px-4 py-3 text-slate-300 focus:outline-none focus:border-cyan-500 transition-colors resize-none"></textarea>
           </div>
 
           <button id="submit-btn" type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-lg py-4 rounded-xl transition-all shadow-lg shadow-cyan-500/20 flex justify-center items-center gap-2">
-            <span>ثبت درخواست بررسی معماری</span>
+            <span>ثبت درخواست ارزیابی Production Readiness</span>
             <svg id="loading-spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-slate-950 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
           </button>
         </form>
@@ -120,7 +120,7 @@ import Footer from '../components/Footer.astro';
     } finally {
       submitBtn.disabled = false;
       submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
-      submitText.innerText = 'ثبت درخواست بررسی معماری';
+      submitText.innerText = 'ثبت درخواست ارزیابی Production Readiness';
       loadingSpinner.classList.add('hidden');
     }
   });
