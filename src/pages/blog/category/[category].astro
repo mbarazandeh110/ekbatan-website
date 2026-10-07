@@ -4,6 +4,12 @@ import Layout from '../../../layouts/Layout.astro';
 import Navbar from '../../../components/Navbar.astro';
 import Footer from '../../../components/Footer.astro';
 
+const slugify = (text) => text.toString().toLowerCase()
+  .replace(/\s+/g, '-')
+  .replace(/&/g, 'and')
+  .replace(/[^\w\-]+/g, '')
+  .replace(/\-\-+/g, '-');
+
 export async function getStaticPaths() {
   const allPosts = await getCollection('blog');
   // استخراج تمام تگ‌ها
@@ -16,17 +22,17 @@ export async function getStaticPaths() {
       .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
       
     return {
-      params: { category: tag },
-      props: { posts: filteredPosts, allTags: uniqueTags },
+      params: { category: slugify(tag) },
+      props: { posts: filteredPosts, allTags: uniqueTags, originalTag: tag },
     };
   });
 }
 
 const { category } = Astro.params;
-const { posts, allTags } = Astro.props;
+const { posts, allTags, originalTag } = Astro.props;
 
-const title = `مقالات دسته ${category} | بلاگ اکباتان`;
-const description = `لیست مقالات تخصصی مهندسی اکباتان در حوزه ${category}.`;
+const title = `مقالات دسته ${originalTag} | بلاگ اکباتان`;
+const description = `لیست مقالات تخصصی مهندسی اکباتان در حوزه ${originalTag}.`;
 ---
 
 <Layout title={title} description={description}>
@@ -36,18 +42,18 @@ const description = `لیست مقالات تخصصی مهندسی اکباتا�
     <div class="mb-12 text-center">
       <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">CATEGORY</span>
       <h1 class="text-4xl md:text-5xl font-black text-white mt-4 mb-6">
-        مقالات حوزه <span class="text-cyan-400 font-mono">{category}</span>
+        مقالات حوزه <span class="text-cyan-400 font-mono">{originalTag}</span>
       </h1>
     </div>
 
     <!-- نوار دسته‌بندی‌ها -->
     <div class="flex flex-wrap items-center justify-center gap-3 mb-16">
-      <a href="/blog" class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-bold">همه مقالات</a>
+      <a href="/blog/" class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-bold">همه مقالات</a>
       {allTags.map(tag => (
         <a 
-          href={`/blog/category/${tag}`} 
+          href={`/blog/category/${slugify(tag)}/`} 
           class={`px-5 py-2 rounded-full text-sm font-mono transition-colors ${
-            tag === category 
+            tag === originalTag 
             ? 'bg-cyan-500 text-slate-950 font-bold shadow-lg shadow-cyan-500/20' 
             : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800'
           }`}
@@ -61,7 +67,7 @@ const description = `لیست مقالات تخصصی مهندسی اکباتا�
       {posts.map((post) => {
         const formattedDate = new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.pubDate);
         return (
-          <a href={`/blog/${post.id}`.replace('//', '/')} class="group p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between shadow-lg">
+          <a href={`/blog/${post.id}/`.replace('//', '/')} class="group p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between shadow-lg">
             <div>
               <div class="flex items-center gap-4 text-xs font-mono text-slate-400 mb-4">
                 <time datetime={post.data.pubDate.toISOString()} class="text-cyan-400">{formattedDate}</time>
