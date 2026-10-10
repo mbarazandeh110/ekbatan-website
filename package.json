@@ -7,9 +7,10 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && npm run seo:check",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "seo:check": "node scripts/seo-smoke-test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

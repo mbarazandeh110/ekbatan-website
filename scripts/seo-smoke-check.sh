@@ -11,7 +11,7 @@ TARGET_URLS=(
     "services/kubernetes/index.html" 
     "blog/kubernetes-production-checklist/index.html"
 )
-REQUIRED_FILES=("sitemap-index.xml" "robots.txt")
+REQUIRED_FILES=("sitemap-index.xml" "robots.txt", "sitemap-index.xml")
 
 echo "🚀 Starting Technical SEO Smoke Check..."
 
