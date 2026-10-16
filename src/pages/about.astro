@@ -45,26 +45,67 @@ const teamMembers = [
     linkedin: "https://www.linkedin.com/in/hossein-eyvazi-7908231b8/"
   }
 ];
+
+const schemaData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "درباره شرکت اکباتان (Ekbatan Tech)",
+    "url": "https://ekbatan.tech/about/",
+    "description": "آشنایی با تیم مهندسی پلتفرم، معماری ابری و SRE شرکت اکباتان؛ متخصص در استقرار Kubernetes، Ceph، CDN و زیرساخت‌های Enterprise.",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "شرکت اکباتان (Ekbatan Tech)",
+      "alternateName": ["شرکت اکباتان", "تیم مهندسی زیرساخت اکباتان"],
+      "url": "https://ekbatan.tech/",
+      "logo": "https://ekbatan.tech/Ekbatan_logo.png",
+      "sameAs": [
+        "https://linkedin.com/company/ekbatantech",
+        "https://github.com/ekbatan-tech"
+      ],
+      "member": teamMembers.map((m) => ({
+        "@type": "Person",
+        "name": m.name,
+        "jobTitle": m.headline,
+        "sameAs": [m.linkedin]
+      }))
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
+      { "@type": "ListItem", "position": 2, "name": "درباره شرکت اکباتان", "item": "https://ekbatan.tech/about/" }
+    ]
+  }
+];
 ---
 
 <Layout
-title="درباره اکباتان | تخصص در سطح مأموریت‌بحرانی"
-description="تیم مهندسی پلتفرم و معماری ابری اکباتان. متخصص در SRE، Kubernetes و زیرساخت‌های Enterprise."
+  title="درباره شرکت اکباتان (Ekbatan Tech) | تیم مهندسی پلتفرم، کوبرنتیز و SRE"
+  description="آشنایی با شرکت اکباتان؛ تیم تخصصی مهندسی پلتفرم (Platform Engineering)، معماری ابری و SRE. طراح و مجری زیرساخت‌های کوبرنتیز، Ceph و CDN در مقیاس ملی."
 >
   <Navbar />
   <main class="min-h-screen py-24 px-6 max-w-5xl mx-auto">
 
+    <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center justify-center gap-2">
+      <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
+      <span>/</span>
+      <span class="text-cyan-400">درباره شرکت اکباتان</span>
+    </nav>
+
     <section class="text-center mb-20">
       <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">
-        ABOUT EKBATAN
+        ABOUT EKBATAN TECH
       </span>
 
       <h1 class="text-4xl md:text-6xl font-black text-white mt-4 mb-6">
-        مهندسی پلتفرم در مقیاس Enterprise
+        درباره شرکت اکباتان؛ مهندسی پلتفرم در مقیاس Enterprise
       </h1>
 
       <p class="text-lg text-slate-400 max-w-3xl mx-auto leading-relaxed">
-        اکباتان یک آژانس پشتیبانی IT نیست؛ ما یک تیم تخصصی
+        شرکت اکباتان (Ekbatan Tech) یک آژانس پشتیبانی IT نیست؛ ما یک تیم تخصصی
         <strong class="text-slate-200">&nbsp;Platform Engineering&nbsp;</strong>
         و
         <strong class="text-slate-200">&nbsp;SRE&nbsp;</strong>
@@ -105,7 +146,7 @@ description="تیم مهندسی پلتفرم و معماری ابری اکبا�
     <section class="mb-20">
       <div class="text-center mb-12">
         <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">CORE TEAM</span>
-        <h2 class="text-3xl md:text-4xl font-bold text-white mt-3">تیم مهندسی و معماری اکباتان</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-white mt-3">تیم مهندسی و معماری شرکت اکباتان</h2>
         <p class="text-slate-400 mt-4 max-w-2xl mx-auto leading-relaxed">
           حضور متخصصین ارشد زیرساخت، SRE و معماری نرم‌افزار، تضمین‌کننده پایداری سیستم‌های شماست. ما فناوری را می‌سازیم، نه اینکه فقط آن را راه‌اندازی کنیم.
         </p>
@@ -145,22 +186,22 @@ description="تیم مهندسی پلتفرم و معماری ابری اکبا�
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+        <a href="/services/" class="border border-slate-800 hover:border-cyan-500/40 rounded-2xl p-6 bg-slate-950/50 transition-colors block">
           <h3 class="text-lg font-bold text-white mb-2">Platform Engineering</h3>
           <p class="text-sm text-slate-400 leading-relaxed">طراحی و پیاده‌سازی پلتفرم‌های داخلی برای توسعه، استقرار و مدیریت سرویس‌ها.</p>
-        </div>
-        <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+        </a>
+        <a href="/services/kubernetes/" class="border border-slate-800 hover:border-cyan-500/40 rounded-2xl p-6 bg-slate-950/50 transition-colors block">
           <h3 class="text-lg font-bold text-white mb-2">Kubernetes & Cloud Native</h3>
           <p class="text-sm text-slate-400 leading-relaxed">طراحی، مهاجرت، بهینه‌سازی و مدیریت کلاسترهای Kubernetes در محیط‌های Enterprise.</p>
-        </div>
-        <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+        </a>
+        <a href="/services/elasticsearch-enterprise/" class="border border-slate-800 hover:border-cyan-500/40 rounded-2xl p-6 bg-slate-950/50 transition-colors block">
           <h3 class="text-lg font-bold text-white mb-2">SRE & Observability</h3>
           <p class="text-sm text-slate-400 leading-relaxed">طراحی سیستم‌های مانیتورینگ، Alerting، SLO و Error Budget برای افزایش قابلیت اطمینان.</p>
-        </div>
-        <div class="border border-slate-800 rounded-2xl p-6 bg-slate-950/50">
+        </a>
+        <a href="/services/enterprise-devops-gitlab/" class="border border-slate-800 hover:border-cyan-500/40 rounded-2xl p-6 bg-slate-950/50 transition-colors block">
           <h3 class="text-lg font-bold text-white mb-2">Infrastructure Automation</h3>
           <p class="text-sm text-slate-400 leading-relaxed">اتوماسیون فرآیندهای عملیاتی با IaC، CI/CD و GitOps برای کاهش خطای انسانی.</p>
-        </div>
+        </a>
       </div>
     </section>
 
@@ -191,4 +232,5 @@ description="تیم مهندسی پلتفرم و معماری ابری اکبا�
     </section>
   </main>
   <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 </Layout>

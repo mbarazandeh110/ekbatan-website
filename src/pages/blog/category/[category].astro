@@ -4,14 +4,14 @@ import Layout from '../../../layouts/Layout.astro';
 import Navbar from '../../../components/Navbar.astro';
 import Footer from '../../../components/Footer.astro';
 
-const slugify = (text) => text.toString().toLowerCase()
+const slugify = (text: string) => text.toString().toLowerCase()
   .replace(/\s+/g, '-')
   .replace(/&/g, 'and')
   .replace(/[^\w\-]+/g, '')
   .replace(/\-\-+/g, '-');
 
 export async function getStaticPaths() {
-  const slugify = (text) => text.toString().toLowerCase()
+  const slugify = (text: string) => text.toString().toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/&/g, 'and')
     .replace(/[^\w\-]+/g, '')
@@ -32,14 +32,13 @@ export async function getStaticPaths() {
   });
 }
 
-const { category } = Astro.params;
 const { posts, allTags, originalTag } = Astro.props;
 
 const title = `مقالات دسته ${originalTag} | بلاگ اکباتان`;
 const description = `لیست مقالات تخصصی مهندسی اکباتان در حوزه ${originalTag}.`;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} robots="noindex, follow">
   <Navbar />
   
   <main class="py-20 px-6 max-w-5xl mx-auto min-h-[70vh]">
@@ -53,7 +52,7 @@ const description = `لیست مقالات تخصصی مهندسی اکباتا�
     <!-- نوار دسته‌بندی‌ها -->
     <div class="flex flex-wrap items-center justify-center gap-3 mb-16">
       <a href="/blog/" class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-bold">همه مقالات</a>
-      {allTags.map(tag => (
+      {allTags.map((tag) => (
         <a 
           href={`/blog/category/${slugify(tag)}/`} 
           class={`px-5 py-2 rounded-full text-sm font-mono transition-colors ${

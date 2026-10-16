@@ -8,18 +8,23 @@ export async function getStaticPaths() {
   const services = await getCollection('services');
   return services.map((service) => ({
     params: { slug: service.id },
-    props: { service },
+    props: {
+      service,
+      relatedServices: services
+        .filter((s) => s.id !== service.id)
+        .sort((a, b) => a.data.order - b.data.order)
+        .slice(0, 3),
+    },
   }));
 }
 
-const { service } = Astro.props;
+const { service, relatedServices } = Astro.props;
 const { Content } = await render(service);
 const data = service.data;
 
-// تضمین آدرس مطلق با trailing slash برای Schema
 const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.site).href;
 
-const schemaData = [
+const schemaData: any[] = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -28,7 +33,7 @@ const schemaData = [
     "url": canonicalUrl,
     "provider": {
       "@type": "ProfessionalService",
-      "name": "اکباتان",
+      "name": "شرکت اکباتان (Ekbatan Tech)",
       "url": "https://ekbatan.tech/"
     }
   },
@@ -47,7 +52,7 @@ if (data.faqs && data.faqs.length > 0) {
   schemaData.push({
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": data.faqs.map(f => ({
+    "mainEntity": data.faqs.map((f) => ({
       "@type": "Question",
       "name": f.question,
       "acceptedAnswer": {
@@ -63,6 +68,14 @@ if (data.faqs && data.faqs.length > 0) {
   <Navbar />
   
   <main class="py-20 px-6 max-w-4xl mx-auto">
+    <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center justify-center gap-2">
+      <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
+      <span>/</span>
+      <a href="/services/" class="hover:text-cyan-400 transition-colors">خدمات سازمانی</a>
+      <span>/</span>
+      <span class="text-cyan-400">{data.title}</span>
+    </nav>
+
     <!-- Hero Service -->
     <div class="mb-16 text-center border-b border-slate-800/60 pb-12">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-800/60 bg-cyan-950/40 text-xs font-mono text-cyan-400 mb-6">
@@ -70,7 +83,7 @@ if (data.faqs && data.faqs.length > 0) {
         <span>•</span>
         <span class="text-emerald-400">{data.tag}</span>
       </div>
-      <h1 class="text-4xl md:text-6xl font-black text-white mb-6 leading-snug">
+      <h1 class="text-3xl md:text-5xl font-black text-white mb-6 leading-snug">
         {data.title}
       </h1>
       <p class="text-slate-300 text-lg md:text-xl leading-relaxed font-light">
@@ -102,6 +115,29 @@ if (data.faqs && data.faqs.length > 0) {
           ))}
         </div>
       </div>
+    )}
+
+    <!-- سایر خدمات مرتبط جهت تقویت لینک‌سازی داخلی -->
+    {relatedServices && relatedServices.length > 0 && (
+      <section class="mt-16 pt-16 border-t border-slate-800/60">
+        <h2 class="text-2xl font-bold text-white mb-6">سایر خدمات مهندسی زیرساخت اکباتان</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {relatedServices.map((rel) => (
+            <a
+              href={`/services/${rel.id}/`}
+              class="p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <span class="text-[10px] font-mono text-cyan-400 block mb-2">{rel.data.tag}</span>
+                <h3 class="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors leading-snug mb-2">
+                  {rel.data.title}
+                </h3>
+              </div>
+              <span class="text-xs text-cyan-400 font-mono mt-3 inline-block">مشاهده سرویس ←</span>
+            </a>
+          ))}
+        </div>
+      </section>
     )}
   </main>
 

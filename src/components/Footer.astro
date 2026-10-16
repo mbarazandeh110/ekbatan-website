@@ -2,14 +2,39 @@
 ---
 <footer id="contact" class="border-t border-slate-800 bg-[#040812] pt-16 pb-8 px-6">
   <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-    <div class="col-span-1 md:col-span-2">
-      <div class="flex items-center gap-3 mb-4">
-        <img src="/Ekbatan_logo.webp" alt="لوگوی تیم مهندسی زیرساخت و پلتفرم اکباتان" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 opacity-90" />
-        <span class="font-black text-white text-xl tracking-wide">EKBATAN</span>
-      </div>
-      <p class="text-sm text-slate-400 leading-relaxed max-w-md">
-        جایی که داده، هوشمندی و فناوری به هم می‌پیوندند.
+    <div class="col-span-1">
+      <a href="/" class="flex items-center gap-3 mb-4 group">
+        <img src="/Ekbatan_logo.webp" alt="لوگوی شرکت مهندسی زیرساخت و پلتفرم اکباتان" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 opacity-90" />
+        <span class="font-black text-white text-xl tracking-wide group-hover:text-cyan-400 transition-colors">EKBATAN</span>
+      </a>
+      <p class="text-sm text-slate-400 leading-relaxed">
+        شرکت اکباتان (Ekbatan Tech)؛ تیم تخصصی مهندسی پلتفرم، زیرساخت ابری، کوبرنتیز سازمانی و SRE برای کسب‌وکارهای ماموریت‌بحرانی.
       </p>
+    </div>
+
+    <div>
+      <h4 class="text-white font-bold mb-4 font-mono text-sm">خدمات کلیدی</h4>
+      <ul class="space-y-2.5 text-sm text-slate-400">
+        <li><a href="/services/kubernetes/" class="hover:text-cyan-400 transition-colors">استقرار کوبرنتیز سازمانی (K8s)</a></li>
+        <li><a href="/services/ceph/" class="hover:text-cyan-400 transition-colors">ذخیره‌سازی توزیع‌شده Ceph</a></li>
+        <li><a href="/services/enterprise-databases/" class="hover:text-cyan-400 transition-colors">پایگاه‌های داده HA و ClickHouse</a></li>
+        <li><a href="/services/elasticsearch-enterprise/" class="hover:text-cyan-400 transition-colors">استقرار Elasticsearch و ECK</a></li>
+        <li><a href="/services/edge-cdn-networking/" class="hover:text-cyan-400 transition-colors">شبکه توزیع محتوا (CDN) و Edge</a></li>
+        <li><a href="/services/mlops-ai-clusters/" class="hover:text-cyan-400 transition-colors">کلاسترهای GPU و MLOps</a></li>
+        <li><a href="/services/enterprise-devops-gitlab/" class="hover:text-cyan-400 transition-colors">اتوماسیون DevOps و GitLab</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="text-white font-bold mb-4 font-mono text-sm">دسترسی سریع</h4>
+      <ul class="space-y-2.5 text-sm text-slate-400">
+        <li><a href="/services/" class="hover:text-cyan-400 transition-colors">کاتالوگ جامع خدمات</a></li>
+        <li><a href="/blog/" class="hover:text-cyan-400 transition-colors">بلاگ مهندسی اکباتان</a></li>
+        <li><a href="/about/" class="hover:text-cyan-400 transition-colors">درباره شرکت اکباتان</a></li>
+        <li><a href="/assessment/" class="hover:text-cyan-400 transition-colors">درخواست ارزیابی معماری</a></li>
+        <li><a href="https://github.com/ekbatan-tech" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">مشارکت‌های متن‌باز (GitHub)</a></li>
+        <li><a href="https://linkedin.com/company/ekbatantech" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">صفحه رسمی لینکدین</a></li>
+      </ul>
     </div>
 
     <div>
@@ -25,16 +50,8 @@
         </li>
         <li class="flex items-start gap-2 mt-4">
           <span class="text-cyan-500">⚑</span>
-          <address class="not-italic leading-relaxed">تهران</address>
+          <address class="not-italic leading-relaxed">تهران، ایران</address>
         </li>
-      </ul>
-    </div>
-
-    <div>
-      <h4 class="text-white font-bold mb-4 font-mono text-sm">پیوندهای حیاتی</h4>
-      <ul class="space-y-3 text-sm text-slate-400">
-        <li><a href="/assessment/" class="hover:text-cyan-400 transition-colors">درخواست ارزیابی معماری</a></li>
-        <li><a href="https://github.com/ekbatan-tech" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">مشارکت‌های متن‌باز (GitHub)</a></li>
       </ul>
     </div>
   </div>
@@ -44,7 +61,7 @@
       طراحی شده برای پایداری. <span class="text-emerald-500">SLA 99.96%</span>
     </div>
     <div class="font-mono" dir="ltr">
-      &copy; {new Date().getFullYear()} Ekbatan Infrastructure Engineering.
+      &copy; {new Date().getFullYear()} Ekbatan Infrastructure Engineering (ekbatan.tech).
     </div>
   </div>
 </footer>

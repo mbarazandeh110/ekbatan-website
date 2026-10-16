@@ -8,13 +8,18 @@ export async function getStaticPaths() {
   const tools = await getCollection('tools');
   return tools.map((tool) => ({
     params: { slug: tool.id },
-    props: { tool },
+    props: {
+      tool,
+      relatedTools: tools.filter((t) => t.id !== tool.id).slice(0, 3),
+    },
   }));
 }
 
-const { tool } = Astro.props;
+const { tool, relatedTools } = Astro.props;
 const { Content } = await render(tool);
 const data = tool.data;
+
+const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.site).href;
 
 const truncateDescription = (text: string, maxLength = 155) => {
   if (text.length <= maxLength) return text;
@@ -25,12 +30,20 @@ const optimizedDescription = truncateDescription(data.description);
 ---
 
 <Layout 
-  title={`${data.name} | استقرار سازمانی اکباتان`}
+  title={`استقرار و معماری ${data.name} روی کوبرنتیز | شرکت اکباتان`}
   description={optimizedDescription}
 >
   <Navbar />
   
   <main class="py-20 px-6 max-w-5xl mx-auto">
+    <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center gap-2">
+      <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
+      <span>/</span>
+      <a href="/services/" class="hover:text-cyan-400 transition-colors">خدمات و استک‌های سازمانی</a>
+      <span>/</span>
+      <span class="text-cyan-400">{data.name}</span>
+    </nav>
+
     <div class="mb-12">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-800/60 bg-cyan-950/40 text-xs font-mono text-cyan-400 mb-6">
         <span>{data.category}</span>
@@ -38,7 +51,7 @@ const optimizedDescription = truncateDescription(data.description);
         <span>{data.badge}</span>
       </div>
       <h1 class="text-3xl md:text-5xl font-black text-white mb-6 leading-snug">
-        معماری و استقرار <span class="text-cyan-400">{data.name}</span>
+        معماری و استقرار سازمانی <span class="text-cyan-400">{data.name}</span>
       </h1>
       <p class="text-slate-300 text-base md:text-lg leading-relaxed max-w-3xl font-light">
         {data.description}
@@ -47,7 +60,7 @@ const optimizedDescription = truncateDescription(data.description);
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
       <div class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800">
-        <h3 class="text-lg font-bold text-white mb-4 font-mono text-cyan-400">معماری و نحوه پیاده‌سازی</h3>
+        <h2 class="text-lg font-bold text-white mb-4 font-mono text-cyan-400">معماری و نحوه پیاده‌سازی</h2>
         <ul class="space-y-3 text-slate-300 text-sm">
           {data.architectureDetails.map((item: string) => (
             <li class="flex items-start gap-2">
@@ -59,7 +72,7 @@ const optimizedDescription = truncateDescription(data.description);
       </div>
 
       <div class="p-8 rounded-2xl bg-slate-900/50 border border-slate-800">
-        <h3 class="text-lg font-bold text-white mb-4 font-mono text-cyan-400">مزایای کلیدی و قابلیت‌ها</h3>
+        <h2 class="text-lg font-bold text-white mb-4 font-mono text-cyan-400">مزایای کلیدی و قابلیت‌ها</h2>
         <ul class="space-y-3 text-slate-300 text-sm">
           {data.features.map((feature: string) => (
             <li class="flex items-start gap-2">
@@ -73,7 +86,7 @@ const optimizedDescription = truncateDescription(data.description);
 
     {data.yamlCode && (
       <div class="mb-16">
-        <h3 class="text-xl font-bold text-white mb-4">نمای شماتیک معماری (Architecture Snapshot)</h3>
+        <h2 class="text-xl font-bold text-white mb-4">نمای شماتیک معماری (Architecture Snapshot)</h2>
         <div class="rounded-xl border border-slate-800 bg-[#0B101B] shadow-2xl overflow-hidden font-mono text-xs text-left" dir="ltr">
           <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
             <span class="text-slate-400 text-[11px]">{tool.id}-architecture-values.yaml</span>
@@ -84,22 +97,50 @@ const optimizedDescription = truncateDescription(data.description);
       </div>
     )}
 
-    <div class="text-slate-300 mb-16 prose prose-invert max-w-none">
+    <div class="text-slate-300 mb-16 prose prose-invert max-w-none leading-loose">
       <Content />
     </div>
 
-    <div class="p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white">
-      اکباتان آماده طراحی و پیاده‌سازی این معماری در زیرساخت ماموریت‌بحرانی شماست.
-      <div class="mt-6">
+    <div class="p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white mb-16">
+      شرکت اکباتان آماده طراحی و پیاده‌سازی معماری High Availability برای {data.name} در زیرساخت ماموریت‌بحرانی شماست.
+      <div class="mt-6 flex flex-wrap justify-center gap-4">
         <a 
-          href={`mailto:contact@ekbatan.tech?subject=درخواست ارزیابی معماری برای ${data.name}`} 
+          href="/assessment/" 
           class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25"
         >
           درخواست ارزیابی معماری (Architecture Assessment)
           <span>↗</span>
         </a>
+        <a 
+          href="/services/kubernetes/" 
+          class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-all border border-slate-700"
+        >
+          معماری کوبرنتیز سازمانی
+        </a>
       </div>
     </div>
+
+    {relatedTools && relatedTools.length > 0 && (
+      <section class="pt-12 border-t border-slate-800/60">
+        <h2 class="text-xl font-bold text-white mb-6">سایر استک‌های سازمانی قابل استقرار</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {relatedTools.map((rel) => (
+            <a
+              href={`/enterprise/${rel.id}/`}
+              class="p-5 rounded-xl bg-slate-900/40 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <h3 class="text-base font-bold text-white font-mono group-hover:text-cyan-300 transition-colors">
+                  {rel.data.name}
+                </h3>
+                <p class="text-xs text-slate-400 mt-1">{rel.data.category}</p>
+              </div>
+              <span class="text-xs text-cyan-400 font-mono mt-4 inline-block">مشاهده معماری ←</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </main>
 
   <Footer />
@@ -111,10 +152,11 @@ const optimizedDescription = truncateDescription(data.description);
       "serviceType": "ITConsulting",
       "name": `خدمات استقرار و معماری ${data.name}`,
       "description": optimizedDescription,
+      "url": canonicalUrl,
       "provider": {
         "@type": "ProfessionalService",
-        "name": "اکباتان (Ekbatan Tech)",
-        "url": "https://ekbatan.tech"
+        "name": "شرکت اکباتان (Ekbatan Tech)",
+        "url": "https://ekbatan.tech/"
       }
     },
     {
@@ -122,8 +164,8 @@ const optimizedDescription = truncateDescription(data.description);
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
-        { "@type": "ListItem", "position": 2, "name": "استک‌های سازمانی", "item": "https://ekbatan.tech/#enterprise-stack" },
-        { "@type": "ListItem", "position": 3, "name": data.name, "item": Astro.url.href }
+        { "@type": "ListItem", "position": 2, "name": "خدمات سازمانی", "item": "https://ekbatan.tech/services/" },
+        { "@type": "ListItem", "position": 3, "name": data.name, "item": canonicalUrl }
       ]
     }
   ])} />

@@ -9,11 +9,126 @@ import EnterpriseStack from '../components/EnterpriseStack.astro';
 import TerminalPreview from '../components/TerminalPreview.astro';
 import Cta from '../components/Cta.astro';
 import Footer from '../components/Footer.astro';
+
+const schemaData = [
+  {
+    "@context": "https://schema.org",
+    "@type": ["Organization", "ProfessionalService"],
+    "@id": "https://ekbatan.tech/#organization",
+    "name": "شرکت اکباتان (Ekbatan Tech)",
+    "alternateName": [
+      "شرکت اکباتان",
+      "شرکت مهندسی اکباتان",
+      "تیم مهندسی زیرساخت اکباتان",
+      "Ekbatan Tech",
+      "Ekbatan Cloud Systems"
+    ],
+    "url": "https://ekbatan.tech/",
+    "logo": "https://ekbatan.tech/Ekbatan_logo.png",
+    "image": "https://ekbatan.tech/Ekbatan_logo.png",
+    "description": "شرکت اکباتان؛ ارائه خدمات مشاوره، طراحی معماری و استقرار زیرساخت ابری، کلاسترهای کوبرنتیز سازمانی، Ceph، دیتابیس‌های توزیع‌شده، MLOps و خدمات SRE با تضمین پایداری ۹۹.۹۶٪.",
+    "telephone": "+989186100599",
+    "email": "m.barazandeh110@gmail.com",
+    "sameAs": [
+      "https://linkedin.com/company/ekbatantech",
+      "https://github.com/ekbatan-tech"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "تهران",
+      "addressCountry": "IR"
+    },
+    "knowsAbout": [
+      "Kubernetes",
+      "Site Reliability Engineering (SRE)",
+      "Cloud Native Infrastructure",
+      "Ceph Distributed Storage",
+      "Cilium eBPF Networking",
+      "Content Delivery Network (CDN)",
+      "MLOps & GPU Clusters",
+      "Elasticsearch & Observability",
+      "Distributed Databases (ClickHouse, PostgreSQL)"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "خدمات مهندسی زیرساخت و پلتفرم اکباتان",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "مشاوره، راه‌اندازی و استقرار کوبرنتیز سازمانی",
+            "url": "https://ekbatan.tech/services/kubernetes/"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "زیرساخت ذخیره‌سازی توزیع‌شده Ceph",
+            "url": "https://ekbatan.tech/services/ceph/"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "پایگاه‌های داده توزیع‌شده و سازمانی",
+            "url": "https://ekbatan.tech/services/enterprise-databases/"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "استقرار Elasticsearch Enterprise",
+            "url": "https://ekbatan.tech/services/elasticsearch-enterprise/"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "شبکه‌های توزیع محتوا (CDN) و Edge",
+            "url": "https://ekbatan.tech/services/edge-cdn-networking/"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "MLOps و کلاسترهای هوش مصنوعی",
+            "url": "https://ekbatan.tech/services/mlops-ai-clusters/"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "اتوماسیون DevOps و چرخه CI/CD سازمانی",
+            "url": "https://ekbatan.tech/services/enterprise-devops-gitlab/"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://ekbatan.tech/#website",
+    "url": "https://ekbatan.tech/",
+    "name": "شرکت اکباتان | Ekbatan Tech",
+    "inLanguage": "fa-IR",
+    "publisher": {
+      "@id": "https://ekbatan.tech/#organization"
+    }
+  }
+];
 ---
 
 <Layout 
-  title="شرکت اکباتان | مشاوره و استقرار زیرساخت ابری و کوبرنتیز"
-  description="شرکت اکباتان؛ ارائه خدمات مشاوره، طراحی معماری و استقرار زیرساخت ابری، کلاسترهای کوبرنتیز سازمانی، Ceph، MLOps و خدمات SRE با تضمین پایداری ۹۹.۹۶٪."
+  title="شرکت اکباتان | مشاوره و استقرار زیرساخت ابری، کوبرنتیز و SRE"
+  description="شرکت اکباتان (Ekbatan Tech)؛ ارائه خدمات مشاوره، طراحی معماری و استقرار زیرساخت ابری، کلاسترهای کوبرنتیز سازمانی، Ceph، MLOps و خدمات SRE با تضمین پایداری ۹۹.۹۶٪."
 >
   <Navbar />
   <main>
@@ -27,20 +142,5 @@ import Footer from '../components/Footer.astro';
   </main>
   <Footer />
   
-  <!-- Schema Markup for Homepage -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Ekbatan Tech",
-      "alternateName": ["شرکت اکباتان", "تیم مهندسی زیرساخت اکباتان"],
-      "url": "https://ekbatan.tech",
-      "logo": "https://ekbatan.tech/Ekbatan_logo.png",
-      "description": "معماری زیرساخت‌های ابری، MLOps، دیتابیس‌های توزیع‌شده و کلاسترهای Enterprise Kubernetes توسط متخصصین DevOps و SRE.",
-      "sameAs": ["https://linkedin.com/company/ekbatantech"],
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "تهران",
-        "addressCountry": "IR"
-      }
-  })} />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 </Layout>

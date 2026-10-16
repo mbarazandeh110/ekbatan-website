@@ -5,6 +5,46 @@ import Footer from '../components/Footer.astro';
 ---
 
 <Layout title="۴۰۴ - مسیر یافت نشد | شرکت اکباتان (Ekbatan)" robots="noindex, nofollow">
+  <!-- اسکریپت بازیابی خودکار لینک‌های قدیمی و حروف بزرگ ثبت‌شده در سرچ کنسول روی GitHub Pages -->
+  <script is:inline>
+    (function () {
+      if (typeof window === 'undefined') return;
+      var rawPath = decodeURIComponent(window.location.pathname);
+      var cleanPath = rawPath.replace(/\/+$/, '');
+
+      // نگاشت مستقیم آدرس‌های تغییر نام یافته در سرچ کنسول
+      var legacyMap = {
+        '/blog/numa-domain-kubernetes': '/blog/nginx-numa-kernel-vod/',
+        '/blog/category/performance': '/blog/category/performance-tuning/',
+        '/blog/category/bare-metal': '/blog/',
+        '/services/category/kubernetes': '/services/kubernetes/'
+      };
+
+      var lowerClean = cleanPath.toLowerCase();
+      if (legacyMap[lowerClean]) {
+        window.location.replace(legacyMap[lowerClean]);
+        return;
+      }
+
+      // نرمال‌سازی آدرس‌های دسته‌بندی دارای حروف بزرگ، فاصله یا &
+      if (lowerClean.indexOf('/services/category/') === 0 || lowerClean.indexOf('/blog/category/') === 0) {
+        var parts = lowerClean.split('/');
+        var prefix = '/' + parts[1] + '/' + parts[2] + '/';
+        var catRaw = parts.slice(3).join('-');
+        var slug = catRaw
+          .replace(/\s+/g, '-')
+          .replace(/&/g, 'and')
+          .replace(/[^\w\-]+/g, '')
+          .replace(/\-\-+/g, '-');
+        var target = prefix + slug + '/';
+        if (target !== window.location.pathname) {
+          window.location.replace(target);
+          return;
+        }
+      }
+    })();
+  </script>
+
   <Navbar />
   
   <main class="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
@@ -22,15 +62,27 @@ import Footer from '../components/Footer.astro';
       </h2>
       
       <p class="text-gray-600 dark:text-gray-400 leading-relaxed mt-4">
-        به نظر می‌رسد درخواست شما به یک مسیر نامعتبر هدایت شده است. ممکن است صفحه مورد نظر به یک کلاستر دیگر منتقل شده باشد یا در حال حاضر در دسترس نباشد.
+        به نظر می‌رسد درخواست شما به یک مسیر نامعتبر هدایت شده است. می‌توانید از طریق پیوندهای زیر به بخش‌های اصلی معماری اکباتان دسترسی داشته باشید:
       </p>
       
-      <div class="pt-8">
+      <div class="pt-6 flex flex-wrap items-center justify-center gap-4">
         <a 
           href="/" 
-          class="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow"
+          class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold rounded-xl text-slate-950 bg-cyan-500 hover:bg-cyan-400 transition-all duration-200 shadow-lg shadow-cyan-500/20"
         >
-          بازگشت به داشبورد اصلی
+          بازگشت به صفحه اصلی
+        </a>
+        <a 
+          href="/services/" 
+          class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-all duration-200"
+        >
+          کاتالوگ خدمات مهندسی
+        </a>
+        <a 
+          href="/blog/" 
+          class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-all duration-200"
+        >
+          بلاگ مهندسی
         </a>
       </div>
     </div>

@@ -4,14 +4,14 @@ import Layout from '../../../layouts/Layout.astro';
 import Navbar from '../../../components/Navbar.astro';
 import Footer from '../../../components/Footer.astro';
 
-const slugify = (text) => text.toString().toLowerCase()
+const slugify = (text: string) => text.toString().toLowerCase()
   .replace(/\s+/g, '-')
   .replace(/&/g, 'and')
   .replace(/[^\w\-]+/g, '')
   .replace(/\-\-+/g, '-');
 
 export async function getStaticPaths() {
-  const slugify = (text) => text.toString().toLowerCase()
+  const slugify = (text: string) => text.toString().toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/&/g, 'and')
     .replace(/[^\w\-]+/g, '')
@@ -32,14 +32,13 @@ export async function getStaticPaths() {
   });
 }
 
-const { category } = Astro.params;
 const { services, allCategories, originalCategory } = Astro.props;
 
 const title = `سرویس‌های ${originalCategory} | اکباتان`;
 const description = `لیست خدمات و سرویس‌های مهندسی اکباتان در دسته ${originalCategory}.`;
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} robots="noindex, follow">
   <Navbar />
   
   <main class="py-20 px-6 max-w-5xl mx-auto min-h-[70vh]">
@@ -53,7 +52,7 @@ const description = `لیست خدمات و سرویس‌های مهندسی ا�
     <!-- نوار دسته‌بندی‌ها -->
     <div class="flex flex-wrap items-center justify-center gap-3 mb-16">
       <a href="/services/" class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-800 transition-colors text-sm font-bold">تمام سرویس‌ها</a>
-      {allCategories.map(cat => (
+      {allCategories.map((cat) => (
         <a 
           href={`/services/category/${slugify(cat)}/`} 
           class={`px-5 py-2 rounded-full text-sm font-mono transition-colors ${

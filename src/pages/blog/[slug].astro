@@ -8,11 +8,14 @@ export async function getStaticPaths() {
   const posts = await getCollection('blog');
   return posts.map((post) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      relatedPosts: posts.filter((p) => p.id !== post.id).slice(0, 2),
+    },
   }));
 }
 
-const { post } = Astro.props;
+const { post, relatedPosts } = Astro.props;
 const { Content } = await render(post);
 const data = post.data;
 
@@ -25,10 +28,24 @@ const formattedDate = new Intl.DateTimeFormat('fa-IR', {
 const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.site).href;
 ---
 
-<Layout title={`${data.title} | بلاگ فنی اکباتان`} description={data.description}>
+<Layout
+  title={`${data.title} | بلاگ فنی اکباتان`}
+  description={data.description}
+  type="article"
+  publishedTime={data.pubDate.toISOString()}
+  author={data.author}
+>
   <Navbar />
   
   <main class="py-20 px-6 max-w-4xl mx-auto">
+    <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center gap-2">
+      <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
+      <span>/</span>
+      <a href="/blog/" class="hover:text-cyan-400 transition-colors">بلاگ مهندسی</a>
+      <span>/</span>
+      <span class="text-cyan-400 truncate max-w-[220px] sm:max-w-md">{data.title}</span>
+    </nav>
+
     <article>
       <header class="mb-12 border-b border-slate-800/60 pb-8">
         <div class="flex items-center gap-4 text-xs font-mono text-cyan-400 mb-6">
@@ -47,17 +64,55 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
 
         {data.tags && (
           <div class="flex flex-wrap gap-2 mt-6">
-            {data.tags.map(tag => (
-              <span class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs">{tag}</span>
+            {data.tags.map((tag) => (
+              <span class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-mono">{tag}</span>
             ))}
           </div>
         )}
       </header>
 
-      <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose">
+      <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose mb-16">
         <Content />
       </div>
     </article>
+
+    <!-- باکس دعوت به اقدام (CTA) و لینک به خدمات -->
+    <div class="p-8 md:p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white mb-16">
+      <h2 class="text-xl md:text-2xl font-bold mb-3">نیاز به طراحی یا بهینه‌سازی زیرساخت Production دارید؟</h2>
+      <p class="text-slate-300 text-sm mb-6 max-w-2xl mx-auto leading-relaxed">
+        تیم مهندسی پلتفرم و SRE شرکت اکباتان آماده ممیزی گلوگاه‌های شبکه، استوریج و کلاسترهای کوبرنتیز سازمان شماست.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/assessment/" class="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25">
+          درخواست ارزیابی معماری زیرساخت ←
+        </a>
+        <a href="/services/" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-all border border-slate-700">
+          مشاهده خدمات مهندسی
+        </a>
+      </div>
+    </div>
+
+    {relatedPosts && relatedPosts.length > 0 && (
+      <section class="pt-12 border-t border-slate-800/60">
+        <h2 class="text-2xl font-bold text-white mb-6">مقالات فنی مرتبط</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {relatedPosts.map((rel) => (
+            <a
+              href={`/blog/${rel.id}/`}
+              class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between group"
+            >
+              <div>
+                <h3 class="text-lg font-bold text-white group-hover:text-cyan-300 transition-colors mb-2 leading-snug">
+                  {rel.data.title}
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">{rel.data.description}</p>
+              </div>
+              <span class="text-xs text-cyan-400 font-mono mt-4 inline-block">مطالعه مقاله ←</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
   </main>
   
   <Footer />
@@ -65,7 +120,7 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
   <script type="application/ld+json" set:html={JSON.stringify([
     {
       "@context": "https://schema.org",
-      "@type": "Article",
+      "@type": "TechArticle",
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": canonicalUrl
@@ -76,11 +131,12 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
       "datePublished": data.pubDate.toISOString(),
       "author": {
         "@type": "Organization",
-        "name": data.author
+        "name": data.author,
+        "url": "https://ekbatan.tech/about/"
       },
       "publisher": {
         "@type": "Organization",
-        "name": "اکباتان",
+        "name": "شرکت اکباتان (Ekbatan Tech)",
         "logo": {
           "@type": "ImageObject",
           "url": "https://ekbatan.tech/Ekbatan_logo.png"
