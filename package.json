@@ -10,7 +10,7 @@
     "build": "astro build && npm run seo:check",
     "preview": "astro preview",
     "astro": "astro",
-    "seo:check": "node scripts/seo-smoke-test.mjs"
+    "seo:check": "node scripts/seo-smoke-check.sh"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
