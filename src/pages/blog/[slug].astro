@@ -70,8 +70,8 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
           </div>
         )}
       </header>
-
-      <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose mb-16">
+      <!-- کانتینر رندر Markdown با پشتیبانی کامل از justify، RTL و جدول‌ها -->
+      <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl">
         <Content />
       </div>
     </article>

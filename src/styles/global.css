@@ -1,19 +1,81 @@
 @import "tailwindcss";
 
-/* Scroll Animation Utilities */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-}
+@layer base {
+  /* تنظیم عمومی تراز متن‌ها به صورت justify برای مقالات و توضیحات فارسی */
+  .prose {
+    text-align: justify;
+    text-justify: inter-word;
+    word-break: break-word;
+  }
 
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
+  /* استایل‌دهی کامل به جدول‌های رندرشده از Markdown */
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    display: block;
+  }
 
-pre, code, kbd, samp {
-  direction: ltr !important;
-  text-align: left !important;
-  unicode-bidi: isolate;
+  .prose th {
+    background-color: #0b1221;
+    color: #38bdf8; /* رنگ سیان ملایم */
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    border: 1px solid #1e293b;
+    text-align: right;
+  }
+
+  .prose td {
+    padding: 0.75rem 1rem;
+    border: 1px solid #1e293b;
+    color: #cbd5e1;
+    background-color: #070b14;
+    text-align: right;
+  }
+
+  .prose tr:nth-child(even) td {
+    background-color: #090e1a;
+  }
+
+  /* استایل پیشرفته برای کدهای داخل متن و بلوک‌های کد */
+  .prose code {
+    font-family: 'Fira Code', monospace;
+    direction: ltr;
+    unicode-bidi: embed;
+    background-color: #0b101b;
+    color: #38bdf8;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.85em;
+    border: 1px solid #1e293b;
+  }
+
+  .prose pre code {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: #e2e8f0;
+  }
+
+  /* بازنشانی جهت و چینش برای تمام بلوک‌های کد و کدهای YAML در متن مقالات */
+  .prose pre,
+  .prose code,
+  .prose kbd,
+  .prose samp {
+    direction: ltr !important;
+    text-align: left !important;
+    unicode-bidi: embed;
+  }
+
+  /* جلوگیری از به هم ریختن کدهای YAML داخل بلوک‌های نمایش کد */
+  .prose pre code {
+    display: block;
+    text-align: left !important;
+    direction: ltr !important;
+    white-space: pre;
+  }
 }
