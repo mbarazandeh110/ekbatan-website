@@ -1,0 +1,61 @@
+name: Google Search Console daily report
+
+on:
+  schedule:
+    # 08:00 Asia/Tehran (UTC+3:30).
+    - cron: "30 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gsc-readonly-report
+  cancel-in-progress: false
+
+jobs:
+  report:
+    name: Read-only GSC report
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_OAUTH_CLIENT_ID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+      GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
+      GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+      GSC_SITE_URL: ${{ vars.GSC_SITE_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Check credential configuration
+        id: credentials
+        shell: bash
+        run: |
+          if [[ -n "$GOOGLE_OAUTH_CLIENT_ID" && -n "$GSC_REFRESH_TOKEN" ]]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "## Google Search Console — setup required"
+              echo
+              echo "No report was requested because `GOOGLE_OAUTH_CLIENT_ID` and/or `GSC_REFRESH_TOKEN` is missing."
+              echo "Follow [the OAuth setup guide](https://github.com/${GITHUB_REPOSITORY}/blob/main/docs/seo/google-search-console-oauth.md) and run this workflow again."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Query Search Console (read-only)
+        if: steps.credentials.outputs.ready == 'true'
+        run: node scripts/gsc-audit.mjs > gsc-report.json
+
+      - name: Upload metrics report
+        if: steps.credentials.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-report-${{ github.run_id }}
+          path: gsc-report.json
+          if-no-files-found: error
+          retention-days: 14
