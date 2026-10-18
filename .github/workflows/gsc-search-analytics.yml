@@ -1,6 +1,11 @@
 name: Google Search Console report
 
 on:
+  pull_request:
+    paths:
+      - '.github/workflows/gsc-search-analytics.yml'
+      - 'scripts/gsc_search_analytics.py'
+      - 'tests/test_gsc_search_analytics.py'
   workflow_dispatch:
   schedule:
     # 05:00 UTC = 08:30 Asia/Tehran.
