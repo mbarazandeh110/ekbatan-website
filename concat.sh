@@ -7,9 +7,17 @@ OUTPUT_FILE="seo_source_code.txt"
 
 echo "Collecting files for SEO review..."
 
+file="scripts/seo-smoke-check.sh"
+echo "Adding: $file"
+echo "// ==========================================================" >> "$OUTPUT_FILE"
+echo "// FilePath: $file" >> "$OUTPUT_FILE"
+echo "// ==========================================================" >> "$OUTPUT_FILE"
+cat "$file" >> "$OUTPUT_FILE"
+echo -e "\n\n" >> "$OUTPUT_FILE"
+
 # جستجو و ادغام فایل‌های .astro، .ts، .mjs و .json, .sh
 find src astro.config.mjs package.json \
-    -type f \( -name "*.astro" -o -name "*.ts" -o -name "*.mjs" -o -name "*.json" -o -name "*.txt"  -o -name "*.md" -o -name "*.sh" \) | \
+    -type f \( -name "*.astro" -o -name "*.ts" -o -name "*.mjs" -o -name "*.json" -o -name "*.txt" -o -name "*.css" -o -name "*.md" -o -name "*.sh" \) | \
 while read -r file; do
     echo "Adding: $file"
     echo "// ==========================================================" >> "$OUTPUT_FILE"
