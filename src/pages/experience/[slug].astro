@@ -5,12 +5,18 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-  const experiences = await getCollection('experiences');
-  return experiences.map((exp) => ({
+  const experiences = (await getCollection('experiences')).sort((a, b) => a.id.localeCompare(b.id));
+  const total = experiences.length;
+
+  return experiences.map((exp, index) => ({
     params: { slug: exp.id },
     props: {
       exp,
-      otherExperiences: experiences.filter((e) => e.id !== exp.id).slice(0, 3),
+      otherExperiences: [
+        experiences[(index + 1) % total],
+        experiences[(index + 2) % total],
+        experiences[(index + 3) % total],
+      ].filter((e) => e.id !== exp.id),
     },
   }));
 }
@@ -29,12 +35,12 @@ const truncateDescription = (text: string, maxLength = 155) => {
 const optimizedDescription = truncateDescription(data.description);
 ---
 
-<Layout 
-  title={`${data.title} | تجربیات اجرایی شرکت اکباتان`}
+<Layout
+  title={`${data.title} | تجربیات اجرایی اکباتان تک`}
   description={optimizedDescription}
 >
   <Navbar />
-  
+
   <main class="py-20 px-6 max-w-5xl mx-auto">
     <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center gap-2">
       <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
@@ -60,9 +66,9 @@ const optimizedDescription = truncateDescription(data.description);
 
     {data.metrics && data.metrics.length > 0 && (
       <div class="p-8 rounded-2xl bg-cyan-900/10 border border-cyan-800/40 mb-12">
-        <h2 class="text-lg font-bold text-white mb-6 font-mono text-cyan-400">نتایج کمی و مقیاس عملیاتی (Impact & Metrics)</h2>
+        <h2 class="text-lg font-bold text-white mb-6 font-mono text-cyan-400">نتایج کمی و مقیاس عملیاتی (Impact &amp; Metrics)</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {data.metrics.map((metric: any) => (
+          {data.metrics.map((metric: { label: string; value: string }) => (
             <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-800/80 text-center shadow-inner">
               <div class="text-2xl md:text-3xl font-black text-white mb-1 font-mono">{metric.value}</div>
               <div class="text-xs md:text-sm text-slate-400">{metric.label}</div>
@@ -95,7 +101,6 @@ const optimizedDescription = truncateDescription(data.description);
       </div>
     </div>
 
-    <!-- Markdown Content Rendered -->
     <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl mb-16">
       <Content />
     </div>
@@ -103,7 +108,7 @@ const optimizedDescription = truncateDescription(data.description);
     <div class="p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white mb-16">
       برای پیاده‌سازی چنین مقیاس و معماری در سازمان خود با تیم SRE شرکت اکباتان مشورت کنید.
       <div class="mt-6">
-        <a 
+        <a
           href="/assessment/"
           class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25"
         >
@@ -137,40 +142,47 @@ const optimizedDescription = truncateDescription(data.description);
   </main>
 
   <Footer />
-  
-  <script type="application/ld+json" set:html={JSON.stringify([
-    {
-      "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": canonicalUrl
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify([
+      {
+        '@context': 'https://schema.org',
+        '@type': 'TechArticle',
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': canonicalUrl,
+        },
+        url: canonicalUrl,
+        headline: data.title,
+        description: optimizedDescription,
+        image: 'https://ekbatan.tech/Ekbatan_logo.png',
+        inLanguage: 'fa-IR',
+        author: {
+          '@id': 'https://ekbatan.tech/#organization',
+          '@type': 'Organization',
+          name: 'اکباتان تک (Ekbatan Tech)',
+          url: 'https://ekbatan.tech/',
+        },
+        publisher: {
+          '@id': 'https://ekbatan.tech/#organization',
+          '@type': 'Organization',
+          name: 'اکباتان تک (Ekbatan Tech)',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://ekbatan.tech/Ekbatan_logo.png',
+          },
+        },
       },
-      "url": canonicalUrl,
-      "headline": data.title,
-      "description": optimizedDescription,
-      "author": {
-        "@type": "Organization",
-        "name": "شرکت اکباتان (Ekbatan Tech)",
-        "url": "https://ekbatan.tech/"
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
+          { '@type': 'ListItem', position: 2, name: 'خدمات سازمانی', item: 'https://ekbatan.tech/services/' },
+          { '@type': 'ListItem', position: 3, name: data.title, item: canonicalUrl },
+        ],
       },
-      "publisher": {
-        "@type": "Organization",
-        "name": "شرکت اکباتان (Ekbatan Tech)",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://ekbatan.tech/Ekbatan_logo.png"
-        }
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
-        { "@type": "ListItem", "position": 2, "name": "خدمات سازمانی", "item": "https://ekbatan.tech/services/" },
-        { "@type": "ListItem", "position": 3, "name": data.title, "item": canonicalUrl }
-      ]
-    }
-  ])} />
+    ])}
+  />
 </Layout>

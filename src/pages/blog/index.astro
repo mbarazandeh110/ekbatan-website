@@ -1,16 +1,62 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
-const title = "بلاگ مهندسی و فنی | اکباتان";
-const description = "مقالات تخصصی تیم مهندسی اکباتان در حوزه زیرساخت ابری، کوبرنتیز، SRE، معماری نرم‌افزار و DevOps.";
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const tagCounts = allPosts.reduce((acc, post) => {
+  (post.data.tags || []).forEach((tag) => {
+    acc[tag] = (acc[tag] || 0) + 1;
+  });
+  return acc;
+}, {} as Record<string, number>);
+
+const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
+
+const title = 'بلاگ مهندسی زیرساخت، کوبرنتیز و SRE | اکباتان تک';
+const description =
+  'مقالات تخصصی تیم مهندسی اکباتان (Ekbatan Tech) در حوزه زیرساخت ابری، کوبرنتیز، تیونینگ لینوکس و CDN، استوریج Ceph، MLOps و مهندسی قابلیت اطمینان (SRE).';
+
+const schemaData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: 'بلاگ مهندسی اکباتان',
+    url: 'https://ekbatan.tech/blog/',
+    description,
+    publisher: { '@id': 'https://ekbatan.tech/#organization' },
+    blogPost: allPosts.map((post) => ({
+      '@type': 'TechArticle',
+      headline: post.data.title,
+      url: `https://ekbatan.tech/blog/${post.id}/`,
+      datePublished: post.data.pubDate.toISOString(),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
+      { '@type': 'ListItem', position: 2, name: 'بلاگ مهندسی', item: 'https://ekbatan.tech/blog/' },
+    ],
+  },
+];
 ---
 
 <Layout title={title} description={description}>
   <Navbar />
-  
+
   <main class="py-20 px-6 max-w-5xl mx-auto min-h-[70vh]">
+    <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center justify-center gap-2">
+      <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
+      <span>/</span>
+      <span class="text-cyan-400">بلاگ مهندسی</span>
+    </nav>
+
     <div class="mb-12 text-center">
       <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">ENGINEERING BLOG</span>
       <h1 class="text-4xl md:text-5xl font-black text-white mt-4 mb-6">
@@ -21,256 +67,245 @@ const description = "مقالات تخصصی تیم مهندسی اکباتان 
       </p>
     </div>
 
-    <div id="loading-state" class="flex flex-col items-center justify-center py-20">
-      <div class="w-10 h-10 border-4 border-slate-800 border-t-cyan-500 rounded-full animate-spin mb-4"></div>
-      <span class="text-slate-400 font-mono text-sm">در حال دریافت معماری مقالات...</span>
+    <!-- نوار فیلتر تگ‌ها (رندر استاتیک + تعامل سمت کلاینت) -->
+    <div class="mb-14 relative z-[80] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-[#070b14]/80 p-4 rounded-2xl border border-slate-800 shadow-inner">
+      <div id="active-tags-container" class="flex flex-wrap gap-2 flex-grow min-h-[32px] items-center">
+        <span class="text-sm text-slate-500 ml-2">فیلترهای فعال:</span>
+        <span id="no-active-tags" class="text-sm text-slate-400 font-mono">ALL_POSTS ({allPosts.length})</span>
+      </div>
+
+      <div class="relative w-full md:w-auto shrink-0">
+        <button
+          id="tag-dropdown-btn"
+          type="button"
+          class="w-full md:w-auto flex items-center justify-between gap-3 px-5 py-2.5 bg-cyan-950/30 border border-cyan-800/50 hover:bg-cyan-900/50 text-cyan-400 rounded-xl transition-all shadow-sm text-sm font-bold relative z-[101]"
+        >
+          <span>جستجو و انتخاب تگ‌ها</span>
+          <svg class="w-4 h-4 transition-transform duration-200" id="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div
+          id="tag-dropdown-panel"
+          class="absolute top-[calc(100%+12px)] left-0 md:right-0 w-full md:w-[340px] bg-[#0B1221] border border-cyan-700/50 rounded-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),0_0_20px_rgba(6,182,212,0.1)] opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden flex flex-col z-[100]"
+        >
+          <div class="p-4 border-b border-slate-800/80 bg-[#0B1221] shrink-0 relative z-10">
+            <input
+              type="text"
+              id="tag-search-input"
+              placeholder="جستجوی تگ (مثلاً Kubernetes)..."
+              class="w-full bg-[#050811] border border-slate-700/80 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors font-mono shadow-inner"
+              dir="rtl"
+            />
+          </div>
+
+          <ul id="tag-list" class="max-h-72 overflow-y-auto p-2 custom-scrollbar bg-[#0B1221] relative z-10">
+            {sortedTags.map((tag) => (
+              <li class="tag-item" data-tag-name={tag.toLowerCase()}>
+                <label class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-800/80 rounded-lg cursor-pointer transition-colors group">
+                  <div class="flex items-center gap-3">
+                    <div class="relative flex items-center justify-center w-4 h-4">
+                      <input type="checkbox" value={tag} class="tag-checkbox peer absolute w-full h-full opacity-0 cursor-pointer z-10" />
+                      <div class="w-4 h-4 rounded-[4px] border border-slate-600 bg-[#050811] peer-checked:bg-cyan-500 peer-checked:border-cyan-500 transition-colors flex items-center justify-center">
+                        <svg class="w-3 h-3 text-slate-950 opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
+                    </div>
+                    <span class="text-sm text-slate-300 select-none font-mono group-hover:text-cyan-300 transition-colors">{tag}</span>
+                  </div>
+                  <span class="text-[10px] font-mono text-cyan-400 bg-cyan-950/50 border border-cyan-800/60 px-2 py-0.5 rounded-full">
+                    {tagCounts[tag]}
+                  </span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div id="blog-content" class="hidden">
-      
-      <div class="mb-16 relative z-[80] flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-[#070b14]/80 p-4 rounded-2xl border border-slate-800 shadow-inner">
-        
-        <div id="active-tags-container" class="flex flex-wrap gap-2 flex-grow min-h-[32px] items-center">
-          <span class="text-sm text-slate-500 ml-2">فیلترهای فعال:</span>
-          <span id="no-active-tags" class="text-sm text-slate-400 font-mono">ALL_POSTS</span>
-        </div>
+    <!-- لیست استاتیک مقالات در HTML اولیه برای خزش مستقیم Googlebot -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10" id="posts-grid">
+      {allPosts.map((post) => {
+        const formattedDate = new Intl.DateTimeFormat('fa-IR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }).format(post.data.pubDate);
 
-        <div class="relative w-full md:w-auto shrink-0">
-          <button id="tag-dropdown-btn" class="w-full md:w-auto flex items-center justify-between gap-3 px-5 py-2.5 bg-cyan-950/30 border border-cyan-800/50 hover:bg-cyan-900/50 text-cyan-400 rounded-xl transition-all shadow-sm text-sm font-bold relative z-[101]">
-            <span>جستجو و انتخاب تگ‌ها</span>
-            <svg class="w-4 h-4 transition-transform duration-200" id="dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-
-          <!-- پنل بازشو با طراحی جدید و Custom Checkboxes -->
-          <div id="tag-dropdown-panel" class="absolute top-[calc(100%+12px)] left-0 md:right-0 w-full md:w-[340px] bg-[#0B1221] border border-cyan-700/50 rounded-xl shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8),0_0_20px_rgba(6,182,212,0.1)] opacity-0 invisible translate-y-2 transition-all duration-200 overflow-hidden flex flex-col z-[100] before:absolute before:-top-[7px] before:right-[50px] before:md:left-[50px] before:w-3.5 before:h-3.5 before:bg-[#0B1221] before:border-t before:border-l before:border-cyan-700/50 before:rotate-45">
-            
-            <div class="p-4 border-b border-slate-800/80 bg-[#0B1221] shrink-0 relative z-10">
-              <input 
-                type="text" 
-                id="tag-search-input" 
-                placeholder="جستجوی تگ (مثلاً K8s)..." 
-                class="w-full bg-[#050811] border border-slate-700/80 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-colors font-mono shadow-inner" 
-                dir="rtl" 
-              />
+        return (
+          <a
+            href={`/blog/${post.id}/`}
+            data-tags={JSON.stringify(post.data.tags || [])}
+            class="post-card group p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between shadow-lg"
+          >
+            <div>
+              <div class="flex items-center gap-4 text-xs font-mono text-slate-400 mb-4">
+                <time datetime={post.data.pubDate.toISOString()} class="text-cyan-400">
+                  {formattedDate}
+                </time>
+                <span>•</span>
+                <span>{post.data.author}</span>
+              </div>
+              <h2 class="text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors leading-snug">
+                {post.data.title}
+              </h2>
+              <p class="text-slate-400 text-sm leading-relaxed mb-6 font-light">
+                {post.data.description}
+              </p>
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-1.5 mb-6">
+                  {post.data.tags.map((tag) => (
+                    <span class="px-2.5 py-0.5 rounded-full bg-slate-800/80 text-slate-300 text-[11px] font-mono">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
-            
-            <ul id="tag-list" class="max-h-72 overflow-y-auto p-2 custom-scrollbar bg-[#0B1221] relative z-10"></ul>
-          </div>
-        </div>
-      </div>
+            <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-cyan-400">
+              <span class="font-medium">مطالعه مقاله</span>
+              <span class="font-mono group-hover:translate-x-[-4px] transition-transform">←</span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10" id="posts-grid"></div>
-
-      <div id="no-results" class="hidden text-center py-16 border border-slate-800/50 border-dashed rounded-2xl bg-[#070b14]/50 mt-8">
-        <p class="text-slate-400 text-lg mb-4">مقاله‌ای با این ترکیب از تگ‌ها یافت نشد.</p>
-        <button id="reset-filters" class="px-6 py-2 rounded-lg bg-slate-800 text-cyan-400 hover:bg-slate-700 hover:text-cyan-300 text-sm font-bold transition-colors">حذف فیلترها</button>
-      </div>
-
+    <div id="no-results" class="hidden text-center py-16 border border-slate-800/50 border-dashed rounded-2xl bg-[#070b14]/50 mt-8">
+      <p class="text-slate-400 text-lg mb-4">مقاله‌ای با این ترکیب از تگ‌ها یافت نشد.</p>
+      <button id="reset-filters" type="button" class="px-6 py-2 rounded-lg bg-slate-800 text-cyan-400 hover:bg-slate-700 hover:text-cyan-300 text-sm font-bold transition-colors">
+        حذف فیلترها
+      </button>
     </div>
   </main>
+
   <Footer />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 </Layout>
 
 <style>
-  /* پشتیبانی کامل از Firefox برای جلوگیری از رندر شدن اسکرول‌بار بومی سیستم‌عامل */
   .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: #334155 transparent;
   }
-  .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 10px; }
-  .tag-checkbox { accent-color: #06b6d4; }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #334155;
+    border-radius: 10px;
+  }
 </style>
 
 <script>
-  interface BlogPost {
-    id: string;
-    title: string;
-    description: string;
-    pubDate: string;
-    author: string;
-    tags: string[];
-  }
-
-  document.addEventListener('DOMContentLoaded', async () => {
-    const loadingState = document.getElementById('loading-state');
-    const blogContent = document.getElementById('blog-content');
-    const postsGrid = document.getElementById('posts-grid');
-    const tagList = document.getElementById('tag-list');
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.post-card'));
+    const checkboxes = Array.from(document.querySelectorAll<HTMLInputElement>('.tag-checkbox'));
     const dropdownBtn = document.getElementById('tag-dropdown-btn');
     const dropdownPanel = document.getElementById('tag-dropdown-panel');
     const dropdownIcon = document.getElementById('dropdown-icon');
-    const searchInput = document.getElementById('tag-search-input') as HTMLInputElement;
+    const searchInput = document.getElementById('tag-search-input') as HTMLInputElement | null;
     const activeTagsContainer = document.getElementById('active-tags-container');
     const noActiveTagsMsg = document.getElementById('no-active-tags');
     const noResultsMsg = document.getElementById('no-results');
     const resetBtn = document.getElementById('reset-filters');
 
-    let allPosts: BlogPost[] = [];
     let activeTags: string[] = [];
 
-    try {
-      const response = await fetch('/api/posts.json');
-      if (!response.ok) throw new Error('Network response was not ok');
-      allPosts = await response.json();
-      initializeBlog();
-    } catch (error) {
-      console.error('Failed to load posts:', error);
-      if (loadingState) loadingState.innerHTML = '<span class="text-red-400">خطا در دریافت اطلاعات. لطفا صفحه را رفرش کنید.</span>';
-    }
+    function applyFilters() {
+      let visibleCount = 0;
 
-    function initializeBlog() {
-      loadingState?.classList.add('hidden');
-      blogContent?.classList.remove('hidden');
-
-      const tagCounts: Record<string, number> = {};
-      allPosts.forEach(post => {
-        post.tags.forEach(tag => {
-          tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-        });
+      cards.forEach((card) => {
+        const postTags: string[] = JSON.parse(card.dataset.tags || '[]');
+        const isMatch = activeTags.length === 0 || activeTags.every((t) => postTags.includes(t));
+        card.classList.toggle('hidden', !isMatch);
+        if (isMatch) visibleCount++;
       });
 
-      const sortedTags = Object.keys(tagCounts).sort((a, b) => tagCounts[b] - tagCounts[a]);
-
-      if (tagList) {
-        // تغییرات: استفاده از Custom Checkbox به جای مرورگر با ساختار Tailwind Peer
-        tagList.innerHTML = sortedTags.map(tag => `
-          <li class="tag-item" data-tag-name="${tag.toLowerCase()}">
-            <label class="flex items-center justify-between px-3 py-2.5 hover:bg-slate-800/80 rounded-lg cursor-pointer transition-colors group">
-              <div class="flex items-center gap-3">
-                <div class="relative flex items-center justify-center w-4 h-4">
-                  <input type="checkbox" value="${tag}" class="tag-checkbox peer absolute w-full h-full opacity-0 cursor-pointer z-10" />
-                  <div class="w-4 h-4 rounded-[4px] border border-slate-600 bg-[#050811] peer-checked:bg-cyan-500 peer-checked:border-cyan-500 transition-colors flex items-center justify-center">
-                    <svg class="w-3 h-3 text-slate-950 opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                </div>
-                <span class="text-sm text-slate-300 select-none font-mono group-hover:text-cyan-300 transition-colors">${tag}</span>
-              </div>
-              <span class="text-[10px] font-mono text-cyan-400 bg-cyan-950/50 border border-cyan-800/60 px-2 py-0.5 rounded-full">${tagCounts[tag]}</span>
-            </label>
-          </li>
-        `).join('');
-      }
-
-      document.querySelectorAll('.tag-checkbox').forEach(cb => {
-        cb.addEventListener('change', (e) => {
-          const tag = (e.target as HTMLInputElement).value;
-          if ((e.target as HTMLInputElement).checked) {
-            if (!activeTags.includes(tag)) activeTags.push(tag);
-          } else {
-            activeTags = activeTags.filter(t => t !== tag);
-          }
-          renderFilteredPosts();
-        });
-      });
-
-      renderFilteredPosts();
-    }
-
-    function renderFilteredPosts() {
-      const filteredPosts = allPosts.filter(post => {
-        if (activeTags.length === 0) return true;
-        return activeTags.every(tag => post.tags.includes(tag));
-      });
-
-      if (postsGrid) {
-        if (filteredPosts.length > 0) {
-          const cardsHtml = filteredPosts.map(post => {
-            const formattedDate = new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(post.pubDate));
-            const postUrl = `/blog/${post.id}/`.replace('//', '/');
-            
-            return `
-              <a href="${postUrl}" class="group p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/40 hover:bg-slate-950 transition-all flex flex-col justify-between shadow-lg">
-                <div>
-                  <div class="flex items-center gap-4 text-xs font-mono text-slate-400 mb-4">
-                    <time datetime="${post.pubDate}" class="text-cyan-400">${formattedDate}</time>
-                    <span>•</span>
-                    <span>${post.author}</span>
-                  </div>
-                  <h2 class="text-2xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors leading-snug">${post.title}</h2>
-                  <p class="text-slate-400 text-sm leading-relaxed mb-6 font-light">${post.description}</p>
-                </div>
-                <div class="pt-4 border-t border-slate-800/60 flex items-center justify-between text-xs text-cyan-400">
-                  <span class="font-medium">مطالعه مقاله</span>
-                  <span class="font-mono group-hover:translate-x-[-4px] transition-transform">←</span>
-                </div>
-              </a>
-            `;
-          }).join('');
-          
-          postsGrid.innerHTML = cardsHtml;
-          postsGrid.classList.remove('hidden');
-          noResultsMsg?.classList.add('hidden');
-        } else {
-          postsGrid.innerHTML = '';
-          postsGrid.classList.add('hidden');
-          noResultsMsg?.classList.remove('hidden');
-        }
-      }
+      noResultsMsg?.classList.toggle('hidden', visibleCount > 0);
 
       if (activeTagsContainer && noActiveTagsMsg) {
-        activeTagsContainer.querySelectorAll('.tag-chip').forEach(el => el.remove());
-        
+        activeTagsContainer.querySelectorAll('.tag-chip').forEach((el) => el.remove());
+
         if (activeTags.length === 0) {
           noActiveTagsMsg.style.display = 'inline';
         } else {
           noActiveTagsMsg.style.display = 'none';
-          activeTags.forEach(tag => {
+          activeTags.forEach((tag) => {
             const chip = document.createElement('span');
-            chip.className = 'tag-chip flex items-center gap-2 px-3 py-1 bg-cyan-950/60 border border-cyan-800/50 text-cyan-300 text-xs rounded-lg font-mono animate-fade-in';
-            chip.innerHTML = `${tag} <button class="remove-tag-btn text-cyan-500 hover:text-red-400 transition-colors focus:outline-none" data-tag="${tag}">✕</button>`;
+            chip.className =
+              'tag-chip flex items-center gap-2 px-3 py-1 bg-cyan-950/60 border border-cyan-800/50 text-cyan-300 text-xs rounded-lg font-mono';
+            chip.innerHTML = `${tag} <button type="button" class="remove-tag-btn text-cyan-500 hover:text-red-400 transition-colors focus:outline-none" data-tag="${tag}" aria-label="حذف تگ ${tag}">✕</button>`;
             activeTagsContainer.appendChild(chip);
           });
         }
       }
     }
 
+    checkboxes.forEach((cb) => {
+      cb.addEventListener('change', () => {
+        const tag = cb.value;
+        if (cb.checked) {
+          if (!activeTags.includes(tag)) activeTags.push(tag);
+        } else {
+          activeTags = activeTags.filter((t) => t !== tag);
+        }
+        applyFilters();
+      });
+    });
+
     dropdownBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdownPanel?.classList.toggle('opacity-0');
       dropdownPanel?.classList.toggle('invisible');
-      dropdownPanel?.classList.toggle('translate-y-3');
+      dropdownPanel?.classList.toggle('translate-y-2');
       dropdownIcon?.classList.toggle('rotate-180');
       if (!dropdownPanel?.classList.contains('invisible')) searchInput?.focus();
     });
 
     document.addEventListener('click', (e) => {
-      if (dropdownPanel && dropdownBtn && !dropdownBtn.contains(e.target as Node) && !dropdownPanel.contains(e.target as Node)) {
-        dropdownPanel.classList.add('opacity-0', 'invisible', 'translate-y-3');
+      if (
+        dropdownPanel &&
+        dropdownBtn &&
+        !dropdownBtn.contains(e.target as Node) &&
+        !dropdownPanel.contains(e.target as Node)
+      ) {
+        dropdownPanel.classList.add('opacity-0', 'invisible', 'translate-y-2');
         dropdownIcon?.classList.remove('rotate-180');
       }
     });
 
-    searchInput?.addEventListener('input', (e) => {
-      const term = (e.target as HTMLInputElement).value.toLowerCase().trim();
-      document.querySelectorAll('.tag-item').forEach(item => {
-        const tagName = item.getAttribute('data-tag-name') || '';
-        const parentLi = item.closest('li');
-        if (parentLi) parentLi.style.display = tagName.includes(term) ? 'block' : 'none';
+    searchInput?.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase().trim();
+      document.querySelectorAll<HTMLLIElement>('.tag-item').forEach((item) => {
+        const tagName = item.dataset.tagName || '';
+        item.style.display = tagName.includes(term) ? 'block' : 'none';
       });
     });
 
     activeTagsContainer?.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      const removeBtn = target.closest('.remove-tag-btn');
+      const removeBtn = (e.target as HTMLElement).closest<HTMLButtonElement>('.remove-tag-btn');
       if (removeBtn) {
-        const tagToRemove = removeBtn.getAttribute('data-tag');
-        activeTags = activeTags.filter(t => t !== tagToRemove);
-        const cb = document.querySelector(`.tag-checkbox[value="${tagToRemove}"]`) as HTMLInputElement;
+        const tagToRemove = removeBtn.dataset.tag || '';
+        activeTags = activeTags.filter((t) => t !== tagToRemove);
+        const cb = checkboxes.find((c) => c.value === tagToRemove);
         if (cb) cb.checked = false;
-        renderFilteredPosts();
+        applyFilters();
       }
     });
 
     resetBtn?.addEventListener('click', () => {
       activeTags = [];
-      document.querySelectorAll('.tag-checkbox').forEach(cb => (cb as HTMLInputElement).checked = false);
-      renderFilteredPosts();
+      checkboxes.forEach((cb) => {
+        cb.checked = false;
+      });
+      applyFilters();
     });
   });
 </script>

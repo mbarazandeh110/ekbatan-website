@@ -1,0 +1,28 @@
+# Ekbatan Tech (شرکت مهندسی زیرساخت اکباتان)
+
+> Enterprise Platform Engineering, Cloud-Native Infrastructure, Kubernetes, Ceph Storage, High-Throughput CDN, MLOps/GPU Clusters, and Site Reliability Engineering (SRE) in Tehran, Iran.
+
+## Core Services
+- [Enterprise Kubernetes & Bare-Metal](https://ekbatan.tech/services/kubernetes/): HA control plane, Cilium eBPF CNI, GitOps, CIS hardening.
+- [Ceph Distributed Storage](https://ekbatan.tech/services/ceph/): Multi-petabyte Block (RBD), File (CephFS), and Object (S3/RGW) via cephadm & Rook-Ceph.
+- [Enterprise Distributed Databases](https://ekbatan.tech/services/enterprise-databases/): HA PostgreSQL (Patroni/CloudNativePG), ClickHouse, StarRocks, Kafka.
+- [Elasticsearch Enterprise & Observability](https://ekbatan.tech/services/elasticsearch-enterprise/): ECK Operator, Hot-Warm-Cold ILM, Vector, OpenTelemetry, VictoriaMetrics.
+- [Edge CDN & Networking](https://ekbatan.tech/services/edge-cdn-networking/): Anycast BGP, Envoy xDS Go controllers, NUMA/kTLS Nginx tuning for Tbps video streaming.
+- [MLOps & GPU AI Clusters](https://ekbatan.tech/services/mlops-ai-clusters/): HPE Gen11, NVIDIA H200/NVLink, MIG, vLLM, KServe, MLflow.
+- [Enterprise DevOps & GitLab CI/CD](https://ekbatan.tech/services/enterprise-devops-gitlab/): GitLab Enterprise, ArgoCD GitOps, KEDA, Kaniko, LLM-assisted code review.
+
+## Enterprise Deployment Catalog
+- [Enterprise Stacks Hub](https://ekbatan.tech/enterprise/): Reference HA Kubernetes architectures for GitLab, Elasticsearch (ECK), Jira Data Center, Confluence Data Center, n8n Queue Mode, JFrog Artifactory, Nexus Repository, Mattermost, Nextcloud, and Unleash.
+
+## Engineering Case Studies & Blog
+- [Kubernetes 80+ Nodes HA](https://ekbatan.tech/experience/kubernetes-clusters/)
+- [3 Tbps CDN & Streaming](https://ekbatan.tech/experience/cdn-streaming/)
+- [Enterprise AI & MLOps (H200/vLLM)](https://ekbatan.tech/experience/ai-mlops/)
+- [40+ Nodes Data Platform](https://ekbatan.tech/experience/data-platform/)
+- [Multi-Petabyte Ceph Storage](https://ekbatan.tech/experience/ceph-storage/)
+- [Engineering Blog](https://ekbatan.tech/blog/)
+
+## Contact & Assessment
+- [Production Readiness Assessment](https://ekbatan.tech/assessment/)
+- [About Team](https://ekbatan.tech/about/)
+- Email: info@ekbatan.tech

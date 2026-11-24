@@ -2,16 +2,18 @@
 title: "بهینه‌سازی هزینه‌های شبکه در Kubernetes با Topology Aware Routing"
 description: "بررسی معماری Topology Aware Routing در کوبرنتیز برای کاهش Latency و هزینه‌های ترافیک بین زون‌ها در محیط‌های ابری و دیتاسنترهای Multi-Rack."
 pubDate: 2026-09-22
+updatedDate: 2026-11-24
 author: "تیم مهندسی اکباتان"
 tags: ["Kubernetes", "Networking", "Cloud-Cost", "SRE", "DevOps"]
 ---
+
 ## مقدمه
 
 در کلاسترهای ابری و دیتاسنترهای Multi-Zone، یکی از هزینه‌های پنهان و گلوگاه‌های پرفورمنس در [استقرار کوبرنتیز سازمانی](/services/kubernetes/)، ترافیک عبوری میان Availability Zoneها یا رک‌های مجزا (Cross-Zone Data Transfer) است. به‌صورت پیش‌فرض، سرویس‌های Kubernetes ترافیک ورودی را به‌صورت تصادفی و Round-Robin میان تمامی Podهای پشتیبان توزیع می‌کنند؛ فارغ از اینکه درخواست از همان زون مبدا صادر شده یا نیازمند عبور از مرز زون‌هاست. قابلیت **Topology Aware Routing** پاسخی مهندسی برای کاهش تاخیر شبکه (Latency) و کنترل مستقیم این هزینه‌ها در کلاسترهای پرترافیک است.
 
 ## مکانیزم عملکرد Topology Aware Routing
 
-قابلیت Topology Aware Routing (که جایگزین نسخه قدیمی TopologyKeys شده است) رفتار `kube-proxy` یا CNIهای سازگار (مانند Cilium) را تغییر می‌دهد تا بسته‌های شبکه تا جای ممکن در همان ناحیه جغرافیایی یا زونی که Pod کلاینت در آن مستقر است، نگهداری شوند.
+قابلیت Topology Aware Routing (که جایگزین نسخه قدیمی `TopologyKeys` شده است) رفتار `kube-proxy` یا CNIهای سازگار (مانند Cilium) را تغییر می‌دهد تا بسته‌های شبکه تا جای ممکن در همان ناحیه جغرافیایی یا زونی که Pod کلاینت در آن مستقر است، نگهداری شوند.
 
 این مکانیزم توسط EndpointSlice Controller پیاده‌سازی می‌شود. کنترلر با ارزیابی متوازن بودن توزیع پادها و ظرفیت هر زون، تخصیص ترافیک را مدیریت می‌کند:
 
@@ -37,20 +39,20 @@ spec:
       targetPort: 8080
 ```
 
-## **مقایسه اثر معماری بر عملکرد و هزینه**
+## مقایسه اثر معماری بر عملکرد و هزینه
 
-در زیرساخت‌های Cloud-Native سازمانی و [معماری کلاسترهای کوبرنتیز](/experience/kubernetes-clusters/) [Multi-Region](/experience/kubernetes-clusters/)، فعال‌سازی کنترل‌شده این سازوکار تفاوت‌های ملموسی در معیارهای کلیدی ایجاد می‌کند:
+در زیرساخت‌های Cloud-Native سازمانی و [معماری کلاسترهای کوبرنتیز Multi-Region](/experience/kubernetes-clusters/)، فعال‌سازی کنترل‌شده این سازوکار تفاوت‌های ملموسی در معیارهای کلیدی ایجاد می‌کند:
 
-| شاخص                        | پیش‌فرض (بدون Topology Routing)                                 | با Topology Aware Routing                                                      |
-| ------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| ترافیک Cross-Zone         | تصادفی (~۶۶٪ ترافیک بین‌زونی در ۳ زون)        | به حداقل رسیده (نزدیک به صفر در شرایط پایدار) |
-| هزینه Egress شبکه      | بالا بر اساس حجم دیتای تبادلی بین زون‌ها  | کاهش چشمگیر هزینه‌های مرتبط با Cross-AZ                |
-| P99 Latency                     | ناپایدار به‌دلیل RTT متغیر بین دیتاسنترها | تثبیت‌شده در محدوده کمترین تاخیر درون‌زونی  |
-| رفتار در قطعی زون | ارسال مستقیم به زون‌های فعال باقی‌مانده  | سوئیچ خودکار سهمیه‌بندی بدون قطعی سرویس۱      |
+| شاخص | پیش‌فرض (بدون Topology Routing) | با Topology Aware Routing |
+| :--- | :--- | :--- |
+| ترافیک Cross-Zone | تصادفی (~۶۶٪ ترافیک بین‌زونی در ۳ زون) | به حداقل رسیده (نزدیک به صفر در شرایط پایدار) |
+| هزینه Egress شبکه | بالا بر اساس حجم دیتای تبادلی بین زون‌ها | کاهش چشمگیر هزینه‌های مرتبط با Cross-AZ |
+| P99 Latency | ناپایدار به‌دلیل RTT متغیر بین دیتاسنترها | تثبیت‌شده در محدوده کمترین تاخیر درون‌زونی |
+| رفتار در قطعی زون | ارسال مستقیم به زون‌های فعال باقی‌مانده | سوئیچ خودکار به زون‌های سالم بدون قطعی سرویس |
 
-## **نکته مهندسی برای محیط Production**
+## نکته مهندسی برای محیط Production
 
-هشدار Production: پیش‌نیاز حیاتی Topology Aware Routing، توزیع کاملاً متوازن Replicaها در تمامی زون‌هاست. همان‌طور که در [چک‌لیست استقرار](/blog/kubernetes-production-checklist/) [Kubernetes در Production](/blog/kubernetes-production-checklist/) تاکید کرده‌ایم، همواره در Deploymentها از `topologySpreadConstraints` استفاده کنید تا مطمئن شوید پادها به‌صورت یکنواخت در سطح زون‌ها پخش شده‌اند. در صورت وجود عدم تعادل شدید در تعداد پادها میان زون‌ها، کنترلر EndpointSlice برای جلوگیری از Overload شدن یک زون خاص، قابلیت را نادیده گرفته و به توزیع سراسری بازمی‌گردد.
+پیش‌نیاز حیاتی Topology Aware Routing، توزیع کاملاً متوازن Replicaها در تمامی زون‌هاست. همان‌طور که در [چک‌لیست استقرار Kubernetes در Production](/blog/kubernetes-production-checklist/) تاکید کرده‌ایم، همواره در Deploymentها از `topologySpreadConstraints` استفاده کنید تا مطمئن شوید پادها به‌صورت یکنواخت در سطح زون‌ها پخش شده‌اند. در صورت وجود عدم تعادل شدید در تعداد پادها میان زون‌ها، کنترلر EndpointSlice برای جلوگیری از Overload شدن یک زون خاص، قابلیت را نادیده گرفته و به توزیع سراسری بازمی‌گردد.
 
 ```yaml
 spec:
@@ -63,11 +65,11 @@ spec:
           app: payment-api
 ```
 
-## **جمع‌بندی**
+## جمع‌بندی
 
 استفاده از `service.kubernetes.io/topology-mode: Auto` راهکاری استاندارد، بدون وابستگی به Service Mesh سنگین و مستقیم در هسته کوبرنتیز است که نه‌تنها Latency پاسخ‌دهی سرویس‌های داخلی و [پایگاه‌های داده توزیع‌شده](/services/enterprise-databases/) را تثبیت می‌کند، بلکه مانع از اتلاف ظرفیت لینک‌های ارتباطی بین رک‌ها و دیتاسنترها در مقیاس‌های بزرگ می‌شود.
 
-## **منابع**
+## منابع
 
-* [مستندات رسمی کوبرنتیز: Topology Aware Routing](https://kubernetes.io/docs/concepts/services-networking/topology-aware-routing/?utm_source=gemini)
-* [راهنمای وبلاگ رسمی کوبرنتیز درباره EndpointSlice و هدایت بهینه ترافیک](https://www.google.com/search?q=https://kubernetes.io/blog/2021/10/18/topology-aware-hints/&utm_source=gemini)
+* [مستندات رسمی کوبرنتیز: Topology Aware Routing](https://kubernetes.io/docs/concepts/services-networking/topology-aware-routing/)
+* [وبلاگ رسمی کوبرنتیز: معرفی EndpointSlice و Topology Aware Hints](https://kubernetes.io/blog/2021/10/18/topology-aware-hints/)

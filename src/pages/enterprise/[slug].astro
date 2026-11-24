@@ -5,12 +5,18 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-  const tools = await getCollection('tools');
-  return tools.map((tool) => ({
+  const tools = (await getCollection('tools')).sort((a, b) => a.id.localeCompare(b.id));
+  const total = tools.length;
+
+  return tools.map((tool, index) => ({
     params: { slug: tool.id },
     props: {
       tool,
-      relatedTools: tools.filter((t) => t.id !== tool.id).slice(0, 3),
+      relatedTools: [
+        tools[(index + 1) % total],
+        tools[(index + 2) % total],
+        tools[(index + 3) % total],
+      ].filter((t) => t.id !== tool.id),
     },
   }));
 }
@@ -29,17 +35,17 @@ const truncateDescription = (text: string, maxLength = 155) => {
 const optimizedDescription = truncateDescription(data.description);
 ---
 
-<Layout 
-  title={`استقرار و معماری ${data.name} روی کوبرنتیز | شرکت اکباتان`}
+<Layout
+  title={`استقرار و معماری ${data.name} روی کوبرنتیز | اکباتان تک`}
   description={optimizedDescription}
 >
   <Navbar />
-  
+
   <main class="py-20 px-6 max-w-5xl mx-auto">
     <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center gap-2">
       <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
       <span>/</span>
-      <a href="/services/" class="hover:text-cyan-400 transition-colors">خدمات و استک‌های سازمانی</a>
+      <a href="/enterprise/" class="hover:text-cyan-400 transition-colors">استک‌های سازمانی</a>
       <span>/</span>
       <span class="text-cyan-400">{data.name}</span>
     </nav>
@@ -97,7 +103,6 @@ const optimizedDescription = truncateDescription(data.description);
       </div>
     )}
 
-    <!-- Markdown Content Rendered -->
     <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl mb-16">
       <Content />
     </div>
@@ -105,15 +110,15 @@ const optimizedDescription = truncateDescription(data.description);
     <div class="p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white mb-16">
       شرکت اکباتان آماده طراحی و پیاده‌سازی معماری High Availability برای {data.name} در زیرساخت ماموریت‌بحرانی شماست.
       <div class="mt-6 flex flex-wrap justify-center gap-4">
-        <a 
-          href="/assessment/" 
+        <a
+          href="/assessment/"
           class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition-all shadow-lg shadow-cyan-500/25"
         >
           درخواست ارزیابی معماری (Architecture Assessment)
           <span>↗</span>
         </a>
-        <a 
-          href="/services/kubernetes/" 
+        <a
+          href="/services/kubernetes/"
           class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-sm transition-all border border-slate-700"
         >
           معماری کوبرنتیز سازمانی
@@ -145,29 +150,33 @@ const optimizedDescription = truncateDescription(data.description);
   </main>
 
   <Footer />
-  
-  <script type="application/ld+json" set:html={JSON.stringify([
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "serviceType": "ITConsulting",
-      "name": `خدمات استقرار و معماری ${data.name}`,
-      "description": optimizedDescription,
-      "url": canonicalUrl,
-      "provider": {
-        "@type": "ProfessionalService",
-        "name": "شرکت اکباتان (Ekbatan Tech)",
-        "url": "https://ekbatan.tech/"
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
-        { "@type": "ListItem", "position": 2, "name": "خدمات سازمانی", "item": "https://ekbatan.tech/services/" },
-        { "@type": "ListItem", "position": 3, "name": data.name, "item": canonicalUrl }
-      ]
-    }
-  ])} />
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify([
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        serviceType: 'ITConsulting',
+        name: `خدمات استقرار و معماری ${data.name}`,
+        description: optimizedDescription,
+        url: canonicalUrl,
+        provider: {
+          '@id': 'https://ekbatan.tech/#organization',
+          '@type': 'ProfessionalService',
+          name: 'اکباتان تک (Ekbatan Tech)',
+          url: 'https://ekbatan.tech/',
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
+          { '@type': 'ListItem', position: 2, name: 'استک‌های سازمانی', item: 'https://ekbatan.tech/enterprise/' },
+          { '@type': 'ListItem', position: 3, name: data.name, item: canonicalUrl },
+        ],
+      },
+    ])}
+  />
 </Layout>

@@ -2,7 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const toolsCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/tools" }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/tools' }),
   schema: z.object({
     name: z.string(),
     category: z.string(),
@@ -15,7 +15,7 @@ const toolsCollection = defineCollection({
 });
 
 const experiencesCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/experiences" }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/experiences' }),
   schema: z.object({
     title: z.string(),
     scale: z.string(),
@@ -23,36 +23,45 @@ const experiencesCollection = defineCollection({
     description: z.string(),
     highlights: z.array(z.string()),
     techs: z.array(z.string()),
-    metrics: z.array(z.object({
-      label: z.string(),
-      value: z.string()
-    })).optional(),
+    metrics: z
+      .array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+        })
+      )
+      .optional(),
   }),
 });
 
 const blogCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/blog" }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
     pubDate: z.date(),
+    updatedDate: z.date().optional(),
     author: z.string().default('تیم مهندسی اکباتان'),
     tags: z.array(z.string()).optional(),
   }),
 });
 
 const servicesCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: "./src/content/services" }),
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/services' }),
   schema: z.object({
     title: z.string(),
     metaTitle: z.string(),
     description: z.string(),
     tag: z.string(),
     order: z.number().default(100),
-    faqs: z.array(z.object({
-      question: z.string(),
-      answer: z.string()
-    })).optional(),
+    faqs: z
+      .array(
+        z.object({
+          question: z.string(),
+          answer: z.string(),
+        })
+      )
+      .optional(),
   }),
 });
 

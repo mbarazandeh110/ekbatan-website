@@ -4,82 +4,75 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="۴۰۴ - مسیر یافت نشد | شرکت اکباتان (Ekbatan)" robots="noindex, nofollow">
-  <!-- اسکریپت بازیابی خودکار لینک‌های قدیمی و حروف بزرگ ثبت‌شده در سرچ کنسول روی GitHub Pages -->
+<Layout title="۴۰۴ - مسیر یافت نشد | اکباتان تک (Ekbatan Tech)" robots="noindex, nofollow">
   <script is:inline>
     (function () {
       if (typeof window === 'undefined') return;
-      var rawPath = decodeURIComponent(window.location.pathname);
-      var cleanPath = rawPath.replace(/\/+$/, '');
+      var cleanPath = decodeURIComponent(window.location.pathname).replace(/\/+$/, '').toLowerCase();
 
-      // نگاشت مستقیم آدرس‌های تغییر نام یافته در سرچ کنسول
-      var legacyMap = {
-        '/blog/numa-domain-kubernetes': '/blog/nginx-numa-kernel-vod/',
-        '/blog/category/performance': '/blog/category/performance-tuning/',
-        '/blog/category/bare-metal': '/blog/',
-        '/services/category/kubernetes': '/services/kubernetes/'
+      var serviceMap = {
+        '/services/category/kubernetes': '/services/kubernetes/',
+        '/services/category/databases & analytics': '/services/enterprise-databases/',
+        '/services/category/databases-and-analytics': '/services/enterprise-databases/',
+        '/services/category/ai & ml & pipelines': '/services/mlops-ai-clusters/',
+        '/services/category/ai-and-ml-and-pipelines': '/services/mlops-ai-clusters/',
+        '/services/category/networking & cdn': '/services/edge-cdn-networking/',
+        '/services/category/networking-and-cdn': '/services/edge-cdn-networking/',
+        '/services/category/observability & search': '/services/elasticsearch-enterprise/',
+        '/services/category/observability-and-search': '/services/elasticsearch-enterprise/',
+        '/services/category/storage & data': '/services/ceph/',
+        '/services/category/storage-and-data': '/services/ceph/',
+        '/services/category/infrastructure as code': '/services/enterprise-devops-gitlab/',
+        '/services/category/infrastructure-as-code': '/services/enterprise-devops-gitlab/',
       };
 
-      var lowerClean = cleanPath.toLowerCase();
-      if (legacyMap[lowerClean]) {
-        window.location.replace(legacyMap[lowerClean]);
-        return;
-      }
-
-      // نرمال‌سازی آدرس‌های دسته‌بندی دارای حروف بزرگ، فاصله یا &
-      if (lowerClean.indexOf('/services/category/') === 0 || lowerClean.indexOf('/blog/category/') === 0) {
-        var parts = lowerClean.split('/');
-        var prefix = '/' + parts[1] + '/' + parts[2] + '/';
-        var catRaw = parts.slice(3).join('-');
-        var slug = catRaw
-          .replace(/\s+/g, '-')
-          .replace(/&/g, 'and')
-          .replace(/[^\w\-]+/g, '')
-          .replace(/\-\-+/g, '-');
-        var target = prefix + slug + '/';
-        if (target !== window.location.pathname) {
-          window.location.replace(target);
-          return;
-        }
+      if (serviceMap[cleanPath]) {
+        window.location.replace(serviceMap[cleanPath]);
       }
     })();
   </script>
 
   <Navbar />
-  
+
   <main class="flex flex-col items-center justify-center min-h-[70vh] px-4 text-center">
     <div class="space-y-6 max-w-2xl mx-auto">
       <h1 class="text-8xl md:text-9xl font-extrabold tracking-widest text-gray-900 dark:text-gray-100">
         404
       </h1>
-      
+
       <div class="inline-block bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 px-4 py-2 rounded-md font-mono text-sm md:text-base border border-red-200 dark:border-red-800/50">
         Error: Ingress route not matched / Resource not found
       </div>
-      
+
       <h2 class="text-2xl md:text-3xl font-semibold text-gray-800 dark:text-gray-200 mt-4">
         پاسخی از نود (Node) دریافت نشد!
       </h2>
-      
+
       <p class="text-gray-600 dark:text-gray-400 leading-relaxed mt-4">
         به نظر می‌رسد درخواست شما به یک مسیر نامعتبر هدایت شده است. می‌توانید از طریق پیوندهای زیر به بخش‌های اصلی معماری اکباتان دسترسی داشته باشید:
       </p>
-      
+
       <div class="pt-6 flex flex-wrap items-center justify-center gap-4">
-        <a 
-          href="/" 
+        <a
+          href="/"
           class="inline-flex items-center justify-center px-6 py-3 text-sm font-bold rounded-xl text-slate-950 bg-cyan-500 hover:bg-cyan-400 transition-all duration-200 shadow-lg shadow-cyan-500/20"
         >
           بازگشت به صفحه اصلی
         </a>
-        <a 
-          href="/services/" 
+        <a
+          href="/services/"
           class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-all duration-200"
         >
           کاتالوگ خدمات مهندسی
         </a>
-        <a 
-          href="/blog/" 
+        <a
+          href="/enterprise/"
+          class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-all duration-200"
+        >
+          استک‌های سازمانی
+        </a>
+        <a
+          href="/blog/"
           class="inline-flex items-center justify-center px-6 py-3 text-sm font-medium rounded-xl text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-all duration-200"
         >
           بلاگ مهندسی

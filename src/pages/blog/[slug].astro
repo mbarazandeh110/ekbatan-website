@@ -5,7 +5,9 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
   return posts.map((post) => ({
     params: { slug: post.id },
     props: {
@@ -19,13 +21,14 @@ const { post, relatedPosts } = Astro.props;
 const { Content } = await render(post);
 const data = post.data;
 
-const formattedDate = new Intl.DateTimeFormat('fa-IR', { 
-  year: 'numeric', 
-  month: 'long', 
-  day: 'numeric' 
+const formattedDate = new Intl.DateTimeFormat('fa-IR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
 }).format(data.pubDate);
 
 const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.site).href;
+const modifiedIso = (data.updatedDate || data.pubDate).toISOString();
 ---
 
 <Layout
@@ -33,10 +36,11 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
   description={data.description}
   type="article"
   publishedTime={data.pubDate.toISOString()}
+  modifiedTime={modifiedIso}
   author={data.author}
 >
   <Navbar />
-  
+
   <main class="py-20 px-6 max-w-4xl mx-auto">
     <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center gap-2">
       <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
@@ -53,11 +57,11 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
           <span>•</span>
           <span class="text-slate-400">{data.author}</span>
         </div>
-        
+
         <h1 class="text-3xl md:text-5xl font-black text-white mb-6 leading-snug">
           {data.title}
         </h1>
-        
+
         <p class="text-slate-300 text-lg leading-relaxed font-light">
           {data.description}
         </p>
@@ -65,19 +69,20 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
         {data.tags && (
           <div class="flex flex-wrap gap-2 mt-6">
             {data.tags.map((tag) => (
-              <span class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-mono">{tag}</span>
+              <span class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-mono">
+                {tag}
+              </span>
             ))}
           </div>
         )}
       </header>
-      <!-- کانتینر رندر Markdown با پشتیبانی کامل از justify، RTL و جدول‌ها -->
+
       <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl">
         <Content />
       </div>
     </article>
 
-    <!-- باکس دعوت به اقدام (CTA) و لینک به خدمات -->
-    <div class="p-8 md:p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white mb-16">
+    <div class="p-8 md:p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white my-16">
       <h2 class="text-xl md:text-2xl font-bold mb-3">نیاز به طراحی یا بهینه‌سازی زیرساخت Production دارید؟</h2>
       <p class="text-slate-300 text-sm mb-6 max-w-2xl mx-auto leading-relaxed">
         تیم مهندسی پلتفرم و SRE شرکت اکباتان آماده ممیزی گلوگاه‌های شبکه، استوریج و کلاسترهای کوبرنتیز سازمان شماست.
@@ -114,43 +119,51 @@ const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.
       </section>
     )}
   </main>
-  
+
   <Footer />
 
-  <script type="application/ld+json" set:html={JSON.stringify([
-    {
-      "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": canonicalUrl
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify([
+      {
+        '@context': 'https://schema.org',
+        '@type': 'TechArticle',
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': canonicalUrl,
+        },
+        url: canonicalUrl,
+        headline: data.title,
+        description: data.description,
+        image: 'https://ekbatan.tech/Ekbatan_logo.png',
+        inLanguage: 'fa-IR',
+        datePublished: data.pubDate.toISOString(),
+        dateModified: modifiedIso,
+        author: {
+          '@id': 'https://ekbatan.tech/#organization',
+          '@type': 'Organization',
+          name: data.author,
+          url: 'https://ekbatan.tech/about/',
+        },
+        publisher: {
+          '@id': 'https://ekbatan.tech/#organization',
+          '@type': 'Organization',
+          name: 'اکباتان تک (Ekbatan Tech)',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://ekbatan.tech/Ekbatan_logo.png',
+          },
+        },
       },
-      "url": canonicalUrl,
-      "headline": data.title,
-      "description": data.description,
-      "datePublished": data.pubDate.toISOString(),
-      "author": {
-        "@type": "Organization",
-        "name": data.author,
-        "url": "https://ekbatan.tech/about/"
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
+          { '@type': 'ListItem', position: 2, name: 'بلاگ مهندسی', item: 'https://ekbatan.tech/blog/' },
+          { '@type': 'ListItem', position: 3, name: data.title, item: canonicalUrl },
+        ],
       },
-      "publisher": {
-        "@type": "Organization",
-        "name": "شرکت اکباتان (Ekbatan Tech)",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://ekbatan.tech/Ekbatan_logo.png"
-        }
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
-        { "@type": "ListItem", "position": 2, "name": "بلاگ مهندسی", "item": "https://ekbatan.tech/blog/" },
-        { "@type": "ListItem", "position": 3, "name": data.title, "item": canonicalUrl }
-      ]
-    }
-  ])} />
+    ])}
+  />
 </Layout>
