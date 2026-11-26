@@ -36,7 +36,7 @@ const optimizedDescription = truncateDescription(data.description);
 ---
 
 <Layout
-  title={`${data.title} | تجربیات اجرایی اکباتان تک`}
+  title={`${data.title} | مطالعات موردی اکباتان تک`}
   description={optimizedDescription}
 >
   <Navbar />
@@ -45,7 +45,7 @@ const optimizedDescription = truncateDescription(data.description);
     <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center gap-2">
       <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
       <span>/</span>
-      <a href="/services/" class="hover:text-cyan-400 transition-colors">خدمات و مطالعات موردی</a>
+      <a href="/experience/" class="hover:text-cyan-400 transition-colors">مطالعات موردی و تجربیات</a>
       <span>/</span>
       <span class="text-cyan-400 truncate max-w-[220px] sm:max-w-md">{data.title}</span>
     </nav>
@@ -101,7 +101,7 @@ const optimizedDescription = truncateDescription(data.description);
       </div>
     </div>
 
-    <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl mb-16">
+    <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose rtl mb-16">
       <Content />
     </div>
 
@@ -156,7 +156,7 @@ const optimizedDescription = truncateDescription(data.description);
         url: canonicalUrl,
         headline: data.title,
         description: optimizedDescription,
-        image: 'https://ekbatan.tech/Ekbatan_logo.png',
+        image: 'https://ekbatan.tech/og-default.png',
         inLanguage: 'fa-IR',
         author: {
           '@id': 'https://ekbatan.tech/#organization',
@@ -179,7 +179,7 @@ const optimizedDescription = truncateDescription(data.description);
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
-          { '@type': 'ListItem', position: 2, name: 'خدمات سازمانی', item: 'https://ekbatan.tech/services/' },
+          { '@type': 'ListItem', position: 2, name: 'مطالعات موردی و تجربیات', item: 'https://ekbatan.tech/experience/' },
           { '@type': 'ListItem', position: 3, name: data.title, item: canonicalUrl },
         ],
       },

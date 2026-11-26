@@ -33,10 +33,51 @@ const truncateDescription = (text: string, maxLength = 155) => {
 };
 
 const optimizedDescription = truncateDescription(data.description);
+
+const schemaData: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    serviceType: 'ITConsulting',
+    name: `خدمات استقرار و معماری ${data.name}`,
+    description: optimizedDescription,
+    url: canonicalUrl,
+    provider: {
+      '@id': 'https://ekbatan.tech/#organization',
+      '@type': 'ProfessionalService',
+      name: 'اکباتان تک (Ekbatan Tech)',
+      url: 'https://ekbatan.tech/',
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
+      { '@type': 'ListItem', position: 2, name: 'استک‌های سازمانی', item: 'https://ekbatan.tech/enterprise/' },
+      { '@type': 'ListItem', position: 3, name: data.name, item: canonicalUrl },
+    ],
+  },
+];
+
+if (data.faqs && data.faqs.length > 0) {
+  schemaData.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: data.faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  });
+}
 ---
 
 <Layout
-  title={`استقرار و معماری ${data.name} روی کوبرنتیز | اکباتان تک`}
+  title={`استقرار ${data.name} روی کوبرنتیز | اکباتان تک`}
   description={optimizedDescription}
 >
   <Navbar />
@@ -103,9 +144,23 @@ const optimizedDescription = truncateDescription(data.description);
       </div>
     )}
 
-    <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl mb-16">
+    <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose rtl mb-16">
       <Content />
     </div>
+
+    {data.faqs && data.faqs.length > 0 && (
+      <section class="mb-16 mt-12 border-t border-slate-800/60 pt-14">
+        <h2 class="text-2xl md:text-3xl font-bold text-white mb-8 text-center">سوالات متداول استقرار {data.name}</h2>
+        <div class="space-y-4">
+          {data.faqs.map((faq) => (
+            <div class="p-6 rounded-xl bg-slate-900/30 border border-slate-800/80">
+              <h3 class="text-lg font-bold text-cyan-50 mb-3">{faq.question}</h3>
+              <p class="text-sm text-slate-400 leading-relaxed">{faq.answer}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
 
     <div class="p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white mb-16">
       شرکت اکباتان آماده طراحی و پیاده‌سازی معماری High Availability برای {data.name} در زیرساخت ماموریت‌بحرانی شماست.
@@ -150,33 +205,5 @@ const optimizedDescription = truncateDescription(data.description);
   </main>
 
   <Footer />
-
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify([
-      {
-        '@context': 'https://schema.org',
-        '@type': 'Service',
-        serviceType: 'ITConsulting',
-        name: `خدمات استقرار و معماری ${data.name}`,
-        description: optimizedDescription,
-        url: canonicalUrl,
-        provider: {
-          '@id': 'https://ekbatan.tech/#organization',
-          '@type': 'ProfessionalService',
-          name: 'اکباتان تک (Ekbatan Tech)',
-          url: 'https://ekbatan.tech/',
-        },
-      },
-      {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
-          { '@type': 'ListItem', position: 2, name: 'استک‌های سازمانی', item: 'https://ekbatan.tech/enterprise/' },
-          { '@type': 'ListItem', position: 3, name: data.name, item: canonicalUrl },
-        ],
-      },
-    ])}
-  />
+  <script type="application/ld+json" set:html={JSON.stringify(schemaData)} />
 </Layout>

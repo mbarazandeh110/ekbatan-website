@@ -2,93 +2,55 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-
-const teamMembers = [
-  {
-    name: "مهدی برازنده",
-    initials: "MLB",
-    colorClass: "text-cyan-400 bg-cyan-900/50 border-cyan-800",
-    hoverClass: "group-hover:text-cyan-300",
-    headline: "SRE | Focus on Kubernetes, CDN & Reliability",
-    linkedin: "https://www.linkedin.com/in/mahdi-barazandeh/"
-  },
-  {
-    name: "یاسین پرکار",
-    initials: "YP",
-    colorClass: "text-indigo-400 bg-indigo-900/50 border-indigo-800",
-    hoverClass: "group-hover:text-indigo-300",
-    headline: "SRE, K8S, Ceph | SRE Manager",
-    linkedin: "https://www.linkedin.com/in/yasinporkar/"
-  },
-  {
-    name: "رضا نجار",
-    initials: "RN",
-    colorClass: "text-indigo-400 bg-indigo-900/50 border-indigo-800",
-    hoverClass: "group-hover:text-indigo-300",
-    headline: "SRE Engineer",
-    linkedin: "https://www.linkedin.com/in/reza-najjar-0337a5132/"
-  },
-  {
-    name: "علی لطفی",
-    initials: "AL",
-    colorClass: "text-emerald-400 bg-emerald-900/50 border-emerald-800",
-    hoverClass: "group-hover:text-emerald-300",
-    headline: "Software Architecture Consultant & Data Specialist | Microservices & Data Lakehouse",
-    linkedin: "https://www.linkedin.com/in/csalilotfi/"
-  },
-  {
-    name: "حسین عیوضی",
-    initials: "HE",
-    colorClass: "text-fuchsia-400 bg-fuchsia-900/50 border-fuchsia-800",
-    hoverClass: "group-hover:text-fuchsia-300",
-    headline: "AI and Data Engineer",
-    linkedin: "https://www.linkedin.com/in/hossein-eyvazi-7908231b8/"
-  }
-];
+import { teamMembers } from '../data/team';
 
 const schemaData = [
   {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "name": "درباره شرکت اکباتان (Ekbatan Tech)",
-    "url": "https://ekbatan.tech/about/",
-    "description": "آشنایی با تیم مهندسی پلتفرم، معماری ابری و SRE شرکت اکباتان؛ متخصص در استقرار Kubernetes، Ceph، CDN و زیرساخت‌های Enterprise.",
-    "mainEntity": {
-      "@type": "Organization",
-      "name": "شرکت اکباتان (Ekbatan Tech)",
-      "alternateName": ["شرکت اکباتان", "تیم مهندسی زیرساخت اکباتان"],
-      "url": "https://ekbatan.tech/",
-      "logo": "https://ekbatan.tech/Ekbatan_logo.png",
-      "sameAs": [
-        "https://linkedin.com/company/ekbatantech",
-        "https://github.com/ekbatan-tech"
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'درباره شرکت اکباتان (Ekbatan Tech)',
+    url: 'https://ekbatan.tech/about/',
+    description:
+      'آشنایی با تیم مهندسی پلتفرم، معماری ابری و SRE شرکت اکباتان؛ متخصص در استقرار Kubernetes، Ceph، CDN و زیرساخت‌های Enterprise.',
+    mainEntity: {
+      '@type': 'Organization',
+      '@id': 'https://ekbatan.tech/#organization',
+      name: 'اکباتان تک (Ekbatan Tech)',
+      alternateName: ['شرکت اکباتان', 'تیم مهندسی زیرساخت اکباتان'],
+      url: 'https://ekbatan.tech/',
+      logo: 'https://ekbatan.tech/Ekbatan_logo.png',
+      email: 'm.barazandeh110@gmail.com',
+      sameAs: [
+        'https://ekbatan.tech',
+        'https://github.com/ekbatan-tech',
       ],
-      "member": teamMembers.map((m) => ({
-        "@type": "Person",
-        "name": m.name,
-        "jobTitle": m.headline,
-        "sameAs": [m.linkedin]
-      }))
-    }
+      member: teamMembers.map((m) => ({
+        '@type': 'Person',
+        '@id': `https://ekbatan.tech/about/#${m.slug}`,
+        name: m.name,
+        jobTitle: m.headline,
+        description: m.bio,
+        sameAs: [m.linkedin],
+      })),
+    },
   },
   {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "خانه", "item": "https://ekbatan.tech/" },
-      { "@type": "ListItem", "position": 2, "name": "درباره شرکت اکباتان", "item": "https://ekbatan.tech/about/" }
-    ]
-  }
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'خانه', item: 'https://ekbatan.tech/' },
+      { '@type': 'ListItem', position: 2, name: 'درباره شرکت اکباتان', item: 'https://ekbatan.tech/about/' },
+    ],
+  },
 ];
 ---
 
 <Layout
-  title="درباره شرکت اکباتان (Ekbatan Tech) | تیم مهندسی پلتفرم، کوبرنتیز و SRE"
-  description="آشنایی با شرکت اکباتان؛ تیم تخصصی مهندسی پلتفرم (Platform Engineering)، معماری ابری و SRE. طراح و مجری زیرساخت‌های کوبرنتیز، Ceph و CDN در مقیاس ملی."
+  title="درباره اکباتان تک | تیم مهندسی کوبرنتیز، Ceph و SRE"
+  description="معرفی تیم مهندسان ارشد پلتفرم و SRE شرکت اکباتان (Ekbatan Tech)؛ طراح و مجری کلاسترهای کوبرنتیز سازمانی، استوریج Ceph و CDN در مقیاس ملی."
 >
   <Navbar />
   <main class="min-h-screen py-24 px-6 max-w-5xl mx-auto">
-
     <nav aria-label="Breadcrumb" class="mb-8 text-xs font-mono text-slate-400 flex items-center justify-center gap-2">
       <a href="/" class="hover:text-cyan-400 transition-colors">خانه</a>
       <span>/</span>
@@ -109,8 +71,7 @@ const schemaData = [
         <strong class="text-slate-200">&nbsp;Platform Engineering&nbsp;</strong>
         و
         <strong class="text-slate-200">&nbsp;SRE&nbsp;</strong>
-        هستیم. تمرکز ما طراحی، پیاده‌سازی و نگهداری زیرساخت‌هایی است که
-        کسب‌وکارهای ملی روی آن‌ها بدون قطعی
+        هستیم. تمرکز ما طراحی، پیاده‌سازی و نگهداری زیرساخت‌هایی است که کسب‌وکارهای ملی روی آن‌ها بدون قطعی
         <strong class="text-slate-200">&nbsp;(Zero-Downtime)&nbsp;</strong>
         رشد می‌کنند.
       </p>
@@ -126,9 +87,7 @@ const schemaData = [
 
       <article class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
-        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-          <span>امنیت و Compliance</span>
-        </h2>
+        <h2 class="text-xl font-bold text-white mb-4">امنیت و Compliance</h2>
         <p class="text-sm text-slate-400 leading-relaxed">
           تغییرات زیرساخت ما مبتنی بر <strong class="text-slate-300">&nbsp;IaC&nbsp;</strong> و Vault است. ما اصول امنیتی نظیر <strong class="text-slate-300">&nbsp;Air-gapped Deployments&nbsp;</strong>، ممیزی‌های <strong class="text-slate-300">&nbsp;ISO 27001 / افتا&nbsp;</strong> و رمزنگاری توزیع‌شده را در معماری لحاظ می‌کنیم.
         </p>
@@ -142,7 +101,6 @@ const schemaData = [
       </article>
     </section>
 
-    <!-- Engineering Team -->
     <section class="mb-20">
       <div class="text-center mb-12">
         <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">CORE TEAM</span>
@@ -154,7 +112,7 @@ const schemaData = [
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {teamMembers.map((member) => (
-          <div class="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl hover:border-cyan-500/40 transition-colors flex items-start gap-4 group">
+          <div id={member.slug} class="bg-slate-900/50 border border-slate-800 p-6 rounded-2xl hover:border-cyan-500/40 transition-colors flex items-start gap-4 group scroll-mt-24">
             <div class={`w-14 h-14 rounded-xl border flex items-center justify-center font-black text-xl shrink-0 ${member.colorClass}`}>
               {member.initials}
             </div>
@@ -162,11 +120,14 @@ const schemaData = [
               <h3 class={`text-lg font-bold text-white transition-colors ${member.hoverClass}`}>
                 {member.name}
               </h3>
-              <p class="text-xs font-mono text-slate-400 mt-1.5 mb-4 leading-relaxed">
+              <p class="text-xs font-mono text-slate-400 mt-1.5 mb-2 leading-relaxed">
                 {member.headline}
               </p>
+              <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+                {member.bio}
+              </p>
               <a href={member.linkedin} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-xs font-semibold text-cyan-500 hover:text-cyan-400 transition-colors">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                 مشاهده پروفایل لینکدین
               </a>
             </div>
@@ -175,7 +136,6 @@ const schemaData = [
       </div>
     </section>
 
-    <!-- What We Do -->
     <section class="mb-20">
       <div class="text-center mb-12">
         <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">WHAT WE DO</span>
@@ -191,11 +151,11 @@ const schemaData = [
           <p class="text-sm text-slate-400 leading-relaxed">طراحی و پیاده‌سازی پلتفرم‌های داخلی برای توسعه، استقرار و مدیریت سرویس‌ها.</p>
         </a>
         <a href="/services/kubernetes/" class="border border-slate-800 hover:border-cyan-500/40 rounded-2xl p-6 bg-slate-950/50 transition-colors block">
-          <h3 class="text-lg font-bold text-white mb-2">Kubernetes & Cloud Native</h3>
+          <h3 class="text-lg font-bold text-white mb-2">Kubernetes &amp; Cloud Native</h3>
           <p class="text-sm text-slate-400 leading-relaxed">طراحی، مهاجرت، بهینه‌سازی و مدیریت کلاسترهای Kubernetes در محیط‌های Enterprise.</p>
         </a>
         <a href="/services/elasticsearch-enterprise/" class="border border-slate-800 hover:border-cyan-500/40 rounded-2xl p-6 bg-slate-950/50 transition-colors block">
-          <h3 class="text-lg font-bold text-white mb-2">SRE & Observability</h3>
+          <h3 class="text-lg font-bold text-white mb-2">SRE &amp; Observability</h3>
           <p class="text-sm text-slate-400 leading-relaxed">طراحی سیستم‌های مانیتورینگ، Alerting، SLO و Error Budget برای افزایش قابلیت اطمینان.</p>
         </a>
         <a href="/services/enterprise-devops-gitlab/" class="border border-slate-800 hover:border-cyan-500/40 rounded-2xl p-6 bg-slate-950/50 transition-colors block">
@@ -205,7 +165,6 @@ const schemaData = [
       </div>
     </section>
 
-    <!-- Technology -->
     <section class="mb-20">
       <div class="border border-slate-800 rounded-3xl p-8 md:p-12 bg-slate-900/30">
         <div class="text-center mb-10">
@@ -213,14 +172,13 @@ const schemaData = [
           <h2 class="text-3xl font-bold text-white mt-3">تکنولوژی در خدمت معماری</h2>
         </div>
         <div class="flex flex-wrap justify-center gap-3">
-          {["Kubernetes", "Linux", "GitOps", "Terraform", "Ansible", "Argo CD", "OpenTelemetry", "VictoriaMetrics", "Elasticsearch", "HashiCorp Vault", "Cilium", "GitLab CI/CD"].map((tech) => (
+          {['Kubernetes', 'Linux', 'GitOps', 'Terraform', 'Ansible', 'Argo CD', 'OpenTelemetry', 'VictoriaMetrics', 'Elasticsearch', 'HashiCorp Vault', 'Cilium', 'GitLab CI/CD'].map((tech) => (
             <span class="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm">{tech}</span>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
     <section class="text-center pb-8">
       <h2 class="text-3xl md:text-4xl font-bold text-white mb-5">زیرساخت شما، شایسته مهندسی است.</h2>
       <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8">

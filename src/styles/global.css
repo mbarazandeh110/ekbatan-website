@@ -1,14 +1,74 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Vazirmatn Variable", system-ui, -apple-system, sans-serif;
+  --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 @layer base {
-  /* تنظیم عمومی تراز متن‌ها به صورت justify برای مقالات و توضیحات فارسی */
+  body {
+    font-family: var(--font-sans);
+  }
+
+  /* تراز راست برای خوانایی بهتر متون فنی فارسی حاوی واژگان انگلیسی (به‌ویژه در موبایل) */
   .prose {
-    text-align: justify;
-    text-justify: inter-word;
+    text-align: right;
     word-break: break-word;
   }
 
-  /* استایل‌دهی کامل به جدول‌های رندرشده از Markdown */
+  .prose h2 {
+    margin-top: 2.25rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.4;
+  }
+
+  .prose h3 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    line-height: 1.5;
+  }
+
+  .prose p {
+    margin-top: 0.9rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin-top: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .prose ul {
+    list-style-type: disc;
+  }
+
+  .prose ol {
+    list-style-type: decimal;
+  }
+
+  .prose li {
+    margin-top: 0.45rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .prose a {
+    color: #22d3ee;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .prose a:hover {
+    color: #67e8f9;
+  }
+
   .prose table {
     width: 100%;
     border-collapse: collapse;
@@ -22,7 +82,7 @@
 
   .prose th {
     background-color: #0b1221;
-    color: #38bdf8; /* رنگ سیان ملایم */
+    color: #38bdf8;
     font-weight: 700;
     padding: 0.75rem 1rem;
     border: 1px solid #1e293b;
@@ -41,17 +101,26 @@
     background-color: #090e1a;
   }
 
-  /* استایل پیشرفته برای کدهای داخل متن و بلوک‌های کد */
   .prose code {
-    font-family: 'Fira Code', monospace;
+    font-family: var(--font-mono);
     direction: ltr;
     unicode-bidi: embed;
     background-color: #0b101b;
     color: #38bdf8;
-    padding: 0.2rem 0.4rem;
+    padding: 0.15rem 0.4rem;
     border-radius: 0.25rem;
     font-size: 0.85em;
     border: 1px solid #1e293b;
+  }
+
+  .prose pre {
+    background-color: #0b101b;
+    border: 1px solid #1e293b;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
   .prose pre code {
@@ -59,9 +128,10 @@
     border: none;
     padding: 0;
     color: #e2e8f0;
+    display: block;
+    white-space: pre;
   }
 
-  /* بازنشانی جهت و چینش برای تمام بلوک‌های کد و کدهای YAML در متن مقالات */
   .prose pre,
   .prose code,
   .prose kbd,
@@ -69,13 +139,5 @@
     direction: ltr !important;
     text-align: left !important;
     unicode-bidi: embed;
-  }
-
-  /* جلوگیری از به هم ریختن کدهای YAML داخل بلوک‌های نمایش کد */
-  .prose pre code {
-    display: block;
-    text-align: left !important;
-    direction: ltr !important;
-    white-space: pre;
   }
 }

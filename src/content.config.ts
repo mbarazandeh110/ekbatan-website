@@ -1,6 +1,11 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+const faqSchema = z.object({
+  question: z.string(),
+  answer: z.string(),
+});
+
 const toolsCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.md', base: './src/content/tools' }),
   schema: z.object({
@@ -11,6 +16,7 @@ const toolsCollection = defineCollection({
     architectureDetails: z.array(z.string()),
     features: z.array(z.string()),
     yamlCode: z.string(),
+    faqs: z.array(faqSchema).optional(),
   }),
 });
 
@@ -42,6 +48,7 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     updatedDate: z.date().optional(),
     author: z.string().default('تیم مهندسی اکباتان'),
+    authorSlug: z.string().optional(),
     tags: z.array(z.string()).optional(),
   }),
 });
@@ -54,14 +61,7 @@ const servicesCollection = defineCollection({
     description: z.string(),
     tag: z.string(),
     order: z.number().default(100),
-    faqs: z
-      .array(
-        z.object({
-          question: z.string(),
-          answer: z.string(),
-        })
-      )
-      .optional(),
+    faqs: z.array(faqSchema).optional(),
   }),
 });
 

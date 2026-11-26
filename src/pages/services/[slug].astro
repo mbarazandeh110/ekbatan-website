@@ -5,7 +5,9 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 
 export async function getStaticPaths() {
-  const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+  const services = (await getCollection('services')).sort(
+    (a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id)
+  );
   const total = services.length;
 
   return services.map((service, index) => ({
@@ -100,7 +102,7 @@ if (data.faqs && data.faqs.length > 0) {
       </div>
     </div>
 
-    <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl mb-16">
+    <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose rtl mb-16">
       <Content />
     </div>
 
@@ -110,7 +112,7 @@ if (data.faqs && data.faqs.length > 0) {
         <div class="space-y-4">
           {data.faqs.map((faq) => (
             <div class="p-6 rounded-xl bg-slate-900/30 border border-slate-800/80">
-              <h3 class="text-lg font-bold text-white mb-3 text-cyan-50">{faq.question}</h3>
+              <h3 class="text-lg font-bold text-cyan-50 mb-3">{faq.question}</h3>
               <p class="text-sm text-slate-400 leading-relaxed">{faq.answer}</p>
             </div>
           ))}

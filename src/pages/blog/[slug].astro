@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
+import { getTeamMemberBySlug } from '../../data/team';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog')).sort(
@@ -21,23 +22,51 @@ const { post, relatedPosts } = Astro.props;
 const { Content } = await render(post);
 const data = post.data;
 
+const authorMember = getTeamMemberBySlug(data.authorSlug);
+const displayAuthorName = authorMember ? authorMember.name : data.author;
+
 const formattedDate = new Intl.DateTimeFormat('fa-IR', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 }).format(data.pubDate);
 
+const formattedUpdatedDate = data.updatedDate
+  ? new Intl.DateTimeFormat('fa-IR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(data.updatedDate)
+  : null;
+
 const canonicalUrl = new URL(Astro.url.pathname.replace(/\/$/, '') + '/', Astro.site).href;
 const modifiedIso = (data.updatedDate || data.pubDate).toISOString();
+
+const authorSchema = authorMember
+  ? {
+      '@type': 'Person',
+      '@id': `https://ekbatan.tech/about/#${authorMember.slug}`,
+      name: authorMember.name,
+      jobTitle: authorMember.headline,
+      url: `https://ekbatan.tech/about/#${authorMember.slug}`,
+      sameAs: [authorMember.linkedin],
+      worksFor: { '@id': 'https://ekbatan.tech/#organization' },
+    }
+  : {
+      '@type': 'Organization',
+      '@id': 'https://ekbatan.tech/#organization',
+      name: data.author,
+      url: 'https://ekbatan.tech/about/',
+    };
 ---
 
 <Layout
-  title={`${data.title} | بلاگ فنی اکباتان`}
+  title={`${data.title} | بلاگ اکباتان تک`}
   description={data.description}
   type="article"
   publishedTime={data.pubDate.toISOString()}
   modifiedTime={modifiedIso}
-  author={data.author}
+  author={displayAuthorName}
 >
   <Navbar />
 
@@ -52,10 +81,22 @@ const modifiedIso = (data.updatedDate || data.pubDate).toISOString();
 
     <article>
       <header class="mb-12 border-b border-slate-800/60 pb-8">
-        <div class="flex items-center gap-4 text-xs font-mono text-cyan-400 mb-6">
+        <div class="flex flex-wrap items-center gap-3 text-xs font-mono text-cyan-400 mb-6">
           <time datetime={data.pubDate.toISOString()}>{formattedDate}</time>
-          <span>•</span>
-          <span class="text-slate-400">{data.author}</span>
+          {formattedUpdatedDate && (
+            <>
+              <span class="text-slate-600">•</span>
+              <span class="text-emerald-400">بروزرسانی: {formattedUpdatedDate}</span>
+            </>
+          )}
+          <span class="text-slate-600">•</span>
+          {authorMember ? (
+            <a href={`/about/#${authorMember.slug}`} class="text-slate-300 hover:text-cyan-300 transition-colors">
+              {authorMember.name}
+            </a>
+          ) : (
+            <span class="text-slate-400">{data.author}</span>
+          )}
         </div>
 
         <h1 class="text-3xl md:text-5xl font-black text-white mb-6 leading-snug">
@@ -69,18 +110,46 @@ const modifiedIso = (data.updatedDate || data.pubDate).toISOString();
         {data.tags && (
           <div class="flex flex-wrap gap-2 mt-6">
             {data.tags.map((tag) => (
-              <span class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-mono">
+              <a
+                href={`/blog/?tag=${encodeURIComponent(tag)}`}
+                class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 text-xs font-mono transition-colors"
+              >
                 {tag}
-              </span>
+              </a>
             ))}
           </div>
         )}
       </header>
 
-      <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose text-justify rtl">
+      <div class="prose prose-invert prose-cyan max-w-none text-slate-300 leading-loose rtl">
         <Content />
       </div>
     </article>
+
+    {authorMember && (
+      <section aria-label="درباره نویسنده" class="mt-14 p-6 rounded-2xl bg-slate-900/50 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center gap-5">
+        <div class={`w-14 h-14 rounded-xl border flex items-center justify-center font-black text-xl shrink-0 ${authorMember.colorClass}`}>
+          {authorMember.initials}
+        </div>
+        <div class="flex-1">
+          <div class="flex flex-wrap items-center gap-3">
+            <a href={`/about/#${authorMember.slug}`} class="text-base font-bold text-white hover:text-cyan-300 transition-colors">
+              {authorMember.name}
+            </a>
+            <span class="text-[11px] font-mono text-cyan-400">{authorMember.headline}</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed mt-2">{authorMember.bio}</p>
+          <div class="mt-3 flex items-center gap-4 text-xs">
+            <a href={authorMember.linkedin} target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:text-cyan-300 font-medium">
+              پروفایل لینکدین ↗
+            </a>
+            <a href="/about/" class="text-slate-400 hover:text-slate-200">
+              تیم مهندسی اکباتان ←
+            </a>
+          </div>
+        </div>
+      </section>
+    )}
 
     <div class="p-8 md:p-10 rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/80 to-cyan-950/30 border border-cyan-900/40 text-center text-white my-16">
       <h2 class="text-xl md:text-2xl font-bold mb-3">نیاز به طراحی یا بهینه‌سازی زیرساخت Production دارید؟</h2>
@@ -135,16 +204,11 @@ const modifiedIso = (data.updatedDate || data.pubDate).toISOString();
         url: canonicalUrl,
         headline: data.title,
         description: data.description,
-        image: 'https://ekbatan.tech/Ekbatan_logo.png',
+        image: 'https://ekbatan.tech/og-default.png',
         inLanguage: 'fa-IR',
         datePublished: data.pubDate.toISOString(),
         dateModified: modifiedIso,
-        author: {
-          '@id': 'https://ekbatan.tech/#organization',
-          '@type': 'Organization',
-          name: data.author,
-          url: 'https://ekbatan.tech/about/',
-        },
+        author: authorSchema,
         publisher: {
           '@id': 'https://ekbatan.tech/#organization',
           '@type': 'Organization',

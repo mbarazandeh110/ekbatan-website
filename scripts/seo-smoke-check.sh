@@ -1,17 +1,31 @@
 #!/usr/bin/env bash
 # ==========================================================
-# Technical SEO & Indexability Check
-# Run this script after 'npm run build' in CI/CD pipeline
+# Technical SEO & Indexability Smoke Check (CI/CD Gate)
 # ==========================================================
-
-set -e
+set -euo pipefail
 
 DIST_DIR="dist"
-TARGET_URLS=(
-    "services/kubernetes/index.html" 
-    "blog/kubernetes-production-checklist/index.html"
+REQUIRED_FILES=(
+  "sitemap-index.xml"
+  "robots.txt"
+  "og-default.png"
+  "blog/numa-domain-kubernetes/index.html"
 )
-REQUIRED_FILES=("sitemap-index.xml" "robots.txt")
+
+TARGET_URLS=(
+  "index.html"
+  "about/index.html"
+  "assessment/index.html"
+  "services/index.html"
+  "services/kubernetes/index.html"
+  "services/ceph/index.html"
+  "enterprise/index.html"
+  "enterprise/gitlab-enterprise/index.html"
+  "experience/index.html"
+  "experience/kubernetes-clusters/index.html"
+  "blog/index.html"
+  "blog/kubernetes-production-checklist/index.html"
+)
 
 echo "🚀 Starting Technical SEO Smoke Check..."
 
@@ -20,40 +34,53 @@ if [ ! -d "$DIST_DIR" ]; then
   exit 1
 fi
 
-# 1. Check Root Level Files
+# 1. Fail if stale category directories leak into dist
+if [ -d "$DIST_DIR/blog/category" ] || [ -d "$DIST_DIR/services/category" ]; then
+  echo "❌ FATAL: Legacy category directories detected in $DIST_DIR!"
+  exit 1
+fi
+
+# 2. Check required root & redirect files
 for file in "${REQUIRED_FILES[@]}"; do
   if [ -f "$DIST_DIR/$file" ]; then
     echo "✅ Found $file"
   else
-    echo "❌ Missing $file"
+    echo "❌ Missing required file: $DIST_DIR/$file"
     exit 1
   fi
 done
 
-# 2. Check Critical Routes & Meta
+# 3. Validate indexable routes
 for route in "${TARGET_URLS[@]}"; do
   FILE_PATH="$DIST_DIR/$route"
-  
+
   if [ ! -f "$FILE_PATH" ]; then
-    echo "❌ Missing Route File: $FILE_PATH"
+    echo "❌ Missing route file: $FILE_PATH"
     exit 1
   fi
 
-  echo "✅ Validating Route: $route"
+  grep -q '<link rel="canonical" href="https://ekbatan.tech/' "$FILE_PATH" || {
+    echo "❌ Missing or invalid HTTPS canonical in $route"
+    exit 1
+  }
 
-  # 3. Canonical Verification
-  if grep -q '<link rel="canonical"' "$FILE_PATH"; then
-     echo "  ✅ Canonical tag exists."
-  else
-     echo "  ❌ Missing Canonical tag in $route"
-     exit 1
+  grep -q '<h1' "$FILE_PATH" || {
+    echo "❌ Missing <h1> in $route"
+    exit 1
+  }
+
+  if grep -qi 'content="noindex' "$FILE_PATH"; then
+    echo "❌ FATAL: 'noindex' found in indexable route $route"
+    exit 1
   fi
 
-  # 4. Noindex Accident Verification
-  if grep -q 'noindex' "$FILE_PATH"; then
-     echo "  ❌ FATAL: 'noindex' found in $route"
-     exit 1
-  fi
+  echo "✅ Validated $route"
 done
+
+# 4. Verify 404 page has noindex
+grep -qi 'noindex' "$DIST_DIR/404.html" || {
+  echo "❌ 404.html must include noindex"
+  exit 1
+}
 
 echo "🎉 All Enterprise SEO Smoke Checks Passed!"

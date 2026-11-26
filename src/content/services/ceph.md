@@ -1,6 +1,6 @@
 ---
 title: "زیرساخت ذخیره‌سازی توزیع‌شده Ceph"
-metaTitle: "معماری و استقرار استوریج توزیع‌شده Ceph در مقیاس Petabyte | شرکت اکباتان"
+metaTitle: "استقرار استوریج Ceph و Rook-Ceph پتابایتی | اکباتان تک"
 description: "طراحی، پیاده‌سازی و نگهداری کلاسترهای Ceph و Rook-Ceph با معماری Software-Defined Storage (SDS) برای ارائه سرویس‌های Block، File و Object (S3) با پایداری ۹۹.۹۶٪."
 tag: "STORAGE & DATA"
 order: 2
@@ -20,13 +20,13 @@ faqs:
 ### ۱. ارائه یکپارچه Block، File و Object Storage
 معماری ما تمامی نیازهای ذخیره‌سازی سازمان را در یک پلتفرم یکپارچه، مقیاس‌پذیر و بدون نقطه تک‌خرابی (SPOF) پوشش می‌دهد:
 * **Ceph RBD (Block Storage):** تامین دیسک‌های `ReadWriteOnce` با IOPS بالا و تاخیر زیر میلی‌ثانیه برای ماشین‌های مجازی و [پایگاه‌های داده سازمانی](/services/enterprise-databases/).
-* **CephFS (Shared File System):** سیستم فایل توزیع‌شده سازگار با POSIX با قابلیت `ReadWriteMany` (RWX) برای کلاسترهای Active-Active (مانند Jira Data Center و سرویس‌های پردازش موازی).
-* **Ceph RGW (S3-Compatible Object Storage):** پیاده‌سازی استوریج شیءگرا با قابلیت Multi-Site Replication برای میزبانی فایل‌های رسانه‌ای، Snapshotهای [کلاسترهای Elasticsearch](/services/elasticsearch-enterprise/)، مخازن آرتیفکت و بک‌آپ‌های Velero.
+* **CephFS (Shared File System):** سیستم فایل توزیع‌شده سازگار با POSIX با قابلیت `ReadWriteMany` (RWX) برای کلاسترهای Active-Active مانند [Jira Data Center](/enterprise/jira-datacenter/)، [Confluence Data Center](/enterprise/confluence-datacenter/) و سرویس‌های پردازش موازی.
+* **Ceph RGW (S3-Compatible Object Storage):** پیاده‌سازی استوریج شیءگرا با قابلیت Multi-Site Replication برای میزبانی فایل‌های رسانه‌ای، ذخیره‌سازی داده‌های [Nextcloud Enterprise](/enterprise/nextcloud-enterprise/) و [Mattermost Enterprise](/enterprise/mattermost-enterprise/)، Snapshotهای [کلاسترهای Elasticsearch](/services/elasticsearch-enterprise/) و بک‌آپ‌های Velero.
 
 ### ۲. تیونینگ کرنل، شبکه و سخت‌افزار برای حداکثر IOPS
 دستیابی به پرفورمنس پایدار در Ceph نیازمند مهندسی دقیق در لایه سیستم‌عامل و شبکه است:
 * **تفکیک شبکه فیزیکی:** جداسازی کامل ترافیک `Public Network` و `Cluster Replication Network` روی کارت‌های شبکه ۲۵/۱۰۰ گیگابیتی با پیکربندی LACP/BGP و تنظیم `MTU 9000` (Jumbo Frames).
-* **تیونینگ کرنل و BlueStore:** بهینه‌سازی پارامترهای کرنل لینوکس (`vm.swappiness`، `vm.min_free_kbytes` و CPU C-States)، تخصیص درایوهای Enterprise NVMe دارای PLP (حفاظت در برابر قطع برق) برای ` RocksDB/WAL` و تنظیم دقیق `osd_memory_target`.
+* **تیونینگ کرنل و BlueStore:** بهینه‌سازی پارامترهای کرنل لینوکس (`vm.swappiness`، `vm.min_free_kbytes` و CPU C-States)، تخصیص درایوهای Enterprise NVMe دارای PLP (حفاظت در برابر قطع برق) برای `RocksDB/WAL` و تنظیم دقیق `osd_memory_target`.
 * **طراحی پیشرفته CRUSH Map:** تعریف سلسله‌مراتب Failure Domain در سطح Host، Rack و Room تا در صورت خاموشی کامل یک رک فیزیکی، دسترسی به داده‌ها بدون وقفه ادامه یابد.
 
 برای مشاهده نمونه‌های عملیاتی پیاده‌سازی‌شده توسط تیم ما، مطالعه موردی **[سیستم‌های ذخیره‌سازی توزیع‌شده Ceph](/experience/ceph-storage/)** را بررسی کنید و یا جهت ممیزی استوریج فعلی سازمان خود، فرم **[درخواست ارزیابی معماری زیرساخت](/assessment/)** را تکمیل نمایید.

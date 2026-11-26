@@ -2,18 +2,30 @@
 title: "زیرساخت پردازش هوش مصنوعی و MLOps در مقیاس Enterprise"
 scale: "HPE ProLiant DL380a Gen11 & NVIDIA H200 NVL"
 category: "AI, ML & MLOps"
-description: "استقرار و بهینه‌سازی مدل‌های هوش مصنوعی واستقرار زیرساخت GPU برای AI و LLM با استفاده از NVLink و RoCE، با تمرکز بر Performance و بهینه‌سازی Training و Inference."
+description: "طراحی، استقرار و بهینه‌سازی کلاسترهای GPU برای آموزش و استنتاج مدل‌های هوش مصنوعی و LLM با استفاده از NVLink، RoCE، NVIDIA MIG و vLLM روی کوبرنتیز."
+metrics:
+  - label: "بهره‌وری منابع GPU"
+    value: "80%+"
+  - label: "تاخیر Inference (P95)"
+    value: "< 50ms"
+  - label: "درخواست هم‌زمان LLM"
+    value: "500+ RPS"
+  - label: "زمان استقرار مدل"
+    value: "< 10m"
 highlights:
-  - "طراحی کلاسترهای GPU-Dense مبتنی بر سرورهای قدرتمند HPE ProLiant Gen11 و مدیریت منابع از طریق NVIDIA GPU Operator و سایر روش‌ها"
-  - "تخصیص، اشتراک‌گذاری و ایزوله‌سازی منابع GPUهای NVIDIA H100/H200 با بهره‌گیری از فناوری‌های NVIDIA MIG برای ایجاد ایزولیشن سخت‌افزاری و قابل‌پیش‌بینی در بارهای کاری حساس، و استفاده از GPU Time-Slicing برای اشتراک‌گذاری بهینه منابع میان محیط‌های توسعه و بارهای کاری کم‌مصرف. همچنین، با بهره‌گیری از KServe و Knative و Runtimeهایی مانند vLLM، امکان بهینه‌سازی مصرف حافظه GPU و استقرار چابک مدل‌های LLM از طریق تنظیماتی مانند max-model-len و gpu-memory-utilization فراهم می‌شود."
-  - "همگام‌سازی فوق‌سریع مموری با پل‌های ارتباطی NVLink و شبکه‌های RoCE"
-  - "یکپارچه‌سازی لایه‌ی MLOps شامل Model Registry (MLflow)، Feature Store و سروینگ مقیاس‌پذیر با KServe و vLLM روی کوبرنتیز"
-techs: ["NVIDIA MIG", "vLLM", "KServe", "NVLink", "MLflow", "RoCE", "Kubernetes"]
+  - "طراحی کلاسترهای GPU-Dense مبتنی بر سرورهای HPE ProLiant Gen11 و مدیریت یکپارچه منابع از طریق NVIDIA GPU Operator روی کوبرنتیز"
+  - "تخصیص، اشتراک‌گذاری و ایزوله‌سازی GPUهای NVIDIA H100/H200 با ترکیب NVIDIA MIG برای ایزولیشن سخت‌افزاری بارهای Production و GPU Time-Slicing برای محیط‌های توسعه"
+  - "همگام‌سازی فوق‌سریع حافظه میان کارت‌های گرافیک با پل‌های ارتباطی NVLink و شبکه‌های کم‌تاخیر RoCE"
+  - "یکپارچه‌سازی پشته MLOps شامل Model Registry (MLflow)، Feature Store و سروینگ مقیاس‌پذیر مدل‌های LLM با KServe و vLLM"
+techs: ["NVIDIA H200 NVL", "NVIDIA MIG", "vLLM", "KServe", "NVLink", "MLflow", "RoCE", "Kubernetes"]
 ---
-### متریک‌های معماری و دستاوردها (Evidence & Outcomes)
 
-با پیاده‌سازی معماری فوق برای پلتفرم‌های پردازش زبان طبیعی، نتایج ملموس زیر در لایه پروداکشن به دست آمده است:
+### معماری اجرایی و متریک‌های دستاورد (Evidence & Outcomes)
 
-* **بهینه‌سازی منابع گرافیکی (GPU Utilization):** افزایش نرخ بهره‌وری از متوسط ۲۵٪ به بالای **۸۰٪** با استفاده ترکیبی از MIG و Time-Slicing مبتنی بر Scheduler هوشمند کوبرنتیز.
-* **کاهش Latency در Inference:** رسیدن به تاخیر کمتر از **50ms** در پردازش همزمان ۵۰۰+ درخواست روی مدل‌های Llama-3 با معماری Tensor Parallelism و vLLM.
-* **زمان استقرار مدل (Deployment Time):** کاهش زمان انتقال مدل از محیط Staging به Production از چندین روز به **کمتر از ۱۰ دقیقه** از طریق پایپ‌لاین‌های CI/CD اتوماتیک.
+در استقرار [زیرساخت MLOps و کلاسترهای هوش مصنوعی](/services/mlops-ai-clusters/) برای پلتفرم‌های پردازش زبان طبیعی، چالش اصلی سازمان بهره‌وری پایین کارت‌های گرافیکی (کمتر از ۲۵٪) و زمان طولانی انتقال مدل از مرحله پژوهش به محیط عملیاتی بود. تیم مهندسی اکباتان با پیاده‌سازی معماری زیر روی [کوبرنتیز Bare-Metal](/services/kubernetes/) نتایج ملموس زیر را در Production رقم زد:
+
+* **بهینه‌سازی منابع گرافیکی (GPU Utilization):** افزایش نرخ بهره‌وری از متوسط ۲۵٪ به بالای **۸۰٪** با پارتیشن‌بندی سخت‌افزاری **NVIDIA MIG** برای سرویس‌های حساس به تاخیر و **GPU Time-Slicing** برای نوت‌بوک‌های دیتاساینس و محیط‌های آزمایشی.
+* **کاهش Latency و افزایش Throughput در Inference:** استقرار موتور **vLLM** و **KServe** با تنظیم دقیق `max-model-len`، `gpu-memory-utilization` و **Tensor Parallelism** روی NVLink که به تاخیر کمتر از **50ms** در پردازش هم‌زمان بیش از ۵۰۰ درخواست روی مدل‌های Llama-3 منجر شد.
+* **سرعت بارگذاری مدل و چابکی استقرار:** نگهداری وزن مدل‌ها روی [استوریج S3 توزیع‌شده Ceph](/services/ceph/) همراه با لایه کش محلی NVMe و پایپ‌لاین‌های خودکار [CI/CD و GitOps](/services/enterprise-devops-gitlab/) که زمان انتقال مدل از Staging به Production را از چند روز به **کمتر از ۱۰ دقیقه** کاهش داد.
+
+برای مشاوره در زمینه سایزینگ سرورهای GPU و طراحی پلتفرم سروینگ LLM درون‌سازمانی، صفحه **[خدمات کلاسترهای GPU و MLOps](/services/mlops-ai-clusters/)** را بررسی کرده یا فرم **[درخواست ارزیابی معماری](/assessment/)** را تکمیل نمایید.
