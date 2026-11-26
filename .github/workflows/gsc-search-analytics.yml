@@ -1,0 +1,60 @@
+name: Google Search Console report
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/gsc-search-analytics.yml'
+      - 'scripts/gsc_search_analytics.py'
+      - 'tests/test_gsc_search_analytics.py'
+  workflow_dispatch:
+  schedule:
+    # 05:00 UTC = 08:30 Asia/Tehran.
+    - cron: "0 5 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gsc-search-analytics
+  cancel-in-progress: true
+
+jobs:
+  report:
+    name: Fetch read-only Search Analytics
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -p 'test_gsc_search_analytics.py' -v
+
+      - name: Fetch Search Console report
+        env:
+          GSC_OAUTH_CLIENT_ID: ${{ secrets.GSC_OAUTH_CLIENT_ID }}
+          GSC_OAUTH_CLIENT_SECRET: ${{ secrets.GSC_OAUTH_CLIENT_SECRET }}
+          GSC_REFRESH_TOKEN: ${{ secrets.GSC_REFRESH_TOKEN }}
+          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
+        run: |
+          set -eu
+          python scripts/gsc_search_analytics.py --output-dir "$RUNNER_TEMP/gsc-report"
+
+      # Query and page performance data must not be exposed from this public repository.
+      - name: Upload report artifact (private repositories only)
+        if: ${{ github.repository_visibility == 'private' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-search-analytics-${{ github.run_id }}
+          path: ${{ runner.temp }}/gsc-report/
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Explain report privacy for public repository
+        if: ${{ github.repository_visibility != 'private' }}
+        run: echo "Report fetched successfully. Artifact upload is disabled because this repository is public; run the script locally to inspect reports privately."
