@@ -22,7 +22,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "sharp": "^0.34.1"
+    "sharp": "^0.35.5"
   },
   "allowScripts": {
     "esbuild": true,
